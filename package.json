@@ -1,0 +1,6 @@
+{
+  "name": "ai-pres-generator",
+  "version": "1.0.0",
+  "description": "AIアニメーションプレゼン自動生成システム",
+  "type": "module"
+}

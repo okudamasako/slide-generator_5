@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIプレゼン自動生成システム</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Hiragino Kaku Gothic ProN','Noto Sans JP',Arial,sans-serif;
+  background: #F0F4FF;
+  color: #1A1A1A;
+  min-height: 100vh;
+}
+
+header {
+  background: #1E2761;
+  padding: 0 40px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.logo { font-size: 16px; font-weight: 700; color: #fff; letter-spacing: 0.05em; }
+.logo span { color: #4FC3F7; }
+.header-badge {
+  font-size: 11px;
+  background: rgba(79,195,247,0.2);
+  color: #4FC3F7;
+  border: 1px solid rgba(79,195,247,0.4);
+  padding: 4px 12px;
+  border-radius: 100px;
+  letter-spacing: 0.06em;
+}
+
+main { max-width: 820px; margin: 40px auto; padding: 0 20px; }
+
+.hero { text-align: center; margin-bottom: 36px; }
+.hero h1 { font-size: 26px; font-weight: 700; color: #1E2761; line-height: 1.4; margin-bottom: 10px; }
+.hero p  { font-size: 14px; color: #64748B; line-height: 1.7; }
+
+/* ステップ */
+.steps-bar {
+  display: flex; align-items: center;
+  margin-bottom: 28px;
+}
+.step { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+.step-num {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: #E8EEF8; color: #64748B;
+  font-size: 13px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.3s;
+}
+.step.active .step-num { background: #1E2761; color: #fff; }
+.step.done   .step-num { background: #00897B; color: #fff; }
+.step-label { font-size: 11px; color: #64748B; text-align: center; }
+.step.active .step-label { color: #1E2761; font-weight: 700; }
+.step-line { flex: 1; height: 2px; background: #E8EEF8; margin-top: 14px; transition: background 0.3s; }
+.step-line.done { background: #00897B; }
+
+/* カード */
+.card {
+  background: #fff;
+  border-radius: 16px;
+  border: 0.5px solid rgba(0,0,0,0.08);
+  padding: 28px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 12px rgba(30,39,97,0.06);
+}
+.card-title {
+  font-size: 12px; font-weight: 700; color: #1E2761;
+  letter-spacing: 0.08em; margin-bottom: 20px;
+  padding-bottom: 12px; border-bottom: 2px solid #E8EEF8;
+}
+
+/* フォーム */
+.field { margin-bottom: 16px; }
+.field label {
+  display: block; font-size: 12px; font-weight: 700;
+  color: #1E2761; margin-bottom: 5px;
+}
+.req { color: #E53E3E; margin-left: 4px; font-size: 10px; }
+.field input, .field textarea, .field select {
+  width: 100%; padding: 9px 13px;
+  border: 1.5px solid #D0D8F0; border-radius: 8px;
+  font-size: 13px; font-family: inherit; color: #1A1A1A;
+  background: #FAFBFF; outline: none;
+  transition: border-color 0.2s;
+}
+.field input:focus, .field textarea:focus { border-color: #1E2761; background: #fff; }
+.field textarea { min-height: 100px; resize: vertical; line-height: 1.7; }
+
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+/* アップロードエリア */
+.upload-area {
+  border: 2px dashed #C0CCF0;
+  border-radius: 12px;
+  padding: 28px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: #FAFBFF;
+  position: relative;
+}
+.upload-area:hover { border-color: #1E2761; background: #F0F4FF; }
+.upload-area.has-file { border-color: #00897B; border-style: solid; background: #F0FFF8; }
+.upload-icon { font-size: 32px; margin-bottom: 10px; }
+.upload-text { font-size: 13px; color: #64748B; margin-bottom: 6px; }
+.upload-sub  { font-size: 11px; color: #94A3B8; }
+.upload-area input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+
+/* カラープレビュー */
+.color-preview {
+  display: flex; gap: 10px; align-items: center;
+  margin-top: 14px; padding: 12px 16px;
+  background: #F8FAFF; border-radius: 8px;
+  border: 0.5px solid #D0D8F0;
+  display: none;
+}
+.color-swatch { width: 28px; height: 28px; border-radius: 6px; border: 0.5px solid rgba(0,0,0,0.1); flex-shrink: 0; }
+.color-info { font-size: 12px; color: #64748B; flex: 1; }
+.color-info strong { display: block; color: #1A1A1A; font-size: 13px; margin-bottom: 2px; }
+
+/* ボタン */
+.btn-primary {
+  width: 100%; padding: 13px;
+  background: #1E2761; color: #fff;
+  font-size: 14px; font-weight: 700; border: none;
+  border-radius: 10px; cursor: pointer;
+  font-family: inherit; transition: all 0.2s;
+}
+.btn-primary:hover { background: #0D1B4B; transform: translateY(-1px); }
+.btn-primary:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+.btn-secondary {
+  width: 100%; padding: 11px;
+  background: #fff; color: #1E2761;
+  font-size: 13px; font-weight: 700;
+  border: 1.5px solid #1E2761; border-radius: 10px;
+  cursor: pointer; font-family: inherit; margin-top: 10px;
+  transition: background 0.2s;
+}
+.btn-secondary:hover { background: #F0F4FF; }
+
+/* プレビューテキスト */
+.preview-box {
+  background: #F8FAFF; border: 1.5px solid #D0D8F0;
+  border-radius: 10px; padding: 18px;
+  font-size: 12px; line-height: 1.9; color: #1A1A1A;
+  white-space: pre-wrap; max-height: 280px; overflow-y: auto;
+  margin-bottom: 14px;
+}
+
+/* スライドプレビュー */
+.slide-outer {
+  border-radius: 12px; overflow: hidden;
+  border: 0.5px solid rgba(0,0,0,0.1);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  margin-bottom: 16px;
+}
+.slide-viewport {
+  width: 100%; aspect-ratio: 16/9;
+  position: relative; background: #fff;
+  overflow: hidden;
+}
+.slide-page { position: absolute; inset: 0; display: none; }
+.slide-page.active { display: block; }
+
+/* スライドUI要素 */
+.s-left-bar  { position: absolute; left: 0; top: 0; bottom: 0; width: 10px; }
+.s-title-box {
+  position: absolute; left: 18px; top: 14px;
+  padding: 5px 16px; border-radius: 4px;
+  font-size: clamp(10px, 2vw, 16px); font-weight: 700; color: #fff;
+  white-space: nowrap;
+}
+.s-badge {
+  position: absolute; right: 16px; top: 14px;
+  padding: 4px 12px; border-radius: 4px;
+  font-size: clamp(8px, 1.5vw, 12px); font-weight: 700; color: #fff;
+  max-width: 35%; text-align: right; line-height: 1.4;
+}
+.s-body {
+  position: absolute;
+  left: 18px; right: 18px;
+  top: 56px; bottom: 14px;
+  display: flex; flex-direction: column; justify-content: center;
+  gap: 10px;
+}
+.s-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  opacity: 0;
+}
+.s-dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  flex-shrink: 0; margin-top: 3px;
+}
+.s-icon {
+  width: 34px; height: 34px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+  border: 1.5px solid currentColor;
+}
+.s-text-block { flex: 1; }
+.s-item-title { font-size: clamp(9px, 1.8vw, 14px); font-weight: 700; color: #1a1a1a; margin-bottom: 1px; }
+.s-item-desc  { font-size: clamp(8px, 1.4vw, 11px); color: #555; line-height: 1.4; }
+
+/* タイトルスライド専用 */
+.s-main-title {
+  position: absolute;
+  left: 18px; right: 18px; top: 50%;
+  transform: translateY(-50%);
+  font-size: clamp(14px, 3vw, 28px);
+  font-weight: 700; color: #fff;
+  line-height: 1.3; opacity: 0;
+}
+.s-sub-title {
+  position: absolute;
+  left: 18px; right: 18px;
+  top: calc(50% + clamp(20px, 4vw, 48px));
+  font-size: clamp(9px, 1.6vw, 14px);
+  color: rgba(255,255,255,0.7); opacity: 0;
+}
+
+/* コントロール */
+.slide-controls {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 0;
+}
+.nav-btn {
+  font-size: 12px; padding: 5px 14px; cursor: pointer;
+  border-radius: 20px; font-family: inherit;
+}
+.nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.slide-dots { display: flex; gap: 5px; flex: 1; justify-content: center; }
+.sdot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #D0D8F0; cursor: pointer; transition: background 0.2s;
+}
+.sdot.on { background: #1E2761; }
+.slide-num { font-size: 12px; color: #64748B; min-width: 40px; text-align: right; }
+
+/* ダウンロード */
+.dl-area { text-align: center; padding: 20px 0 8px; }
+.btn-dl {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 28px; background: #00897B; color: #fff;
+  font-size: 14px; font-weight: 700; border: none;
+  border-radius: 10px; cursor: pointer; font-family: inherit;
+  transition: all 0.2s; margin: 0 6px;
+}
+.btn-dl:hover { background: #00695C; transform: translateY(-1px); }
+
+/* ローディング */
+.loading { display: flex; flex-direction: column; align-items: center; padding: 40px; gap: 14px; }
+.spinner { width: 36px; height: 36px; border: 3px solid #E8EEF8; border-top-color: #1E2761; border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading p { font-size: 13px; color: #64748B; }
+
+/* エラー */
+.err { background: #FFF5F5; border: 1px solid #FEB2B2; border-radius: 8px; padding: 12px 16px; font-size: 12px; color: #C0392B; margin-bottom: 14px; display: none; }
+
+/* パネル制御 */
+.panel { display: none; }
+.panel.active { display: block; }
+
+@keyframes fadeInUp    { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+@keyframes slideLeft   { from{opacity:0;transform:translateX(-24px)} to{opacity:1;transform:translateX(0)} }
+@keyframes slideRight  { from{opacity:0;transform:translateX(24px)} to{opacity:1;transform:translateX(0)} }
+@keyframes fadeIn      { from{opacity:0} to{opacity:1} }
+
+footer { text-align: center; padding: 28px; font-size: 11px; color: #94A3B8; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">AI<span>Pres</span> Generator</div>
+  <div class="header-badge">DEMO</div>
+</header>
+
+<main>
+  <div class="hero">
+    <h1>既存スライドのデザインを活かして<br>プレゼン資料を自動生成</h1>
+    <p>スライド画像をアップロードするだけでテーマカラーを自動抽出。<br>箇条書きを入力するとアニメーション付きスライドが自動生成されます。</p>
+  </div>
+
+  <!-- ステップバー -->
+  <div class="steps-bar">
+    <div class="step active" id="st1"><div class="step-num">1</div><div class="step-label">テンプレート<br>登録</div></div>
+    <div class="step-line" id="ln1"></div>
+    <div class="step" id="st2"><div class="step-num">2</div><div class="step-label">情報<br>入力</div></div>
+    <div class="step-line" id="ln2"></div>
+    <div class="step" id="st3"><div class="step-num">3</div><div class="step-label">構成<br>確認</div></div>
+    <div class="step-line" id="ln3"></div>
+    <div class="step" id="st4"><div class="step-num">4</div><div class="step-label">完成・<br>DL</div></div>
+  </div>
+
+  <!-- パネル1：テンプレートアップロード -->
+  <div class="card panel active" id="panel1">
+    <div class="card-title">STEP 1　既存スライド画像をアップロード（テーマカラーを自動抽出）</div>
+    <div class="err" id="err1"></div>
+
+    <div class="upload-area" id="uploadArea">
+      <input type="file" accept="image/*" id="fileInput" onchange="handleUpload(this)">
+      <div class="upload-icon">🖼</div>
+      <div class="upload-text">スライド画像をドラッグ＆ドロップ<br>またはクリックして選択</div>
+      <div class="upload-sub">PNG・JPG・GIF対応</div>
+    </div>
+
+    <div class="color-preview" id="colorPreview">
+      <div class="color-swatch" id="swatchMain"></div>
+      <div class="color-info">
+        <strong id="colorMainLabel">メインカラー抽出中...</strong>
+        <span id="colorSub">テーマカラーをスライドに適用します</span>
+      </div>
+      <div class="color-swatch" id="swatchBg"></div>
+    </div>
+
+    <div style="margin-top:16px; display:flex; gap:10px; align-items:center; font-size:12px; color:#64748B;">
+      <span>カラーを手動指定：</span>
+      <input type="color" id="colorPicker" value="#E52222" style="width:36px;height:28px;border:none;cursor:pointer;border-radius:4px;">
+      <input type="text" id="colorHex" value="#E52222" style="width:80px;padding:4px 8px;font-size:12px;" oninput="manualColor(this.value)">
+    </div>
+
+    <button class="btn-primary" style="margin-top:20px;" onclick="goToStep2()">次へ → 情報を入力する</button>
+    <p style="font-size:11px;color:#94A3B8;text-align:center;margin-top:10px;">※ 画像なしでもデフォルトカラーで続行できます</p>
+  </div>
+
+  <!-- パネル2：情報入力 -->
+  <div class="card panel" id="panel2">
+    <div class="card-title">STEP 2　プレゼン情報を入力</div>
+    <div class="err" id="err2"></div>
+
+    <div class="row2">
+      <div class="field">
+        <label>プレゼンのテーマ <span class="req">必須</span></label>
+        <input type="text" id="theme" placeholder="例：AIを使った事務作業の軽減化">
+      </div>
+      <div class="field">
+        <label>ターゲット <span class="req">必須</span></label>
+        <input type="text" id="target" placeholder="例：30代の経営者">
+      </div>
+    </div>
+    <div class="field">
+      <label>目的・ゴール <span class="req">必須</span></label>
+      <input type="text" id="goal" placeholder="例：AI導入の意思決定を促す">
+    </div>
+    <div class="field">
+      <label>右上バッジテキスト</label>
+      <input type="text" id="badge" placeholder="例：会社名・講座名・セクション名">
+    </div>
+    <div class="field">
+      <label>伝えたい要点・メモ</label>
+      <textarea id="notes" placeholder="例：コスト削減効果、導入事例、具体的な数字など"></textarea>
+    </div>
+    <div class="field">
+      <label>スライド枚数</label>
+      <select id="slideCount">
+        <option value="3〜5枚">3〜5枚（コンパクト）</option>
+        <option value="5〜8枚" selected>5〜8枚（標準）</option>
+        <option value="10〜12枚">10〜12枚（詳細）</option>
+      </select>
+    </div>
+
+    <button class="btn-primary" id="btnGen" onclick="generateOutline()">AIで構成を生成する →</button>
+    <button class="btn-secondary" onclick="setStep(1)">← テンプレートに戻る</button>
+  </div>
+
+  <!-- ローディング1 -->
+  <div class="card panel" id="panelL1">
+    <div class="loading"><div class="spinner"></div><p>AIがスライド構成を考えています...</p></div>
+  </div>
+
+  <!-- パネル3：構成確認 -->
+  <div class="card panel" id="panel3">
+    <div class="card-title">STEP 3　スライド構成を確認・修正</div>
+    <div class="preview-box" id="outlineBox"></div>
+    <button class="btn-primary" onclick="buildPresentation()">この構成でスライドを生成する →</button>
+    <button class="btn-secondary" onclick="setStep(2)">← 入力に戻る</button>
+  </div>
+
+  <!-- ローディング2 -->
+  <div class="card panel" id="panelL2">
+    <div class="loading"><div class="spinner"></div><p>アニメーションスライドを生成しています...</p></div>
+  </div>
+
+  <!-- パネル4：完成スライド -->
+  <div class="card panel" id="panel4">
+    <div class="card-title">STEP 4　完成！アニメーションスライドをご確認ください</div>
+
+    <div class="slide-outer">
+      <div class="slide-viewport" id="slideViewport"></div>
+    </div>
+
+    <div class="slide-controls">
+      <button class="nav-btn" id="prevBtn" onclick="navSlide(-1)">← 前へ</button>
+      <div class="slide-dots" id="slideDots"></div>
+      <button class="nav-btn" id="nextBtn" onclick="navSlide(1)">次へ →</button>
+      <span class="slide-num" id="slideNum"></span>
+    </div>
+
+    <div class="dl-area">
+      <button class="btn-dl" onclick="downloadHTML()">⬇ HTMLでダウンロード</button>
+    </div>
+
+    <button class="btn-secondary" onclick="setStep(1)">最初からやり直す</button>
+  </div>
+</main>
+
+<footer>© 2026 AIPres Generator　／　Powered by Anthropic Claude</footer>
+
+<script>
+// ============================================================
+// State
+// ============================================================
+let themeColor  = '#E52222';
+let bgColor     = '#ffffff';
+let outline     = '';
+let formData    = {};
+let slideData   = [];
+let currentSlide = 0;
+
+const ICONS = ['📖','🤖','✍️','💡','📊','🎯','🔍','⚡','🌟','📝','🔑','💼'];
+
+// ============================================================
+// ステップ制御
+// ============================================================
+const panels = { 1:'panel1', 2:'panel2', 3:'panel3', 4:'panel4' };
+
+function setStep(n) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  const id = panels[n];
+  if (id) document.getElementById(id).classList.add('active');
+  [1,2,3,4].forEach(i => {
+    const s = document.getElementById('st'+i);
+    s.classList.remove('active','done');
+    if (i < n) s.classList.add('done');
+    if (i === n) s.classList.add('active');
+  });
+  [1,2,3].forEach(i => {
+    const l = document.getElementById('ln'+i);
+    if (l) l.classList.toggle('done', i < n);
+  });
+}
+
+function showPanel(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ============================================================
+// カラー抽出
+// ============================================================
+function handleUpload(input) {
+  const file = input.files[0];
+  if (!file) return;
+
+  const area = document.getElementById('uploadArea');
+  area.classList.add('has-file');
+  area.querySelector('.upload-text').textContent = file.name;
+  area.querySelector('.upload-sub').textContent = 'アップロード完了 ✓';
+
+  const img = new Image();
+  const url = URL.createObjectURL(file);
+  img.onload = () => {
+    const color = extractColor(img);
+    themeColor = color;
+    updateColorUI(color);
+    URL.revokeObjectURL(url);
+  };
+  img.src = url;
+}
+
+function extractColor(img) {
+  const canvas = document.createElement('canvas');
+  const scale  = Math.min(1, 100 / Math.max(img.width, img.height));
+  canvas.width  = Math.floor(img.width  * scale);
+  canvas.height = Math.floor(img.height * scale);
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+  const data   = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+  const counts = {};
+
+  for (let i = 0; i < data.length; i += 16) {
+    const r = Math.round(data[i]   / 32) * 32;
+    const g = Math.round(data[i+1] / 32) * 32;
+    const b = Math.round(data[i+2] / 32) * 32;
+    const a = data[i+3];
+    if (a < 128) continue;
+    // 白・黒・グレー系は除外
+    const max = Math.max(r,g,b), min = Math.min(r,g,b);
+    if (max - min < 40) continue;
+    if (max > 220 && min > 180) continue;
+    const key = `${r},${g},${b}`;
+    counts[key] = (counts[key] || 0) + 1;
+  }
+
+  const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]);
+  if (sorted.length === 0) return '#1E2761';
+
+  const [r,g,b] = sorted[0][0].split(',').map(Number);
+  return '#' + [r,g,b].map(v => v.toString(16).padStart(2,'0')).join('');
+}
+
+function updateColorUI(hex) {
+  document.getElementById('swatchMain').style.background = hex;
+  document.getElementById('colorMainLabel').textContent  = `メインカラー：${hex.toUpperCase()}`;
+  document.getElementById('colorPreview').style.display  = 'flex';
+  document.getElementById('colorPicker').value = hex;
+  document.getElementById('colorHex').value   = hex;
+  themeColor = hex;
+}
+
+function manualColor(val) {
+  if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
+    themeColor = val;
+    document.getElementById('colorPicker').value = val;
+    document.getElementById('swatchMain').style.background = val;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('colorPicker').addEventListener('input', e => {
+    manualColor(e.target.value);
+    document.getElementById('colorHex').value = e.target.value;
+  });
+});
+
+function goToStep2() { setStep(2); }
+
+// ============================================================
+// 構成生成
+// ============================================================
+async function generateOutline() {
+  const theme  = document.getElementById('theme').value.trim();
+  const target = document.getElementById('target').value.trim();
+  const goal   = document.getElementById('goal').value.trim();
+  const badge  = document.getElementById('badge').value.trim();
+  const notes  = document.getElementById('notes').value.trim();
+  const count  = document.getElementById('slideCount').value;
+
+  const errEl = document.getElementById('err2');
+  errEl.style.display = 'none';
+
+  if (!theme || !target || !goal) {
+    errEl.textContent = 'テーマ・ターゲット・目的は必須です。';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  formData = { theme, target, goal, badge, notes, slideCount: count };
+  showPanel('panelL1');
+
+  try {
+    const res  = await fetch('/api/generate', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || '生成に失敗しました');
+
+    outline = data.result;
+    document.getElementById('outlineBox').textContent = outline;
+    setStep(3);
+    showPanel('panel3');
+
+  } catch(e) {
+    setStep(2);
+    showPanel('panel2');
+    errEl.textContent = e.message;
+    errEl.style.display = 'block';
+  }
+}
+
+// ============================================================
+// スライド構築
+// ============================================================
+function parseOutline(text) {
+  const slides = [];
+  const lines  = text.split('\n').filter(l => l.trim());
+  let cur = null;
+
+  for (const line of lines) {
+    const m = line.match(/^スライド\s*(\d+)\s*[：:]\s*(.+)/);
+    if (m) {
+      if (cur) slides.push(cur);
+      cur = { title: m[2].trim(), points: [] };
+    } else if (cur) {
+      const clean = line.replace(/^[・\-\s]+/, '').trim();
+      if (clean) cur.points.push(clean);
+    }
+  }
+  if (cur) slides.push(cur);
+  return slides;
+}
+
+function buildPresentation() {
+  showPanel('panelL2');
+
+  setTimeout(() => {
+    slideData = parseOutline(outline);
+    renderSlides();
+    setStep(4);
+    showPanel('panel4');
+    buildDots();
+    showSlide(0);
+  }, 800);
+}
+
+function renderSlides() {
+  const vp   = document.getElementById('slideViewport');
+  vp.innerHTML = '';
+
+  const tc   = themeColor;
+  const tcRgb = hexToRgb(tc);
+  const iconBg = `rgba(${tcRgb},0.12)`;
+
+  // タイトルスライド
+  const titlePage = document.createElement('div');
+  titlePage.className = 'slide-page';
+  titlePage.id = 'sp-0';
+  titlePage.style.background = tc;
+  titlePage.innerHTML = `
+    <div class="s-left-bar" style="background:rgba(255,255,255,0.25)"></div>
+    <div class="s-main-title" id="mt-0">${formData.theme}</div>
+    <div class="s-sub-title"  id="ms-0">対象：${formData.target}　／　目的：${formData.goal}</div>
+  `;
+  vp.appendChild(titlePage);
+
+  // コンテンツスライド
+  slideData.forEach((s, idx) => {
+    const page = document.createElement('div');
+    page.className = 'slide-page';
+    page.id = 'sp-' + (idx+1);
+    page.style.background = bgColor;
+
+    const itemsHTML = s.points.map((p, pi) => {
+      const parts = p.split('：');
+      const title = parts[0] || p;
+      const desc  = parts.slice(1).join('：') || '';
+      return `
+        <div class="s-item" id="si-${idx}-${pi}">
+          <div class="s-dot" style="background:${tc}"></div>
+          <div class="s-icon" style="background:${iconBg};color:${tc}">${ICONS[(pi + idx) % ICONS.length]}</div>
+          <div class="s-text-block">
+            <div class="s-item-title">${title}</div>
+            ${desc ? `<div class="s-item-desc">${desc}</div>` : ''}
+          </div>
+        </div>`;
+    }).join('');
+
+    page.innerHTML = `
+      <div class="s-left-bar" style="background:${tc}"></div>
+      <div class="s-title-box" id="stb-${idx}" style="background:${tc}">${s.title}</div>
+      ${formData.badge ? `<div class="s-badge" id="sbg-${idx}" style="background:${tc}">${formData.badge}</div>` : ''}
+      <div class="s-body">${itemsHTML}</div>
+    `;
+    vp.appendChild(page);
+  });
+}
+
+function showSlide(idx) {
+  const total = slideData.length + 1;
+  document.querySelectorAll('.slide-page').forEach(p => p.classList.remove('active'));
+  const page = document.getElementById('sp-' + idx);
+  if (!page) return;
+  page.classList.add('active');
+
+  if (idx === 0) {
+    // タイトルスライドアニメ
+    animEl('mt-0', 'fadeInUp 0.6s ease 0.1s forwards');
+    animEl('ms-0', 'fadeInUp 0.6s ease 0.4s forwards');
+  } else {
+    const si = idx - 1;
+    animEl('stb-' + si, 'slideLeft 0.5s ease forwards');
+    if (formData.badge) animEl('sbg-' + si, 'slideRight 0.4s ease 0.2s forwards');
+    slideData[si]?.points.forEach((_, pi) => {
+      animEl(`si-${si}-${pi}`, `fadeInUp 0.5s ease ${0.3 + pi * 0.18}s forwards`);
+    });
+  }
+
+  document.querySelectorAll('.sdot').forEach((d,i) => d.classList.toggle('on', i === idx));
+  document.getElementById('slideNum').textContent = `${idx+1} / ${total}`;
+  document.getElementById('prevBtn').disabled = idx === 0;
+  document.getElementById('nextBtn').disabled = idx === total - 1;
+  currentSlide = idx;
+}
+
+function animEl(id, anim) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.style.animation = 'none';
+  el.style.opacity   = '0';
+  void el.offsetWidth;
+  el.style.animation = anim;
+}
+
+function buildDots() {
+  const dc = document.getElementById('slideDots');
+  dc.innerHTML = '';
+  const total = slideData.length + 1;
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('div');
+    d.className = 'sdot';
+    d.onclick = (()=>{ const idx=i; return ()=>showSlide(idx); })();
+    dc.appendChild(d);
+  }
+}
+
+function navSlide(dir) {
+  const total = slideData.length + 1;
+  showSlide(Math.max(0, Math.min(total - 1, currentSlide + dir)));
+}
+
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1,3),16);
+  const g = parseInt(hex.slice(3,5),16);
+  const b = parseInt(hex.slice(5,7),16);
+  return `${r},${g},${b}`;
+}
+
+// ============================================================
+// HTMLダウンロード
+// ============================================================
+function downloadHTML() {
+  const tc = themeColor;
+  const tcRgb = hexToRgb(tc);
+  const iconBg = `rgba(${tcRgb},0.12)`;
+
+  const slidesHTML = [
+    // タイトルページ
+    `<div class="slide-page active" id="sp-0" style="background:${tc}">
+      <div class="s-left-bar" style="background:rgba(255,255,255,0.25)"></div>
+      <div class="s-main-title anim-title">${formData.theme}</div>
+      <div class="s-sub-title anim-sub">対象：${formData.target}　／　目的：${formData.goal}</div>
+    </div>`,
+    ...slideData.map((s, idx) => `
+    <div class="slide-page" id="sp-${idx+1}" style="background:#fff">
+      <div class="s-left-bar" style="background:${tc}"></div>
+      <div class="s-title-box anim-title" style="background:${tc}">${s.title}</div>
+      ${formData.badge ? `<div class="s-badge anim-badge" style="background:${tc}">${formData.badge}</div>` : ''}
+      <div class="s-body">
+        ${s.points.map((p,pi)=>{
+          const parts = p.split('：');
+          const title = parts[0]||p;
+          const desc  = parts.slice(1).join('：')||'';
+          return `<div class="s-item anim-item" style="animation-delay:${0.3+pi*0.18}s">
+            <div class="s-dot" style="background:${tc}"></div>
+            <div class="s-icon" style="background:${iconBg};color:${tc}">${ICONS[(pi+idx)%ICONS.length]}</div>
+            <div class="s-text-block">
+              <div class="s-item-title">${title}</div>
+              ${desc?`<div class="s-item-desc">${desc}</div>`:''}
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`)
+  ].join('');
+
+  const html = `<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>${formData.theme}</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Hiragino Kaku Gothic ProN','Noto Sans JP',Arial,sans-serif;background:#111;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+.wrap{width:100%;max-width:900px}
+.viewport{width:100%;aspect-ratio:16/9;position:relative;border-radius:12px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.5)}
+.slide-page{position:absolute;inset:0;display:none}
+.slide-page.active{display:block}
+.s-left-bar{position:absolute;left:0;top:0;bottom:0;width:10px}
+.s-title-box{position:absolute;left:18px;top:14px;padding:5px 16px;border-radius:4px;font-size:clamp(11px,2.2vw,18px);font-weight:700;color:#fff}
+.s-badge{position:absolute;right:16px;top:14px;padding:4px 12px;border-radius:4px;font-size:clamp(9px,1.6vw,13px);font-weight:700;color:#fff;max-width:35%;text-align:right;line-height:1.4}
+.s-body{position:absolute;left:18px;right:18px;top:56px;bottom:14px;display:flex;flex-direction:column;justify-content:center;gap:10px}
+.s-item{display:flex;align-items:flex-start;gap:10px;opacity:0}
+.s-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.s-icon{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;border:1.5px solid currentColor}
+.s-text-block{flex:1}
+.s-item-title{font-size:clamp(10px,1.9vw,15px);font-weight:700;color:#1a1a1a;margin-bottom:1px}
+.s-item-desc{font-size:clamp(8px,1.4vw,12px);color:#555;line-height:1.4}
+.s-main-title{position:absolute;left:18px;right:18px;top:50%;transform:translateY(-50%);font-size:clamp(16px,3.5vw,32px);font-weight:700;color:#fff;line-height:1.3;opacity:0}
+.s-sub-title{position:absolute;left:18px;right:18px;top:calc(50% + clamp(22px,4.5vw,52px));font-size:clamp(10px,1.7vw,15px);color:rgba(255,255,255,0.75);opacity:0}
+.controls{display:flex;align-items:center;gap:10px;margin-top:14px}
+.nav-btn{padding:6px 18px;background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.2);border-radius:20px;cursor:pointer;font-size:13px;font-family:inherit}
+.nav-btn:hover{background:rgba(255,255,255,0.2)}
+.nav-btn:disabled{opacity:0.3;cursor:not-allowed}
+.dots{display:flex;gap:6px;flex:1;justify-content:center}
+.dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.3);cursor:pointer;transition:background 0.2s}
+.dot.on{background:#fff}
+.counter{font-size:12px;color:rgba(255,255,255,0.5);min-width:40px;text-align:right}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideLeft{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:translateX(0)}}
+@keyframes slideRight{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:translateX(0)}}
+.anim-title{animation:slideLeft 0.5s ease forwards}
+.anim-badge{animation:slideRight 0.4s ease 0.2s forwards}
+.anim-item{animation:fadeInUp 0.5s ease forwards}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="viewport" id="vp">${slidesHTML}</div>
+  <div class="controls">
+    <button class="nav-btn" id="prev" onclick="nav(-1)">← 前へ</button>
+    <div class="dots" id="dots"></div>
+    <button class="nav-btn" id="next" onclick="nav(1)">次へ →</button>
+    <span class="counter" id="cnt"></span>
+  </div>
+</div>
+<script>
+const pages=${JSON.stringify(slideData.map(s=>s.title).concat([]))};
+const total=${slideData.length+1};
+let cur=0;
+function buildDots(){const dc=document.getElementById('dots');for(let i=0;i<total;i++){const d=document.createElement('div');d.className='dot';d.onclick=(()=>{const x=i;return()=>show(x);})();dc.appendChild(d);}}
+function show(idx){document.querySelectorAll('.slide-page').forEach(p=>p.classList.remove('active'));const pg=document.getElementById('sp-'+idx);if(!pg)return;pg.classList.add('active');pg.querySelectorAll('.anim-title,.anim-badge,.anim-item').forEach(el=>{el.style.animation='none';el.style.opacity='0';void el.offsetWidth;el.style.animation=el.classList.contains('anim-title')?'slideLeft 0.5s ease forwards':el.classList.contains('anim-badge')?'slideRight 0.4s ease 0.2s forwards':el.style.animationDelay||''+'fadeInUp 0.5s ease forwards';});document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('on',i===idx));document.getElementById('cnt').textContent=(idx+1)+' / '+total;document.getElementById('prev').disabled=idx===0;document.getElementById('next').disabled=idx===total-1;cur=idx;}
+function nav(d){show(Math.max(0,Math.min(total-1,cur+d)));}
+buildDots();show(0);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')nav(1);if(e.key==='ArrowLeft')nav(-1);});
+<\/script>
+</body>
+</html>`;
+
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = `${formData.theme}_プレゼン.html`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
