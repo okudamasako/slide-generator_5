@@ -40,11 +40,7 @@ main { max-width: 820px; margin: 40px auto; padding: 0 20px; }
 .hero h1 { font-size: 26px; font-weight: 700; color: #1E2761; line-height: 1.4; margin-bottom: 10px; }
 .hero p  { font-size: 14px; color: #64748B; line-height: 1.7; }
 
-/* ステップ */
-.steps-bar {
-  display: flex; align-items: center;
-  margin-bottom: 28px;
-}
+.steps-bar { display: flex; align-items: center; margin-bottom: 28px; }
 .step { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; }
 .step-num {
   width: 30px; height: 30px; border-radius: 50%;
@@ -60,7 +56,6 @@ main { max-width: 820px; margin: 40px auto; padding: 0 20px; }
 .step-line { flex: 1; height: 2px; background: #E8EEF8; margin-top: 14px; transition: background 0.3s; }
 .step-line.done { background: #00897B; }
 
-/* カード */
 .card {
   background: #fff;
   border-radius: 16px;
@@ -75,12 +70,8 @@ main { max-width: 820px; margin: 40px auto; padding: 0 20px; }
   padding-bottom: 12px; border-bottom: 2px solid #E8EEF8;
 }
 
-/* フォーム */
 .field { margin-bottom: 16px; }
-.field label {
-  display: block; font-size: 12px; font-weight: 700;
-  color: #1E2761; margin-bottom: 5px;
-}
+.field label { display: block; font-size: 12px; font-weight: 700; color: #1E2761; margin-bottom: 5px; }
 .req { color: #E53E3E; margin-left: 4px; font-size: 10px; }
 .field input, .field textarea, .field select {
   width: 100%; padding: 9px 13px;
@@ -91,19 +82,12 @@ main { max-width: 820px; margin: 40px auto; padding: 0 20px; }
 }
 .field input:focus, .field textarea:focus { border-color: #1E2761; background: #fff; }
 .field textarea { min-height: 100px; resize: vertical; line-height: 1.7; }
-
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 
-/* アップロードエリア */
 .upload-area {
-  border: 2px dashed #C0CCF0;
-  border-radius: 12px;
-  padding: 28px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.2s;
-  background: #FAFBFF;
-  position: relative;
+  border: 2px dashed #C0CCF0; border-radius: 12px; padding: 28px;
+  text-align: center; cursor: pointer; transition: all 0.2s;
+  background: #FAFBFF; position: relative;
 }
 .upload-area:hover { border-color: #1E2761; background: #F0F4FF; }
 .upload-area.has-file { border-color: #00897B; border-style: solid; background: #F0FFF8; }
@@ -112,25 +96,28 @@ main { max-width: 820px; margin: 40px auto; padding: 0 20px; }
 .upload-sub  { font-size: 11px; color: #94A3B8; }
 .upload-area input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
 
-/* カラープレビュー */
 .color-preview {
-  display: flex; gap: 10px; align-items: center;
+  display: none; gap: 10px; align-items: center;
   margin-top: 14px; padding: 12px 16px;
-  background: #F8FAFF; border-radius: 8px;
-  border: 0.5px solid #D0D8F0;
-  display: none;
+  background: #F8FAFF; border-radius: 8px; border: 0.5px solid #D0D8F0;
 }
 .color-swatch { width: 28px; height: 28px; border-radius: 6px; border: 0.5px solid rgba(0,0,0,0.1); flex-shrink: 0; }
 .color-info { font-size: 12px; color: #64748B; flex: 1; }
 .color-info strong { display: block; color: #1A1A1A; font-size: 13px; margin-bottom: 2px; }
 
-/* ボタン */
+/* テンプレート解析結果バッジ */
+.template-badge {
+  display: none; margin-top: 12px; padding: 10px 14px;
+  background: #F0FFF8; border: 1px solid #00897B; border-radius: 8px;
+  font-size: 12px; color: #00695C;
+}
+.template-badge strong { display: block; margin-bottom: 4px; font-size: 13px; }
+
 .btn-primary {
   width: 100%; padding: 13px;
   background: #1E2761; color: #fff;
   font-size: 14px; font-weight: 700; border: none;
-  border-radius: 10px; cursor: pointer;
-  font-family: inherit; transition: all 0.2s;
+  border-radius: 10px; cursor: pointer; font-family: inherit; transition: all 0.2s;
 }
 .btn-primary:hover { background: #0D1B4B; transform: translateY(-1px); }
 .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
@@ -139,139 +126,276 @@ main { max-width: 820px; margin: 40px auto; padding: 0 20px; }
   background: #fff; color: #1E2761;
   font-size: 13px; font-weight: 700;
   border: 1.5px solid #1E2761; border-radius: 10px;
-  cursor: pointer; font-family: inherit; margin-top: 10px;
-  transition: background 0.2s;
+  cursor: pointer; font-family: inherit; margin-top: 10px; transition: background 0.2s;
 }
 .btn-secondary:hover { background: #F0F4FF; }
 
-/* プレビューテキスト */
 .preview-box {
   background: #F8FAFF; border: 1.5px solid #D0D8F0;
   border-radius: 10px; padding: 18px;
   font-size: 12px; line-height: 1.9; color: #1A1A1A;
-  white-space: pre-wrap; max-height: 280px; overflow-y: auto;
-  margin-bottom: 14px;
+  white-space: pre-wrap; max-height: 280px; overflow-y: auto; margin-bottom: 14px;
 }
 
-/* スライドプレビュー */
 .slide-outer {
   border-radius: 12px; overflow: hidden;
   border: 0.5px solid rgba(0,0,0,0.1);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-  margin-bottom: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin-bottom: 16px;
 }
 .slide-viewport {
   width: 100%; aspect-ratio: 16/9;
-  position: relative; background: #fff;
-  overflow: hidden;
+  position: relative; background: #f5f5f5; overflow: hidden;
 }
 .slide-page { position: absolute; inset: 0; display: none; }
-.slide-page.active { display: block; }
+.slide-page.active { display: flex; }
 
-/* スライドUI要素 */
-.s-left-bar  { position: absolute; left: 0; top: 0; bottom: 0; width: 10px; }
-.s-title-box {
-  position: absolute; left: 18px; top: 14px;
-  padding: 5px 16px; border-radius: 4px;
-  font-size: clamp(10px, 2vw, 16px); font-weight: 700; color: #fff;
-  white-space: nowrap;
-}
-.s-badge {
-  position: absolute; right: 16px; top: 14px;
-  padding: 4px 12px; border-radius: 4px;
-  font-size: clamp(8px, 1.5vw, 12px); font-weight: 700; color: #fff;
-  max-width: 35%; text-align: right; line-height: 1.4;
-}
-.s-body {
-  position: absolute;
-  left: 18px; right: 18px;
-  top: 56px; bottom: 14px;
-  display: flex; flex-direction: column; justify-content: center;
-  gap: 10px;
-}
-.s-item {
-  display: flex; align-items: flex-start; gap: 10px;
-  opacity: 0;
-}
-.s-dot {
-  width: 9px; height: 9px; border-radius: 50%;
-  flex-shrink: 0; margin-top: 3px;
-}
-.s-icon {
-  width: 34px; height: 34px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 14px; flex-shrink: 0;
-  border: 1.5px solid currentColor;
-}
-.s-text-block { flex: 1; }
-.s-item-title { font-size: clamp(9px, 1.8vw, 14px); font-weight: 700; color: #1a1a1a; margin-bottom: 1px; }
-.s-item-desc  { font-size: clamp(8px, 1.4vw, 11px); color: #555; line-height: 1.4; }
-
-/* タイトルスライド専用 */
-.s-main-title {
-  position: absolute;
-  left: 18px; right: 18px; top: 50%;
-  transform: translateY(-50%);
-  font-size: clamp(14px, 3vw, 28px);
-  font-weight: 700; color: #fff;
-  line-height: 1.3; opacity: 0;
-}
-.s-sub-title {
-  position: absolute;
-  left: 18px; right: 18px;
-  top: calc(50% + clamp(20px, 4vw, 48px));
-  font-size: clamp(9px, 1.6vw, 14px);
-  color: rgba(255,255,255,0.7); opacity: 0;
-}
-
-/* コントロール */
-.slide-controls {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 0;
-}
-.nav-btn {
-  font-size: 12px; padding: 5px 14px; cursor: pointer;
-  border-radius: 20px; font-family: inherit;
-}
+.slide-controls { display: flex; align-items: center; gap: 10px; padding: 10px 0; }
+.nav-btn { font-size: 12px; padding: 5px 14px; cursor: pointer; border-radius: 20px; font-family: inherit; }
 .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 .slide-dots { display: flex; gap: 5px; flex: 1; justify-content: center; }
-.sdot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: #D0D8F0; cursor: pointer; transition: background 0.2s;
-}
+.sdot { width: 7px; height: 7px; border-radius: 50%; background: #D0D8F0; cursor: pointer; transition: background 0.2s; }
 .sdot.on { background: #1E2761; }
 .slide-num { font-size: 12px; color: #64748B; min-width: 40px; text-align: right; }
 
-/* ダウンロード */
 .dl-area { text-align: center; padding: 20px 0 8px; }
 .btn-dl {
   display: inline-flex; align-items: center; gap: 8px;
   padding: 12px 28px; background: #00897B; color: #fff;
   font-size: 14px; font-weight: 700; border: none;
-  border-radius: 10px; cursor: pointer; font-family: inherit;
-  transition: all 0.2s; margin: 0 6px;
+  border-radius: 10px; cursor: pointer; font-family: inherit; transition: all 0.2s; margin: 0 6px;
 }
 .btn-dl:hover { background: #00695C; transform: translateY(-1px); }
 
-/* ローディング */
 .loading { display: flex; flex-direction: column; align-items: center; padding: 40px; gap: 14px; }
 .spinner { width: 36px; height: 36px; border: 3px solid #E8EEF8; border-top-color: #1E2761; border-radius: 50%; animation: spin 0.8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 .loading p { font-size: 13px; color: #64748B; }
 
-/* エラー */
 .err { background: #FFF5F5; border: 1px solid #FEB2B2; border-radius: 8px; padding: 12px 16px; font-size: 12px; color: #C0392B; margin-bottom: 14px; display: none; }
 
-/* パネル制御 */
 .panel { display: none; }
 .panel.active { display: block; }
 
-@keyframes fadeInUp    { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
-@keyframes slideLeft   { from{opacity:0;transform:translateX(-24px)} to{opacity:1;transform:translateX(0)} }
-@keyframes slideRight  { from{opacity:0;transform:translateX(24px)} to{opacity:1;transform:translateX(0)} }
-@keyframes fadeIn      { from{opacity:0} to{opacity:1} }
+@keyframes fadeInUp  { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+@keyframes slideLeft { from{opacity:0;transform:translateX(-20px)} to{opacity:1;transform:translateX(0)} }
+@keyframes slideRight{ from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
+@keyframes fadeIn    { from{opacity:0} to{opacity:1} }
+@keyframes scaleIn   { from{opacity:0;transform:scale(0.85)} to{opacity:1;transform:scale(1)} }
 
 footer { text-align: center; padding: 28px; font-size: 11px; color: #94A3B8; }
+
+/* ============================================================
+   スライド共通スタイル
+   ============================================================ */
+.sl-wrap {
+  width: 100%; height: 100%;
+  background: #fff;
+  font-family: 'Hiragino Kaku Gothic ProN','Noto Sans JP',Arial,sans-serif;
+  position: relative; overflow: hidden;
+}
+.sl-header {
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 44px;
+  display: flex; align-items: center;
+  padding: 0 16px; gap: 10px;
+}
+.sl-header-title {
+  font-size: clamp(9px,1.8vw,14px); font-weight: 800;
+  color: #fff; letter-spacing: 0.04em;
+}
+.sl-badge {
+  margin-left: auto;
+  font-size: clamp(7px,1.2vw,10px); font-weight: 700;
+  color: #fff; padding: 2px 8px; border-radius: 3px;
+  background: rgba(255,255,255,0.25);
+}
+.sl-body {
+  position: absolute;
+  top: 44px; left: 0; right: 0; bottom: 0;
+  padding: 10px 16px 10px;
+  display: flex; flex-direction: column;
+}
+.sl-section-title {
+  font-size: clamp(11px,2.2vw,18px); font-weight: 800;
+  color: #1a1a1a; margin-bottom: 8px; line-height: 1.3;
+}
+.sl-divider {
+  height: 2px; border-radius: 1px; margin-bottom: 10px;
+  opacity: 0.3;
+}
+
+/* ---- LAYOUT: step ---- */
+.layout-step .sl-steps {
+  display: flex; gap: 8px; flex: 1; align-items: stretch;
+}
+.layout-step .step-card {
+  flex: 1; border-radius: 8px; padding: 10px 8px;
+  background: #f5f7ff;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  position: relative; opacity: 0;
+}
+.layout-step .step-card::after {
+  content: '›'; position: absolute; right: -10px; top: 50%;
+  transform: translateY(-50%);
+  font-size: clamp(12px,2vw,18px); color: #ccc; font-weight: 700;
+}
+.layout-step .step-card:last-child::after { display: none; }
+.layout-step .step-num {
+  width: clamp(22px,3.5vw,32px); height: clamp(22px,3.5vw,32px);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: clamp(9px,1.5vw,13px); font-weight: 800; color: #fff;
+}
+.layout-step .step-label {
+  font-size: clamp(8px,1.4vw,11px); font-weight: 800;
+  text-align: center; line-height: 1.2;
+}
+.layout-step .step-desc {
+  font-size: clamp(6px,1.1vw,9px); color: #555; text-align: center; line-height: 1.4;
+}
+
+/* ---- LAYOUT: card ---- */
+.layout-card .sl-cards {
+  display: flex; gap: 8px; flex: 1; align-items: stretch;
+}
+.layout-card .item-card {
+  flex: 1; border-radius: 8px; padding: 10px 8px;
+  background: #f5f7ff;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  opacity: 0;
+}
+.layout-card .item-card .card-icon {
+  width: clamp(28px,4vw,40px); height: clamp(28px,4vw,40px);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: clamp(12px,2vw,18px);
+}
+.layout-card .item-card .card-title {
+  font-size: clamp(8px,1.4vw,11px); font-weight: 800; text-align: center;
+}
+.layout-card .item-card .card-desc {
+  font-size: clamp(6px,1.1vw,9px); color: #555; text-align: center; line-height: 1.4;
+}
+
+/* ---- LAYOUT: list (デフォルト) ---- */
+.layout-list .sl-items {
+  display: flex; flex-direction: column; gap: 6px; flex: 1; justify-content: center;
+}
+.layout-list .list-item {
+  display: flex; align-items: flex-start; gap: 8px;
+  opacity: 0;
+}
+.layout-list .list-dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 3px;
+}
+.layout-list .list-icon {
+  width: clamp(26px,3.5vw,34px); height: clamp(26px,3.5vw,34px);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: clamp(10px,1.6vw,14px); flex-shrink: 0; border: 1.5px solid currentColor;
+}
+.layout-list .list-title {
+  font-size: clamp(9px,1.7vw,13px); font-weight: 700; color: #1a1a1a; margin-bottom: 1px;
+}
+.layout-list .list-desc {
+  font-size: clamp(7px,1.3vw,10px); color: #555; line-height: 1.4;
+}
+
+/* ---- LAYOUT: compare ---- */
+.layout-compare .sl-cols {
+  display: flex; gap: 10px; flex: 1; align-items: stretch;
+}
+.layout-compare .col-box {
+  flex: 1; border-radius: 8px; padding: 10px;
+  display: flex; flex-direction: column; gap: 6px;
+  opacity: 0;
+}
+.layout-compare .col-box.col-before { background: #f0f0f0; }
+.layout-compare .col-box.col-after  { }
+.layout-compare .col-header {
+  font-size: clamp(8px,1.4vw,11px); font-weight: 800;
+  color: #fff; padding: 4px 10px; border-radius: 4px; text-align: center;
+}
+.layout-compare .col-item {
+  background: rgba(255,255,255,0.7); border-radius: 6px; padding: 6px 8px;
+}
+.layout-compare .col-item-title {
+  font-size: clamp(7px,1.3vw,10px); font-weight: 700; color: #1a1a1a;
+}
+.layout-compare .col-item-desc {
+  font-size: clamp(6px,1.1vw,9px); color: #555; line-height: 1.4;
+}
+
+/* ---- LAYOUT: hub ---- */
+.layout-hub .sl-hub-wrap {
+  flex: 1; position: relative; display: flex; align-items: center; justify-content: center;
+}
+.layout-hub .hub-center {
+  position: absolute;
+  width: clamp(60px,9vw,80px); height: clamp(60px,9vw,80px);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: clamp(7px,1.2vw,10px); font-weight: 800; color: #fff; text-align: center;
+  z-index: 2; opacity: 0;
+}
+.layout-hub .hub-item {
+  position: absolute;
+  width: clamp(100px,16vw,140px);
+  background: #f5f7ff; border-radius: 8px; padding: 8px;
+  opacity: 0;
+}
+.layout-hub .hub-item-title {
+  font-size: clamp(7px,1.3vw,10px); font-weight: 800; margin-bottom: 3px;
+}
+.layout-hub .hub-item-desc {
+  font-size: clamp(6px,1.1vw,9px); color: #555; line-height: 1.4;
+}
+/* hub positions */
+.layout-hub .hub-item.pos-top    { top: 4%; left: 50%; transform: translateX(-50%); }
+.layout-hub .hub-item.pos-left   { left: 2%; top: 50%; transform: translateY(-50%); }
+.layout-hub .hub-item.pos-right  { right: 2%; top: 50%; transform: translateY(-50%); }
+.layout-hub .hub-item.pos-bottom { bottom: 4%; left: 50%; transform: translateX(-50%); }
+
+/* ---- LAYOUT: flow ---- */
+.layout-flow .sl-flow {
+  display: flex; flex-direction: column; gap: 6px; flex: 1; justify-content: center;
+}
+.layout-flow .flow-row {
+  display: flex; align-items: stretch; gap: 0;
+  opacity: 0;
+}
+.layout-flow .flow-label {
+  min-width: clamp(60px,10vw,90px); padding: 6px 10px;
+  border-radius: 6px 0 0 6px;
+  font-size: clamp(8px,1.4vw,11px); font-weight: 800; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+}
+.layout-flow .flow-steps {
+  display: flex; flex: 1; background: #f5f7ff; border-radius: 0 6px 6px 0; overflow: hidden;
+}
+.layout-flow .flow-step {
+  flex: 1; padding: 5px 8px;
+  font-size: clamp(6px,1.1vw,9px); font-weight: 700; color: #1a1a1a;
+  display: flex; align-items: center; justify-content: center; text-align: center;
+  border-right: 1px solid #e0e0e0; position: relative;
+}
+.layout-flow .flow-step:last-child { border-right: none; }
+
+/* ---- タイトルスライド ---- */
+.sl-title-wrap {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  justify-content: center; padding: 24px 32px;
+  position: relative;
+}
+.sl-title-main {
+  font-size: clamp(16px,3.2vw,28px); font-weight: 800;
+  color: #fff; line-height: 1.3; opacity: 0;
+}
+.sl-title-sub {
+  font-size: clamp(9px,1.7vw,14px);
+  color: rgba(255,255,255,0.75); margin-top: 10px; opacity: 0;
+}
+.sl-title-divider {
+  width: 50px; height: 3px; border-radius: 2px;
+  background: rgba(255,255,255,0.4); margin: 12px 0; opacity: 0;
+}
 </style>
 </head>
 <body>
@@ -284,10 +408,9 @@ footer { text-align: center; padding: 28px; font-size: 11px; color: #94A3B8; }
 <main>
   <div class="hero">
     <h1>既存スライドのデザインを活かして<br>プレゼン資料を自動生成</h1>
-    <p>スライド画像をアップロードするだけでテーマカラーを自動抽出。<br>箇条書きを入力するとアニメーション付きスライドが自動生成されます。</p>
+    <p>スライド画像をアップロードするだけでレイアウト・カラーを自動解析。<br>テンプレートのデザイン構造を忠実に再現したスライドを生成します。</p>
   </div>
 
-  <!-- ステップバー -->
   <div class="steps-bar">
     <div class="step active" id="st1"><div class="step-num">1</div><div class="step-label">テンプレート<br>登録</div></div>
     <div class="step-line" id="ln1"></div>
@@ -300,7 +423,7 @@ footer { text-align: center; padding: 28px; font-size: 11px; color: #94A3B8; }
 
   <!-- パネル1：テンプレートアップロード -->
   <div class="card panel active" id="panel1">
-    <div class="card-title">STEP 1　既存スライド画像をアップロード（テーマカラーを自動抽出）</div>
+    <div class="card-title">STEP 1　既存スライド画像をアップロード（レイアウト・カラーを自動解析）</div>
     <div class="err" id="err1"></div>
 
     <div class="upload-area" id="uploadArea">
@@ -316,7 +439,11 @@ footer { text-align: center; padding: 28px; font-size: 11px; color: #94A3B8; }
         <strong id="colorMainLabel">メインカラー抽出中...</strong>
         <span id="colorSub">テーマカラーをスライドに適用します</span>
       </div>
-      <div class="color-swatch" id="swatchBg"></div>
+    </div>
+
+    <div class="template-badge" id="templateBadge">
+      <strong id="templateBadgeTitle">🎨 テンプレート解析完了</strong>
+      <span id="templateBadgeDetail"></span>
     </div>
 
     <div style="margin-top:16px; display:flex; gap:10px; align-items:center; font-size:12px; color:#64748B;">
@@ -333,7 +460,6 @@ footer { text-align: center; padding: 28px; font-size: 11px; color: #94A3B8; }
   <div class="card panel" id="panel2">
     <div class="card-title">STEP 2　プレゼン情報を入力</div>
     <div class="err" id="err2"></div>
-
     <div class="row2">
       <div class="field">
         <label>プレゼンのテーマ <span class="req">必須</span></label>
@@ -364,7 +490,6 @@ footer { text-align: center; padding: 28px; font-size: 11px; color: #94A3B8; }
         <option value="10〜12枚">10〜12枚（詳細）</option>
       </select>
     </div>
-
     <button class="btn-primary" id="btnGen" onclick="generateOutline()">AIで構成を生成する →</button>
     <button class="btn-secondary" onclick="setStep(1)">← テンプレートに戻る</button>
   </div>
@@ -390,22 +515,18 @@ footer { text-align: center; padding: 28px; font-size: 11px; color: #94A3B8; }
   <!-- パネル4：完成スライド -->
   <div class="card panel" id="panel4">
     <div class="card-title">STEP 4　完成！アニメーションスライドをご確認ください</div>
-
     <div class="slide-outer">
       <div class="slide-viewport" id="slideViewport"></div>
     </div>
-
     <div class="slide-controls">
       <button class="nav-btn" id="prevBtn" onclick="navSlide(-1)">← 前へ</button>
       <div class="slide-dots" id="slideDots"></div>
       <button class="nav-btn" id="nextBtn" onclick="navSlide(1)">次へ →</button>
       <span class="slide-num" id="slideNum"></span>
     </div>
-
     <div class="dl-area">
       <button class="btn-dl" onclick="downloadHTML()">⬇ HTMLでダウンロード</button>
     </div>
-
     <button class="btn-secondary" onclick="setStep(1)">最初からやり直す</button>
   </div>
 </main>
@@ -416,15 +537,14 @@ footer { text-align: center; padding: 28px; font-size: 11px; color: #94A3B8; }
 // ============================================================
 // State
 // ============================================================
-let themeColor  = '#1E2761';
-let bgColor     = '#ffffff';
-let outline     = '';
-let formData    = {};
-let slideData   = [];
-let currentSlide = 0;
-let templateAnalysis = null; // テンプレート分析結果を保持
+let themeColor       = '#1E2761';
+let outline          = '';
+let formData         = {};
+let slideData        = [];
+let currentSlide     = 0;
+let templateAnalysis = null;
 
-const ICONS = ['📖','🤖','✍️','💡','📊','🎯','🔍','⚡','🌟','📝','🔑','💼'];
+const ICONS = ['📖','🤖','✍️','💡','📊','🎯','🔍','⚡','🌟','📝','🔑','💼','🛠','📈','🎪'];
 
 // ============================================================
 // ステップ制御
@@ -462,9 +582,9 @@ function handleUpload(input) {
   const area = document.getElementById('uploadArea');
   area.classList.add('has-file');
   area.querySelector('.upload-text').textContent = file.name;
-  area.querySelector('.upload-sub').textContent = '解析中...';
+  area.querySelector('.upload-sub').textContent = '解析中... しばらくお待ちください';
 
-  // ① 色抽出（既存処理）
+  // 色抽出
   const img = new Image();
   const url = URL.createObjectURL(file);
   img.onload = () => {
@@ -475,13 +595,13 @@ function handleUpload(input) {
   };
   img.src = url;
 
-  // ② テンプレートをClaude Vision APIで分析
+  // Claude Vision でテンプレート構造を分析
   const reader = new FileReader();
   reader.onload = async (e) => {
-    const base64 = e.target.result.split(',')[1];
+    const base64    = e.target.result.split(',')[1];
     const mediaType = file.type || 'image/png';
     try {
-      const res = await fetch('/api/analyze-template', {
+      const res  = await fetch('/api/analyze-template', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ imageBase64: base64, mediaType })
@@ -489,7 +609,13 @@ function handleUpload(input) {
       const data = await res.json();
       if (data.analysis) {
         templateAnalysis = data.analysis;
-        area.querySelector('.upload-sub').textContent = `テンプレート解析完了 ✓（${templateAnalysis.layoutType || 'カスタム'}）`;
+        const badge = document.getElementById('templateBadge');
+        badge.style.display = 'block';
+        document.getElementById('templateBadgeTitle').textContent =
+          `🎨 テンプレート解析完了：${templateAnalysis.layoutType || 'カスタム'}レイアウト`;
+        document.getElementById('templateBadgeDetail').textContent =
+          `項目数：${templateAnalysis.itemsPerSlide}個／スライド　・　${templateAnalysis.designFeatures || ''}`;
+        area.querySelector('.upload-sub').textContent = '解析完了 ✓';
       } else {
         area.querySelector('.upload-sub').textContent = 'アップロード完了 ✓';
       }
@@ -501,33 +627,28 @@ function handleUpload(input) {
 }
 
 function extractColor(img) {
-  const canvas = document.createElement('canvas');
-  const scale  = Math.min(1, 100 / Math.max(img.width, img.height));
+  const canvas  = document.createElement('canvas');
+  const scale   = Math.min(1, 100 / Math.max(img.width, img.height));
   canvas.width  = Math.floor(img.width  * scale);
   canvas.height = Math.floor(img.height * scale);
-  const ctx = canvas.getContext('2d');
+  const ctx     = canvas.getContext('2d');
   ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-  const data   = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-  const counts = {};
-
+  const data    = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+  const counts  = {};
   for (let i = 0; i < data.length; i += 16) {
     const r = Math.round(data[i]   / 32) * 32;
     const g = Math.round(data[i+1] / 32) * 32;
     const b = Math.round(data[i+2] / 32) * 32;
     const a = data[i+3];
     if (a < 128) continue;
-    // 白・黒・グレー系は除外
     const max = Math.max(r,g,b), min = Math.min(r,g,b);
     if (max - min < 40) continue;
     if (max > 220 && min > 180) continue;
     const key = `${r},${g},${b}`;
     counts[key] = (counts[key] || 0) + 1;
   }
-
   const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]);
   if (sorted.length === 0) return '#1E2761';
-
   const [r,g,b] = sorted[0][0].split(',').map(Number);
   return '#' + [r,g,b].map(v => v.toString(16).padStart(2,'0')).join('');
 }
@@ -537,7 +658,7 @@ function updateColorUI(hex) {
   document.getElementById('colorMainLabel').textContent  = `メインカラー：${hex.toUpperCase()}`;
   document.getElementById('colorPreview').style.display  = 'flex';
   document.getElementById('colorPicker').value = hex;
-  document.getElementById('colorHex').value   = hex;
+  document.getElementById('colorHex').value    = hex;
   themeColor = hex;
 }
 
@@ -568,8 +689,7 @@ async function generateOutline() {
   const badge  = document.getElementById('badge').value.trim();
   const notes  = document.getElementById('notes').value.trim();
   const count  = document.getElementById('slideCount').value;
-
-  const errEl = document.getElementById('err2');
+  const errEl  = document.getElementById('err2');
   errEl.style.display = 'none';
 
   if (!theme || !target || !goal) {
@@ -593,23 +713,20 @@ async function generateOutline() {
     document.getElementById('outlineBox').textContent = outline;
     setStep(3);
     showPanel('panel3');
-
   } catch(e) {
-    setStep(2);
-    showPanel('panel2');
+    setStep(2); showPanel('panel2');
     errEl.textContent = e.message;
     errEl.style.display = 'block';
   }
 }
 
 // ============================================================
-// スライド構築
+// アウトライン解析
 // ============================================================
 function parseOutline(text) {
   const slides = [];
   const lines  = text.split('\n').filter(l => l.trim());
   let cur = null;
-
   for (const line of lines) {
     const m = line.match(/^スライド\s*(\d+)\s*[：:]\s*(.+)/);
     if (m) {
@@ -624,9 +741,11 @@ function parseOutline(text) {
   return slides;
 }
 
+// ============================================================
+// スライド構築
+// ============================================================
 function buildPresentation() {
   showPanel('panelL2');
-
   setTimeout(() => {
     slideData = parseOutline(outline);
     renderSlides();
@@ -637,76 +756,311 @@ function buildPresentation() {
   }, 800);
 }
 
-function renderSlides() {
-  const vp   = document.getElementById('slideViewport');
-  vp.innerHTML = '';
+// レイアウトタイプ判定
+function getLayoutType() {
+  if (!templateAnalysis) return 'list';
+  const lt = (templateAnalysis.layoutType || '').toLowerCase();
+  if (lt.includes('ステップ') || lt.includes('step')) return 'step';
+  if (lt.includes('カード') || lt.includes('card')) return 'card';
+  if (lt.includes('ハブ') || lt.includes('hub')) return 'hub';
+  if (lt.includes('フロー') || lt.includes('flow')) return 'flow';
+  if (lt.includes('比較') || lt.includes('compare') || lt.includes('as-is') || lt.includes('tobe')) return 'compare';
+  return 'list';
+}
 
-  const tc   = themeColor;
-  const tcRgb = hexToRgb(tc);
-  const iconBg = `rgba(${tcRgb},0.12)`;
+// カラーユーティリティ
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1,3),16);
+  const g = parseInt(hex.slice(3,5),16);
+  const b = parseInt(hex.slice(5,7),16);
+  return `${r},${g},${b}`;
+}
+function lighten(hex, amount) {
+  const r = Math.min(255, parseInt(hex.slice(1,3),16) + amount);
+  const g = Math.min(255, parseInt(hex.slice(3,5),16) + amount);
+  const b = Math.min(255, parseInt(hex.slice(5,7),16) + amount);
+  return '#' + [r,g,b].map(v => v.toString(16).padStart(2,'0')).join('');
+}
+
+// ============================================================
+// renderSlides: レイアウトタイプで分岐
+// ============================================================
+function renderSlides() {
+  const vp     = document.getElementById('slideViewport');
+  vp.innerHTML = '';
+  const tc     = themeColor;
+  const layout = getLayoutType();
 
   // タイトルスライド
-  const titlePage = document.createElement('div');
-  titlePage.className = 'slide-page';
-  titlePage.id = 'sp-0';
-  titlePage.style.background = tc;
-  titlePage.innerHTML = `
-    <div class="s-left-bar" style="background:rgba(255,255,255,0.25)"></div>
-    <div class="s-main-title" id="mt-0">${formData.theme}</div>
-    <div class="s-sub-title"  id="ms-0">対象：${formData.target}　／　目的：${formData.goal}</div>
-  `;
+  const titlePage = makeTitleSlide(tc);
   vp.appendChild(titlePage);
 
   // コンテンツスライド
   slideData.forEach((s, idx) => {
-    const page = document.createElement('div');
-    page.className = 'slide-page';
-    page.id = 'sp-' + (idx+1);
-    page.style.background = bgColor;
-
-    const itemsHTML = s.points.map((p, pi) => {
-      const parts = p.split('：');
-      const title = parts[0] || p;
-      const desc  = parts.slice(1).join('：') || '';
-      return `
-        <div class="s-item" id="si-${idx}-${pi}">
-          <div class="s-dot" style="background:${tc}"></div>
-          <div class="s-icon" style="background:${iconBg};color:${tc}">${ICONS[(pi + idx) % ICONS.length]}</div>
-          <div class="s-text-block">
-            <div class="s-item-title">${title}</div>
-            ${desc ? `<div class="s-item-desc">${desc}</div>` : ''}
-          </div>
-        </div>`;
-    }).join('');
-
-    page.innerHTML = `
-      <div class="s-left-bar" style="background:${tc}"></div>
-      <div class="s-title-box" id="stb-${idx}" style="background:${tc}">${s.title}</div>
-      ${formData.badge ? `<div class="s-badge" id="sbg-${idx}" style="background:${tc}">${formData.badge}</div>` : ''}
-      <div class="s-body">${itemsHTML}</div>
-    `;
+    let page;
+    switch(layout) {
+      case 'step':    page = makeStepSlide(s, idx, tc);    break;
+      case 'card':    page = makeCardSlide(s, idx, tc);    break;
+      case 'hub':     page = makeHubSlide(s, idx, tc);     break;
+      case 'flow':    page = makeFlowSlide(s, idx, tc);    break;
+      case 'compare': page = makeCompareSlide(s, idx, tc); break;
+      default:        page = makeListSlide(s, idx, tc);    break;
+    }
     vp.appendChild(page);
   });
 }
 
+// ---- タイトルスライド ----
+function makeTitleSlide(tc) {
+  const page = document.createElement('div');
+  page.className = 'slide-page';
+  page.id = 'sp-0';
+  page.innerHTML = `
+    <div class="sl-title-wrap" style="background:${tc}">
+      <div class="sl-title-divider" id="td-0"></div>
+      <div class="sl-title-main" id="mt-0">${formData.theme}</div>
+      <div class="sl-title-sub"  id="ms-0">対象：${formData.target}　／　目的：${formData.goal}</div>
+      ${formData.badge ? `<div style="position:absolute;top:14px;right:14px;background:rgba(255,255,255,0.2);color:#fff;font-size:clamp(7px,1.2vw,10px);font-weight:700;padding:3px 10px;border-radius:3px;">${formData.badge}</div>` : ''}
+    </div>`;
+  return page;
+}
+
+// ---- ステップ型 ----
+function makeStepSlide(s, idx, tc) {
+  const page = document.createElement('div');
+  page.className = 'slide-page';
+  page.id = 'sp-' + (idx+1);
+  const stepsHTML = s.points.map((p, pi) => {
+    const parts = p.split('：');
+    const title = parts[0] || p;
+    const desc  = parts.slice(1).join('：') || '';
+    return `<div class="step-card" id="sc-${idx}-${pi}" style="border-top:3px solid ${tc}">
+      <div class="step-num" style="background:${tc}">${pi+1}</div>
+      <div class="step-label" style="color:${tc}">${title}</div>
+      ${desc ? `<div class="step-desc">${desc}</div>` : ''}
+    </div>`;
+  }).join('');
+  page.innerHTML = `
+    <div class="sl-wrap layout-step">
+      <div class="sl-header" style="background:${tc}">
+        <div class="sl-header-title">${s.title}</div>
+        ${formData.badge ? `<div class="sl-badge">${formData.badge}</div>` : ''}
+      </div>
+      <div class="sl-body">
+        <div class="sl-steps">${stepsHTML}</div>
+      </div>
+    </div>`;
+  return page;
+}
+
+// ---- カード型 ----
+function makeCardSlide(s, idx, tc) {
+  const page = document.createElement('div');
+  page.className = 'slide-page';
+  page.id = 'sp-' + (idx+1);
+  const tcRgb  = hexToRgb(tc);
+  const iconBg = `rgba(${tcRgb},0.12)`;
+  const cardsHTML = s.points.map((p, pi) => {
+    const parts = p.split('：');
+    const title = parts[0] || p;
+    const desc  = parts.slice(1).join('：') || '';
+    return `<div class="item-card" id="ic-${idx}-${pi}" style="border-top:3px solid ${tc}">
+      <div class="card-icon" style="background:${iconBg};color:${tc}">${ICONS[(pi+idx)%ICONS.length]}</div>
+      <div class="card-title" style="color:${tc}">${title}</div>
+      ${desc ? `<div class="card-desc">${desc}</div>` : ''}
+    </div>`;
+  }).join('');
+  page.innerHTML = `
+    <div class="sl-wrap layout-card">
+      <div class="sl-header" style="background:${tc}">
+        <div class="sl-header-title">${s.title}</div>
+        ${formData.badge ? `<div class="sl-badge">${formData.badge}</div>` : ''}
+      </div>
+      <div class="sl-body">
+        <div class="sl-cards">${cardsHTML}</div>
+      </div>
+    </div>`;
+  return page;
+}
+
+// ---- リスト型（デフォルト） ----
+function makeListSlide(s, idx, tc) {
+  const page = document.createElement('div');
+  page.className = 'slide-page';
+  page.id = 'sp-' + (idx+1);
+  const tcRgb  = hexToRgb(tc);
+  const iconBg = `rgba(${tcRgb},0.12)`;
+  const itemsHTML = s.points.map((p, pi) => {
+    const parts = p.split('：');
+    const title = parts[0] || p;
+    const desc  = parts.slice(1).join('：') || '';
+    return `<div class="list-item" id="li-${idx}-${pi}">
+      <div class="list-dot" style="background:${tc}"></div>
+      <div class="list-icon" style="background:${iconBg};color:${tc}">${ICONS[(pi+idx)%ICONS.length]}</div>
+      <div>
+        <div class="list-title">${title}</div>
+        ${desc ? `<div class="list-desc">${desc}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+  page.innerHTML = `
+    <div class="sl-wrap layout-list">
+      <div class="sl-header" style="background:${tc}">
+        <div class="sl-header-title">${s.title}</div>
+        ${formData.badge ? `<div class="sl-badge">${formData.badge}</div>` : ''}
+      </div>
+      <div class="sl-body">
+        <div class="sl-items">${itemsHTML}</div>
+      </div>
+    </div>`;
+  return page;
+}
+
+// ---- ハブ型 ----
+function makeHubSlide(s, idx, tc) {
+  const page = document.createElement('div');
+  page.className = 'slide-page';
+  page.id = 'sp-' + (idx+1);
+  const positions = ['pos-top','pos-left','pos-right','pos-bottom'];
+  const itemsHTML = s.points.slice(0,4).map((p, pi) => {
+    const parts = p.split('：');
+    const title = parts[0] || p;
+    const desc  = parts.slice(1).join('：') || '';
+    return `<div class="hub-item ${positions[pi]}" id="hi-${idx}-${pi}" style="border-left:3px solid ${tc}">
+      <div class="hub-item-title" style="color:${tc}">${title}</div>
+      ${desc ? `<div class="hub-item-desc">${desc}</div>` : ''}
+    </div>`;
+  }).join('');
+  page.innerHTML = `
+    <div class="sl-wrap layout-hub">
+      <div class="sl-header" style="background:${tc}">
+        <div class="sl-header-title">${s.title}</div>
+        ${formData.badge ? `<div class="sl-badge">${formData.badge}</div>` : ''}
+      </div>
+      <div class="sl-body">
+        <div class="sl-hub-wrap">
+          <div class="hub-center" id="hc-${idx}" style="background:${tc}">${s.title}</div>
+          ${itemsHTML}
+        </div>
+      </div>
+    </div>`;
+  return page;
+}
+
+// ---- フロー型 ----
+function makeFlowSlide(s, idx, tc) {
+  const page = document.createElement('div');
+  page.className = 'slide-page';
+  page.id = 'sp-' + (idx+1);
+  // pointsを行ごとに分割（各行が1フローRow）
+  const rowsHTML = s.points.map((p, pi) => {
+    const parts  = p.split('：');
+    const label  = parts[0] || p;
+    const steps  = parts.slice(1).join('：').split('→').map(v=>v.trim()).filter(Boolean);
+    const stepsHTML = steps.length
+      ? steps.map(st => `<div class="flow-step">${st}</div>`).join('')
+      : `<div class="flow-step">${label}</div>`;
+    return `<div class="flow-row" id="fr-${idx}-${pi}">
+      <div class="flow-label" style="background:${tc}">${label}</div>
+      <div class="flow-steps">${stepsHTML}</div>
+    </div>`;
+  }).join('');
+  page.innerHTML = `
+    <div class="sl-wrap layout-flow">
+      <div class="sl-header" style="background:${tc}">
+        <div class="sl-header-title">${s.title}</div>
+        ${formData.badge ? `<div class="sl-badge">${formData.badge}</div>` : ''}
+      </div>
+      <div class="sl-body">
+        <div class="sl-flow">${rowsHTML}</div>
+      </div>
+    </div>`;
+  return page;
+}
+
+// ---- 比較型 ----
+function makeCompareSlide(s, idx, tc) {
+  const page = document.createElement('div');
+  page.className = 'slide-page';
+  page.id = 'sp-' + (idx+1);
+  const mid    = Math.ceil(s.points.length / 2);
+  const before = s.points.slice(0, mid);
+  const after  = s.points.slice(mid);
+  const makeItems = (pts) => pts.map(p => {
+    const parts = p.split('：');
+    const title = parts[0] || p;
+    const desc  = parts.slice(1).join('：') || '';
+    return `<div class="col-item">
+      <div class="col-item-title">${title}</div>
+      ${desc ? `<div class="col-item-desc">${desc}</div>` : ''}
+    </div>`;
+  }).join('');
+  page.innerHTML = `
+    <div class="sl-wrap layout-compare">
+      <div class="sl-header" style="background:${tc}">
+        <div class="sl-header-title">${s.title}</div>
+        ${formData.badge ? `<div class="sl-badge">${formData.badge}</div>` : ''}
+      </div>
+      <div class="sl-body">
+        <div class="sl-cols">
+          <div class="col-box col-before" id="cb-${idx}-0">
+            <div class="col-header" style="background:#888">As-Is（現状）</div>
+            ${makeItems(before)}
+          </div>
+          <div style="display:flex;align-items:center;font-size:clamp(16px,3vw,28px);color:#ccc;padding:0 4px;">›</div>
+          <div class="col-box col-after" id="cb-${idx}-1" style="background:rgba(${hexToRgb(tc)},0.07)">
+            <div class="col-header" style="background:${tc}">To-Be（改善後）</div>
+            ${makeItems(after)}
+          </div>
+        </div>
+      </div>
+    </div>`;
+  return page;
+}
+
+// ============================================================
+// showSlide：レイアウト別アニメーション
+// ============================================================
 function showSlide(idx) {
-  const total = slideData.length + 1;
+  const total  = slideData.length + 1;
   document.querySelectorAll('.slide-page').forEach(p => p.classList.remove('active'));
   const page = document.getElementById('sp-' + idx);
   if (!page) return;
   page.classList.add('active');
 
+  const layout = getLayoutType();
+
   if (idx === 0) {
-    // タイトルスライドアニメ
-    animEl('mt-0', 'fadeInUp 0.6s ease 0.1s forwards');
-    animEl('ms-0', 'fadeInUp 0.6s ease 0.4s forwards');
+    animEl('td-0', 'fadeInUp 0.4s ease 0.05s forwards');
+    animEl('mt-0', 'fadeInUp 0.6s ease 0.2s forwards');
+    animEl('ms-0', 'fadeInUp 0.6s ease 0.5s forwards');
   } else {
     const si = idx - 1;
-    animEl('stb-' + si, 'slideLeft 0.5s ease forwards');
-    if (formData.badge) animEl('sbg-' + si, 'slideRight 0.4s ease 0.2s forwards');
-    slideData[si]?.points.forEach((_, pi) => {
-      animEl(`si-${si}-${pi}`, `fadeInUp 0.5s ease ${0.3 + pi * 0.18}s forwards`);
-    });
+    const s  = slideData[si];
+    if (!s) return;
+
+    switch(layout) {
+      case 'step':
+        s.points.forEach((_,pi) => animEl(`sc-${si}-${pi}`, `scaleIn 0.4s ease ${0.1+pi*0.15}s forwards`));
+        break;
+      case 'card':
+        s.points.forEach((_,pi) => animEl(`ic-${si}-${pi}`, `fadeInUp 0.4s ease ${0.1+pi*0.15}s forwards`));
+        break;
+      case 'hub':
+        animEl(`hc-${si}`, 'scaleIn 0.4s ease 0.05s forwards');
+        s.points.slice(0,4).forEach((_,pi) => animEl(`hi-${si}-${pi}`, `fadeIn 0.4s ease ${0.2+pi*0.15}s forwards`));
+        break;
+      case 'flow':
+        s.points.forEach((_,pi) => animEl(`fr-${si}-${pi}`, `slideLeft 0.4s ease ${0.1+pi*0.15}s forwards`));
+        break;
+      case 'compare':
+        animEl(`cb-${si}-0`, 'slideLeft 0.4s ease 0.1s forwards');
+        animEl(`cb-${si}-1`, 'slideRight 0.4s ease 0.3s forwards');
+        break;
+      default:
+        s.points.forEach((_,pi) => animEl(`li-${si}-${pi}`, `fadeInUp 0.4s ease ${0.1+pi*0.15}s forwards`));
+        break;
+    }
   }
 
   document.querySelectorAll('.sdot').forEach((d,i) => d.classList.toggle('on', i === idx));
@@ -726,13 +1080,13 @@ function animEl(id, anim) {
 }
 
 function buildDots() {
-  const dc = document.getElementById('slideDots');
+  const dc    = document.getElementById('slideDots');
   dc.innerHTML = '';
   const total = slideData.length + 1;
   for (let i = 0; i < total; i++) {
     const d = document.createElement('div');
     d.className = 'sdot';
-    d.onclick = (()=>{ const idx=i; return ()=>showSlide(idx); })();
+    d.onclick = (()=>{ const x=i; return ()=>showSlide(x); })();
     dc.appendChild(d);
   }
 }
@@ -742,50 +1096,27 @@ function navSlide(dir) {
   showSlide(Math.max(0, Math.min(total - 1, currentSlide + dir)));
 }
 
-function hexToRgb(hex) {
-  const r = parseInt(hex.slice(1,3),16);
-  const g = parseInt(hex.slice(3,5),16);
-  const b = parseInt(hex.slice(5,7),16);
-  return `${r},${g},${b}`;
-}
-
 // ============================================================
-// HTMLダウンロード
+// HTML ダウンロード
 // ============================================================
 function downloadHTML() {
-  const tc = themeColor;
-  const tcRgb = hexToRgb(tc);
-  const iconBg = `rgba(${tcRgb},0.12)`;
+  const tc     = themeColor;
+  const layout = getLayoutType();
 
-  const slidesHTML = [
-    // タイトルページ
-    `<div class="slide-page active" id="sp-0" style="background:${tc}">
-      <div class="s-left-bar" style="background:rgba(255,255,255,0.25)"></div>
-      <div class="s-main-title anim-title">${formData.theme}</div>
-      <div class="s-sub-title anim-sub">対象：${formData.target}　／　目的：${formData.goal}</div>
-    </div>`,
-    ...slideData.map((s, idx) => `
-    <div class="slide-page" id="sp-${idx+1}" style="background:#fff">
-      <div class="s-left-bar" style="background:${tc}"></div>
-      <div class="s-title-box anim-title" style="background:${tc}">${s.title}</div>
-      ${formData.badge ? `<div class="s-badge anim-badge" style="background:${tc}">${formData.badge}</div>` : ''}
-      <div class="s-body">
-        ${s.points.map((p,pi)=>{
-          const parts = p.split('：');
-          const title = parts[0]||p;
-          const desc  = parts.slice(1).join('：')||'';
-          return `<div class="s-item anim-item" style="animation-delay:${0.3+pi*0.18}s">
-            <div class="s-dot" style="background:${tc}"></div>
-            <div class="s-icon" style="background:${iconBg};color:${tc}">${ICONS[(pi+idx)%ICONS.length]}</div>
-            <div class="s-text-block">
-              <div class="s-item-title">${title}</div>
-              ${desc?`<div class="s-item-desc">${desc}</div>`:''}
-            </div>
-          </div>`;
-        }).join('')}
-      </div>
-    </div>`)
-  ].join('');
+  // スライドのHTMLを文字列化
+  const vp = document.getElementById('slideViewport');
+  const pagesHTML = Array.from(vp.querySelectorAll('.slide-page')).map((p,i) => {
+    const clone = p.cloneNode(true);
+    clone.classList.remove('active');
+    if (i === 0) clone.classList.add('active');
+    // アニメーション要素をリセット
+    clone.querySelectorAll('[style*="opacity"]').forEach(el => {
+      el.style.opacity = '1';
+      el.style.animation = 'none';
+      el.style.transform = '';
+    });
+    return clone.outerHTML;
+  }).join('\n');
 
   const html = `<!DOCTYPE html>
 <html lang="ja">
@@ -796,41 +1127,85 @@ function downloadHTML() {
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Hiragino Kaku Gothic ProN','Noto Sans JP',Arial,sans-serif;background:#111;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:20px}
-.wrap{width:100%;max-width:900px}
+.wrap{width:100%;max-width:960px}
 .viewport{width:100%;aspect-ratio:16/9;position:relative;border-radius:12px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.5)}
 .slide-page{position:absolute;inset:0;display:none}
-.slide-page.active{display:block}
-.s-left-bar{position:absolute;left:0;top:0;bottom:0;width:10px}
-.s-title-box{position:absolute;left:18px;top:14px;padding:5px 16px;border-radius:4px;font-size:clamp(11px,2.2vw,18px);font-weight:700;color:#fff}
-.s-badge{position:absolute;right:16px;top:14px;padding:4px 12px;border-radius:4px;font-size:clamp(9px,1.6vw,13px);font-weight:700;color:#fff;max-width:35%;text-align:right;line-height:1.4}
-.s-body{position:absolute;left:18px;right:18px;top:56px;bottom:14px;display:flex;flex-direction:column;justify-content:center;gap:10px}
-.s-item{display:flex;align-items:flex-start;gap:10px;opacity:0}
-.s-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:3px}
-.s-icon{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;border:1.5px solid currentColor}
-.s-text-block{flex:1}
-.s-item-title{font-size:clamp(10px,1.9vw,15px);font-weight:700;color:#1a1a1a;margin-bottom:1px}
-.s-item-desc{font-size:clamp(8px,1.4vw,12px);color:#555;line-height:1.4}
-.s-main-title{position:absolute;left:18px;right:18px;top:50%;transform:translateY(-50%);font-size:clamp(16px,3.5vw,32px);font-weight:700;color:#fff;line-height:1.3;opacity:0}
-.s-sub-title{position:absolute;left:18px;right:18px;top:calc(50% + clamp(22px,4.5vw,52px));font-size:clamp(10px,1.7vw,15px);color:rgba(255,255,255,0.75);opacity:0}
+.slide-page.active{display:flex}
+.sl-wrap{width:100%;height:100%;position:relative;overflow:hidden;font-family:'Hiragino Kaku Gothic ProN','Noto Sans JP',Arial,sans-serif}
+.sl-header{position:absolute;top:0;left:0;right:0;height:44px;display:flex;align-items:center;padding:0 16px;gap:10px}
+.sl-header-title{font-size:clamp(9px,1.8vw,14px);font-weight:800;color:#fff;letter-spacing:.04em}
+.sl-badge{margin-left:auto;font-size:clamp(7px,1.2vw,10px);font-weight:700;color:#fff;padding:2px 8px;border-radius:3px;background:rgba(255,255,255,.25)}
+.sl-body{position:absolute;top:44px;left:0;right:0;bottom:0;padding:10px 16px;display:flex;flex-direction:column}
+.sl-title-wrap{width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;padding:24px 32px;position:relative}
+.sl-title-main{font-size:clamp(16px,3.2vw,28px);font-weight:800;color:#fff;line-height:1.3}
+.sl-title-sub{font-size:clamp(9px,1.7vw,14px);color:rgba(255,255,255,.75);margin-top:10px}
+.sl-title-divider{width:50px;height:3px;border-radius:2px;background:rgba(255,255,255,.4);margin-bottom:12px}
+/* step */
+.layout-step .sl-steps{display:flex;gap:8px;flex:1;align-items:stretch}
+.layout-step .step-card{flex:1;border-radius:8px;padding:10px 8px;background:#f5f7ff;display:flex;flex-direction:column;align-items:center;gap:6px;position:relative}
+.layout-step .step-card::after{content:'›';position:absolute;right:-10px;top:50%;transform:translateY(-50%);font-size:clamp(12px,2vw,18px);color:#ccc;font-weight:700}
+.layout-step .step-card:last-child::after{display:none}
+.layout-step .step-num{width:clamp(22px,3.5vw,32px);height:clamp(22px,3.5vw,32px);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:clamp(9px,1.5vw,13px);font-weight:800;color:#fff}
+.layout-step .step-label{font-size:clamp(8px,1.4vw,11px);font-weight:800;text-align:center;line-height:1.2}
+.layout-step .step-desc{font-size:clamp(6px,1.1vw,9px);color:#555;text-align:center;line-height:1.4}
+/* card */
+.layout-card .sl-cards{display:flex;gap:8px;flex:1;align-items:stretch}
+.layout-card .item-card{flex:1;border-radius:8px;padding:10px 8px;background:#f5f7ff;display:flex;flex-direction:column;align-items:center;gap:6px}
+.layout-card .card-icon{width:clamp(28px,4vw,40px);height:clamp(28px,4vw,40px);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:clamp(12px,2vw,18px)}
+.layout-card .card-title{font-size:clamp(8px,1.4vw,11px);font-weight:800;text-align:center}
+.layout-card .card-desc{font-size:clamp(6px,1.1vw,9px);color:#555;text-align:center;line-height:1.4}
+/* list */
+.layout-list .sl-items{display:flex;flex-direction:column;gap:6px;flex:1;justify-content:center}
+.layout-list .list-item{display:flex;align-items:flex-start;gap:8px}
+.layout-list .list-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.layout-list .list-icon{width:clamp(26px,3.5vw,34px);height:clamp(26px,3.5vw,34px);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:clamp(10px,1.6vw,14px);flex-shrink:0;border:1.5px solid currentColor}
+.layout-list .list-title{font-size:clamp(9px,1.7vw,13px);font-weight:700;color:#1a1a1a;margin-bottom:1px}
+.layout-list .list-desc{font-size:clamp(7px,1.3vw,10px);color:#555;line-height:1.4}
+/* hub */
+.layout-hub .sl-hub-wrap{flex:1;position:relative;display:flex;align-items:center;justify-content:center}
+.layout-hub .hub-center{position:absolute;width:clamp(60px,9vw,80px);height:clamp(60px,9vw,80px);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:clamp(7px,1.2vw,10px);font-weight:800;color:#fff;text-align:center;z-index:2}
+.layout-hub .hub-item{position:absolute;width:clamp(100px,16vw,140px);background:#f5f7ff;border-radius:8px;padding:8px}
+.layout-hub .hub-item-title{font-size:clamp(7px,1.3vw,10px);font-weight:800;margin-bottom:3px}
+.layout-hub .hub-item-desc{font-size:clamp(6px,1.1vw,9px);color:#555;line-height:1.4}
+.layout-hub .pos-top{top:4%;left:50%;transform:translateX(-50%)}
+.layout-hub .pos-left{left:2%;top:50%;transform:translateY(-50%)}
+.layout-hub .pos-right{right:2%;top:50%;transform:translateY(-50%)}
+.layout-hub .pos-bottom{bottom:4%;left:50%;transform:translateX(-50%)}
+/* flow */
+.layout-flow .sl-flow{display:flex;flex-direction:column;gap:6px;flex:1;justify-content:center}
+.layout-flow .flow-row{display:flex;align-items:stretch;gap:0}
+.layout-flow .flow-label{min-width:clamp(60px,10vw,90px);padding:6px 10px;border-radius:6px 0 0 6px;font-size:clamp(8px,1.4vw,11px);font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center}
+.layout-flow .flow-steps{display:flex;flex:1;background:#f5f7ff;border-radius:0 6px 6px 0;overflow:hidden}
+.layout-flow .flow-step{flex:1;padding:5px 8px;font-size:clamp(6px,1.1vw,9px);font-weight:700;color:#1a1a1a;display:flex;align-items:center;justify-content:center;text-align:center;border-right:1px solid #e0e0e0}
+.layout-flow .flow-step:last-child{border-right:none}
+/* compare */
+.layout-compare .sl-cols{display:flex;gap:10px;flex:1;align-items:stretch}
+.layout-compare .col-box{flex:1;border-radius:8px;padding:10px;display:flex;flex-direction:column;gap:6px}
+.layout-compare .col-box.col-before{background:#f0f0f0}
+.layout-compare .col-header{font-size:clamp(8px,1.4vw,11px);font-weight:800;color:#fff;padding:4px 10px;border-radius:4px;text-align:center}
+.layout-compare .col-item{background:rgba(255,255,255,.7);border-radius:6px;padding:6px 8px}
+.layout-compare .col-item-title{font-size:clamp(7px,1.3vw,10px);font-weight:700;color:#1a1a1a}
+.layout-compare .col-item-desc{font-size:clamp(6px,1.1vw,9px);color:#555;line-height:1.4}
+/* controls */
 .controls{display:flex;align-items:center;gap:10px;margin-top:14px}
-.nav-btn{padding:6px 18px;background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.2);border-radius:20px;cursor:pointer;font-size:13px;font-family:inherit}
-.nav-btn:hover{background:rgba(255,255,255,0.2)}
-.nav-btn:disabled{opacity:0.3;cursor:not-allowed}
+.nav-btn{padding:6px 18px;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:20px;cursor:pointer;font-size:13px;font-family:inherit}
+.nav-btn:disabled{opacity:.3;cursor:not-allowed}
 .dots{display:flex;gap:6px;flex:1;justify-content:center}
-.dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.3);cursor:pointer;transition:background 0.2s}
+.dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.3);cursor:pointer;transition:background .2s}
 .dot.on{background:#fff}
-.counter{font-size:12px;color:rgba(255,255,255,0.5);min-width:40px;text-align:right}
-@keyframes fadeInUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-@keyframes slideLeft{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:translateX(0)}}
-@keyframes slideRight{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:translateX(0)}}
-.anim-title{animation:slideLeft 0.5s ease forwards}
-.anim-badge{animation:slideRight 0.4s ease 0.2s forwards}
-.anim-item{animation:fadeInUp 0.5s ease forwards}
+.counter{font-size:12px;color:rgba(255,255,255,.5);min-width:40px;text-align:right}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideLeft{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes slideRight{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes scaleIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="viewport" id="vp">${slidesHTML}</div>
+  <div class="viewport" id="vp">
+${pagesHTML}
+  </div>
   <div class="controls">
     <button class="nav-btn" id="prev" onclick="nav(-1)">← 前へ</button>
     <div class="dots" id="dots"></div>
@@ -839,11 +1214,10 @@ body{font-family:'Hiragino Kaku Gothic ProN','Noto Sans JP',Arial,sans-serif;bac
   </div>
 </div>
 <script>
-const pages=${JSON.stringify(slideData.map(s=>s.title).concat([]))};
 const total=${slideData.length+1};
 let cur=0;
 function buildDots(){const dc=document.getElementById('dots');for(let i=0;i<total;i++){const d=document.createElement('div');d.className='dot';d.onclick=(()=>{const x=i;return()=>show(x);})();dc.appendChild(d);}}
-function show(idx){document.querySelectorAll('.slide-page').forEach(p=>p.classList.remove('active'));const pg=document.getElementById('sp-'+idx);if(!pg)return;pg.classList.add('active');pg.querySelectorAll('.anim-title,.anim-badge,.anim-item').forEach(el=>{el.style.animation='none';el.style.opacity='0';void el.offsetWidth;el.style.animation=el.classList.contains('anim-title')?'slideLeft 0.5s ease forwards':el.classList.contains('anim-badge')?'slideRight 0.4s ease 0.2s forwards':el.style.animationDelay||''+'fadeInUp 0.5s ease forwards';});document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('on',i===idx));document.getElementById('cnt').textContent=(idx+1)+' / '+total;document.getElementById('prev').disabled=idx===0;document.getElementById('next').disabled=idx===total-1;cur=idx;}
+function show(idx){document.querySelectorAll('.slide-page').forEach(p=>p.classList.remove('active'));const pg=document.getElementById('sp-'+idx);if(!pg)return;pg.classList.add('active');document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('on',i===idx));document.getElementById('cnt').textContent=(idx+1)+' / '+total;document.getElementById('prev').disabled=idx===0;document.getElementById('next').disabled=idx===total-1;cur=idx;}
 function nav(d){show(Math.max(0,Math.min(total-1,cur+d)));}
 buildDots();show(0);
 document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')nav(1);if(e.key==='ArrowLeft')nav(-1);});
