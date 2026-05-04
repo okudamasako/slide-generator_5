@@ -91,9 +91,9 @@ main { max-width: 820px; margin: 40px auto; padding: 0 20px; }
 }
 .upload-area:hover { border-color: #1E2761; background: #F0F4FF; }
 .upload-area.has-file { border-color: #00897B; border-style: solid; background: #F0FFF8; }
-.upload-icon { font-size: 32px; margin-bottom: 10px; }
-.upload-text { font-size: 13px; color: #64748B; margin-bottom: 6px; }
-.upload-sub  { font-size: 11px; color: #94A3B8; }
+.upload-icon { font-size: 48px; margin-bottom: 14px; }
+.upload-text { font-size: 16px; font-weight: 700; color: #1A1A1A; margin-bottom: 10px; line-height: 1.6; }
+.upload-sub  { font-size: 14px; color: #64748B; line-height: 1.8; }
 .upload-area input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
 
 .color-preview {
@@ -427,10 +427,10 @@ footer { text-align: center; padding: 28px; font-size: 11px; color: #94A3B8; }
     <div class="err" id="err1"></div>
 
     <div class="upload-area" id="uploadArea">
-      <input type="file" accept="image/*" id="fileInput" onchange="handleUpload(this)">
-      <div class="upload-icon">🖼</div>
-      <div class="upload-text">スライド画像をドラッグ＆ドロップ<br>またはクリックして選択</div>
-      <div class="upload-sub">PNG・JPG・GIF対応</div>
+      <input type="file" accept="image/png,image/jpeg,.pdf" id="fileInput" onchange="handleUpload(this)">
+      <div class="upload-icon">📂</div>
+      <div class="upload-text">既存スライドファイルをここにドラッグ＆ドロップ<br>またはクリックしてファイルを選択</div>
+      <div class="upload-sub">対応ファイル：PDF・PNG・JPG<br><span style="color:#E53E3E;font-weight:700;">※ PowerPoint（PPTX）ファイルの場合は<br>お手数ですがPDFに変換してからアップロードしてください</span></div>
     </div>
 
     <div class="color-preview" id="colorPreview">
@@ -451,7 +451,7 @@ footer { text-align: center; padding: 28px; font-size: 11px; color: #94A3B8; }
     <pre id="debugOutput" style="display:none;margin-top:12px;padding:12px;background:#1a1a1a;color:#00ff88;font-size:11px;border-radius:8px;overflow-x:auto;white-space:pre-wrap;max-height:200px;overflow-y:auto;"></pre>
 
     <button class="btn-primary" style="margin-top:20px;" onclick="goToStep2()">次へ → 情報を入力する</button>
-    <p style="font-size:11px;color:#94A3B8;text-align:center;margin-top:10px;">※ スライド画像をアップロードするとカラーとレイアウトが自動で解析されます</p>
+    <p style="font-size:13px;color:#64748B;text-align:center;margin-top:12px;">ファイルをアップロードするとカラーとレイアウトが自動で解析されます</p>
   </div>
 
   <!-- パネル2：情報入力 -->
@@ -582,22 +582,26 @@ function handleUpload(input) {
   area.querySelector('.upload-text').textContent = file.name;
   area.querySelector('.upload-sub').textContent = '解析中... しばらくお待ちください';
 
-  // 色抽出
-  const img = new Image();
-  const url = URL.createObjectURL(file);
-  img.onload = () => {
-    const color = extractColor(img);
-    themeColor = color;
-    updateColorUI(color);
-    URL.revokeObjectURL(url);
-  };
-  img.src = url;
+  const isPDF = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
 
-  // Claude Vision でテンプレート構造を分析
+  // 画像の場合のみピクセルからの色抽出を行う（PDFはスキップ）
+  if (!isPDF) {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const color = extractColor(img);
+      themeColor = color;
+      updateColorUI(color);
+      URL.revokeObjectURL(url);
+    };
+    img.src = url;
+  }
+
+  // Claude Vision でテンプレート構造を分析（色もここで取得）
   const reader = new FileReader();
   reader.onload = async (e) => {
     const base64    = e.target.result.split(',')[1];
-    const mediaType = file.type || 'image/png';
+    const mediaType = isPDF ? 'application/pdf' : (file.type || 'image/png');
     try {
       const res  = await fetch('/api/analyze-template', {
         method: 'POST',
