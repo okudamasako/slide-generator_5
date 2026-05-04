@@ -137,16 +137,31 @@ main { max-width: 820px; margin: 40px auto; padding: 0 20px; }
   white-space: pre-wrap; max-height: 280px; overflow-y: auto; margin-bottom: 14px;
 }
 
+/* ============================================================
+   スライドビューポート：プレビュー用コンテナ
+   内部の1280×720スライドをCSSスケールで縮小表示する
+   ============================================================ */
 .slide-outer {
   border-radius: 12px; overflow: hidden;
   border: 0.5px solid rgba(0,0,0,0.1);
   box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin-bottom: 16px;
 }
+/* コンテナ：内部スライドの縮小基点になる */
 .slide-viewport {
-  width: 100%; aspect-ratio: 16/9;
-  position: relative; background: #f5f5f5; overflow: hidden;
+  width: 100%;
+  position: relative;
+  background: #f5f5f5;
+  overflow: hidden;
 }
-.slide-page { position: absolute; inset: 0; display: none; }
+/* スライドを1280×720の固定サイズで設計し、transform:scaleでプレビュー縮小 */
+.slide-page {
+  position: absolute;
+  top: 0; left: 0;
+  width: 1280px;
+  height: 720px;
+  transform-origin: top left;
+  display: none;
+}
 .slide-page.active { display: flex; }
 
 .slide-controls { display: flex; align-items: center; gap: 10px; padding: 10px 0; }
@@ -185,142 +200,143 @@ main { max-width: 820px; margin: 40px auto; padding: 0 20px; }
 footer { text-align: center; padding: 28px; font-size: 11px; color: #94A3B8; }
 
 /* ============================================================
-   スライド共通スタイル
+   スライド内部スタイル：1280×720px 固定サイズ設計
+   フォントサイズはすべて px 実寸指定（vwやclampは使わない）
    ============================================================ */
 .sl-wrap {
-  width: 100%; height: 100%;
+  width: 1280px; height: 720px;
   background: #fff;
   font-family: 'Hiragino Kaku Gothic ProN','Noto Sans JP',Arial,sans-serif;
   position: relative; overflow: hidden;
 }
 .sl-header {
   position: absolute; top: 0; left: 0; right: 0;
-  height: 44px;
+  height: 56px;
   display: flex; align-items: center;
-  padding: 0 16px; gap: 10px;
+  padding: 0 40px; gap: 14px;
 }
 .sl-header-title {
-  font-size: clamp(9px,1.8vw,14px); font-weight: 800;
+  font-size: 20px; font-weight: 800;
   color: #fff; letter-spacing: 0.04em;
 }
 .sl-badge {
   margin-left: auto;
-  font-size: clamp(7px,1.2vw,10px); font-weight: 700;
-  color: #fff; padding: 2px 8px; border-radius: 3px;
+  font-size: 14px; font-weight: 700;
+  color: #fff; padding: 4px 14px; border-radius: 4px;
   background: rgba(255,255,255,0.25);
 }
 .sl-body {
   position: absolute;
-  top: 44px; left: 0; right: 0; bottom: 0;
-  padding: 10px 16px 10px;
+  top: 56px; left: 0; right: 0; bottom: 0;
+  padding: 24px 40px 24px;
   display: flex; flex-direction: column;
 }
 .sl-section-title {
-  font-size: clamp(11px,2.2vw,18px); font-weight: 800;
-  color: #1a1a1a; margin-bottom: 8px; line-height: 1.3;
+  font-size: 26px; font-weight: 800;
+  color: #1a1a1a; margin-bottom: 16px; line-height: 1.3;
 }
 .sl-divider {
-  height: 2px; border-radius: 1px; margin-bottom: 10px;
+  height: 3px; border-radius: 2px; margin-bottom: 16px;
   opacity: 0.3;
 }
 
 /* ---- LAYOUT: step ---- */
 .layout-step .sl-steps {
-  display: flex; gap: 8px; flex: 1; align-items: stretch;
+  display: flex; gap: 16px; flex: 1; align-items: stretch;
 }
 .layout-step .step-card {
-  flex: 1; border-radius: 8px; padding: 10px 8px;
+  flex: 1; border-radius: 12px; padding: 28px 20px;
   background: #f5f7ff;
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
   position: relative; opacity: 0;
 }
 .layout-step .step-card::after {
-  content: '›'; position: absolute; right: -10px; top: 50%;
+  content: '›'; position: absolute; right: -14px; top: 50%;
   transform: translateY(-50%);
-  font-size: clamp(12px,2vw,18px); color: #ccc; font-weight: 700;
+  font-size: 28px; color: #ccc; font-weight: 700; z-index: 1;
 }
 .layout-step .step-card:last-child::after { display: none; }
 .layout-step .step-num {
-  width: clamp(22px,3.5vw,32px); height: clamp(22px,3.5vw,32px);
+  width: 48px; height: 48px;
   border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  font-size: clamp(9px,1.5vw,13px); font-weight: 800; color: #fff;
+  font-size: 20px; font-weight: 800; color: #fff;
 }
 .layout-step .step-label {
-  font-size: clamp(8px,1.4vw,11px); font-weight: 800;
-  text-align: center; line-height: 1.2;
+  font-size: 18px; font-weight: 800;
+  text-align: center; line-height: 1.3;
 }
 .layout-step .step-desc {
-  font-size: clamp(6px,1.1vw,9px); color: #555; text-align: center; line-height: 1.4;
+  font-size: 14px; color: #555; text-align: center; line-height: 1.6;
 }
 
 /* ---- LAYOUT: card ---- */
 .layout-card .sl-cards {
-  display: flex; gap: 8px; flex: 1; align-items: stretch;
+  display: flex; gap: 16px; flex: 1; align-items: stretch;
 }
 .layout-card .item-card {
-  flex: 1; border-radius: 8px; padding: 10px 8px;
+  flex: 1; border-radius: 12px; padding: 28px 20px;
   background: #f5f7ff;
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
   opacity: 0;
 }
 .layout-card .item-card .card-icon {
-  width: clamp(28px,4vw,40px); height: clamp(28px,4vw,40px);
+  width: 56px; height: 56px;
   border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  font-size: clamp(12px,2vw,18px);
+  font-size: 26px;
 }
 .layout-card .item-card .card-title {
-  font-size: clamp(8px,1.4vw,11px); font-weight: 800; text-align: center;
+  font-size: 18px; font-weight: 800; text-align: center; line-height: 1.3;
 }
 .layout-card .item-card .card-desc {
-  font-size: clamp(6px,1.1vw,9px); color: #555; text-align: center; line-height: 1.4;
+  font-size: 14px; color: #555; text-align: center; line-height: 1.6;
 }
 
 /* ---- LAYOUT: list (デフォルト) ---- */
 .layout-list .sl-items {
-  display: flex; flex-direction: column; gap: 6px; flex: 1; justify-content: center;
+  display: flex; flex-direction: column; gap: 18px; flex: 1; justify-content: center;
 }
 .layout-list .list-item {
-  display: flex; align-items: flex-start; gap: 8px;
+  display: flex; align-items: flex-start; gap: 18px;
   opacity: 0;
 }
 .layout-list .list-dot {
-  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 3px;
+  width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 6px;
 }
 .layout-list .list-icon {
-  width: clamp(26px,3.5vw,34px); height: clamp(26px,3.5vw,34px);
+  width: 48px; height: 48px;
   border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  font-size: clamp(10px,1.6vw,14px); flex-shrink: 0; border: 1.5px solid currentColor;
+  font-size: 22px; flex-shrink: 0; border: 2px solid currentColor;
 }
 .layout-list .list-title {
-  font-size: clamp(9px,1.7vw,13px); font-weight: 700; color: #1a1a1a; margin-bottom: 1px;
+  font-size: 20px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;
 }
 .layout-list .list-desc {
-  font-size: clamp(7px,1.3vw,10px); color: #555; line-height: 1.4;
+  font-size: 15px; color: #555; line-height: 1.6;
 }
 
 /* ---- LAYOUT: compare ---- */
 .layout-compare .sl-cols {
-  display: flex; gap: 10px; flex: 1; align-items: stretch;
+  display: flex; gap: 20px; flex: 1; align-items: stretch;
 }
 .layout-compare .col-box {
-  flex: 1; border-radius: 8px; padding: 10px;
-  display: flex; flex-direction: column; gap: 6px;
+  flex: 1; border-radius: 12px; padding: 20px;
+  display: flex; flex-direction: column; gap: 12px;
   opacity: 0;
 }
 .layout-compare .col-box.col-before { background: #f0f0f0; }
 .layout-compare .col-box.col-after  { }
 .layout-compare .col-header {
-  font-size: clamp(8px,1.4vw,11px); font-weight: 800;
-  color: #fff; padding: 4px 10px; border-radius: 4px; text-align: center;
+  font-size: 16px; font-weight: 800;
+  color: #fff; padding: 8px 16px; border-radius: 6px; text-align: center;
 }
 .layout-compare .col-item {
-  background: rgba(255,255,255,0.7); border-radius: 6px; padding: 6px 8px;
+  background: rgba(255,255,255,0.7); border-radius: 8px; padding: 12px 14px;
 }
 .layout-compare .col-item-title {
-  font-size: clamp(7px,1.3vw,10px); font-weight: 700; color: #1a1a1a;
+  font-size: 16px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;
 }
 .layout-compare .col-item-desc {
-  font-size: clamp(6px,1.1vw,9px); color: #555; line-height: 1.4;
+  font-size: 13px; color: #555; line-height: 1.5;
 }
 
 /* ---- LAYOUT: hub ---- */
@@ -329,22 +345,22 @@ footer { text-align: center; padding: 28px; font-size: 11px; color: #94A3B8; }
 }
 .layout-hub .hub-center {
   position: absolute;
-  width: clamp(60px,9vw,80px); height: clamp(60px,9vw,80px);
+  width: 120px; height: 120px;
   border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  font-size: clamp(7px,1.2vw,10px); font-weight: 800; color: #fff; text-align: center;
-  z-index: 2; opacity: 0;
+  font-size: 14px; font-weight: 800; color: #fff; text-align: center;
+  z-index: 2; opacity: 0; padding: 8px;
 }
 .layout-hub .hub-item {
   position: absolute;
-  width: clamp(100px,16vw,140px);
-  background: #f5f7ff; border-radius: 8px; padding: 8px;
+  width: 220px;
+  background: #f5f7ff; border-radius: 10px; padding: 14px;
   opacity: 0;
 }
 .layout-hub .hub-item-title {
-  font-size: clamp(7px,1.3vw,10px); font-weight: 800; margin-bottom: 3px;
+  font-size: 16px; font-weight: 800; margin-bottom: 6px;
 }
 .layout-hub .hub-item-desc {
-  font-size: clamp(6px,1.1vw,9px); color: #555; line-height: 1.4;
+  font-size: 13px; color: #555; line-height: 1.5;
 }
 /* hub positions */
 .layout-hub .hub-item.pos-top    { top: 4%; left: 50%; transform: translateX(-50%); }
@@ -354,47 +370,47 @@ footer { text-align: center; padding: 28px; font-size: 11px; color: #94A3B8; }
 
 /* ---- LAYOUT: flow ---- */
 .layout-flow .sl-flow {
-  display: flex; flex-direction: column; gap: 6px; flex: 1; justify-content: center;
+  display: flex; flex-direction: column; gap: 14px; flex: 1; justify-content: center;
 }
 .layout-flow .flow-row {
   display: flex; align-items: stretch; gap: 0;
   opacity: 0;
 }
 .layout-flow .flow-label {
-  min-width: clamp(60px,10vw,90px); padding: 6px 10px;
-  border-radius: 6px 0 0 6px;
-  font-size: clamp(8px,1.4vw,11px); font-weight: 800; color: #fff;
+  min-width: 130px; padding: 10px 16px;
+  border-radius: 8px 0 0 8px;
+  font-size: 16px; font-weight: 800; color: #fff;
   display: flex; align-items: center; justify-content: center;
 }
 .layout-flow .flow-steps {
-  display: flex; flex: 1; background: #f5f7ff; border-radius: 0 6px 6px 0; overflow: hidden;
+  display: flex; flex: 1; background: #f5f7ff; border-radius: 0 8px 8px 0; overflow: hidden;
 }
 .layout-flow .flow-step {
-  flex: 1; padding: 5px 8px;
-  font-size: clamp(6px,1.1vw,9px); font-weight: 700; color: #1a1a1a;
+  flex: 1; padding: 10px 14px;
+  font-size: 14px; font-weight: 700; color: #1a1a1a;
   display: flex; align-items: center; justify-content: center; text-align: center;
-  border-right: 1px solid #e0e0e0; position: relative;
+  border-right: 1px solid #e0e0e0; position: relative; line-height: 1.4;
 }
 .layout-flow .flow-step:last-child { border-right: none; }
 
 /* ---- タイトルスライド ---- */
 .sl-title-wrap {
-  width: 100%; height: 100%;
+  width: 1280px; height: 720px;
   display: flex; flex-direction: column;
-  justify-content: center; padding: 24px 32px;
+  justify-content: center; padding: 60px 80px;
   position: relative;
 }
 .sl-title-main {
-  font-size: clamp(16px,3.2vw,28px); font-weight: 800;
+  font-size: 48px; font-weight: 800;
   color: #fff; line-height: 1.3; opacity: 0;
 }
 .sl-title-sub {
-  font-size: clamp(9px,1.7vw,14px);
-  color: rgba(255,255,255,0.75); margin-top: 10px; opacity: 0;
+  font-size: 22px;
+  color: rgba(255,255,255,0.75); margin-top: 20px; opacity: 0;
 }
 .sl-title-divider {
-  width: 50px; height: 3px; border-radius: 2px;
-  background: rgba(255,255,255,0.4); margin: 12px 0; opacity: 0;
+  width: 70px; height: 4px; border-radius: 2px;
+  background: rgba(255,255,255,0.4); margin: 20px 0; opacity: 0;
 }
 </style>
 </head>
@@ -760,6 +776,8 @@ function buildPresentation() {
     showPanel('panel4');
     buildDots();
     showSlide(0);
+    // panel4表示後に再スケール（offsetWidthが正確になるタイミング）
+    requestAnimationFrame(() => scaleSlides());
   }, 800);
 }
 
@@ -790,6 +808,23 @@ function lighten(hex, amount) {
 }
 
 // ============================================================
+// スライドスケール計算：1280×720のスライドをプレビュー枠に合わせてスケール
+// ============================================================
+function scaleSlides() {
+  const vp = document.getElementById('slideViewport');
+  if (!vp) return;
+  const containerW = vp.offsetWidth;
+  const scale = containerW / 1280;
+  vp.style.height = (720 * scale) + 'px';
+  vp.querySelectorAll('.slide-page').forEach(p => {
+    p.style.transform = `scale(${scale})`;
+  });
+}
+
+// ウィンドウリサイズ時にも再計算
+window.addEventListener('resize', scaleSlides);
+
+// ============================================================
 // renderSlides: レイアウトタイプで分岐
 // ============================================================
 function renderSlides() {
@@ -815,6 +850,8 @@ function renderSlides() {
     }
     vp.appendChild(page);
   });
+  // スケール適用
+  scaleSlides();
 }
 
 // ---- タイトルスライド ----
@@ -827,7 +864,7 @@ function makeTitleSlide(tc) {
       <div class="sl-title-divider" id="td-0"></div>
       <div class="sl-title-main" id="mt-0">${formData.theme}</div>
       <div class="sl-title-sub"  id="ms-0">対象：${formData.target}　／　目的：${formData.goal}</div>
-      ${formData.badge ? `<div style="position:absolute;top:14px;right:14px;background:rgba(255,255,255,0.2);color:#fff;font-size:clamp(7px,1.2vw,10px);font-weight:700;padding:3px 10px;border-radius:3px;">${formData.badge}</div>` : ''}
+      ${formData.badge ? `<div style="position:absolute;top:24px;right:40px;background:rgba(255,255,255,0.2);color:#fff;font-size:16px;font-weight:700;padding:6px 16px;border-radius:4px;">${formData.badge}</div>` : ''}
     </div>`;
   return page;
 }
@@ -1014,7 +1051,7 @@ function makeCompareSlide(s, idx, tc) {
             <div class="col-header" style="background:#888">As-Is（現状）</div>
             ${makeItems(before)}
           </div>
-          <div style="display:flex;align-items:center;font-size:clamp(16px,3vw,28px);color:#ccc;padding:0 4px;">›</div>
+          <div style="display:flex;align-items:center;font-size:40px;color:#ccc;padding:0 6px;">›</div>
           <div class="col-box col-after" id="cb-${idx}-1" style="background:rgba(${hexToRgb(tc)},0.07)">
             <div class="col-header" style="background:${tc}">To-Be（改善後）</div>
             ${makeItems(after)}
@@ -1134,76 +1171,91 @@ function downloadHTML() {
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Hiragino Kaku Gothic ProN','Noto Sans JP',Arial,sans-serif;background:#111;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:20px}
-.wrap{width:100%;max-width:960px}
-.viewport{width:100%;aspect-ratio:16/9;position:relative;border-radius:12px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.5)}
-.slide-page{position:absolute;inset:0;display:none}
+.wrap{width:100%;max-width:1280px}
+/* コンテナ：16:9を維持しscaleでスライドを収める */
+.viewport{
+  width:100%;
+  aspect-ratio:16/9;
+  position:relative;
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 8px 40px rgba(0,0,0,0.5);
+}
+/* スライド：1280×720の固定サイズ、transform:scaleでプレビュー縮小 */
+.slide-page{
+  position:absolute;top:0;left:0;
+  width:1280px;height:720px;
+  transform-origin:top left;
+  display:none;
+}
 .slide-page.active{display:flex}
-.sl-wrap{width:100%;height:100%;position:relative;overflow:hidden;font-family:'Hiragino Kaku Gothic ProN','Noto Sans JP',Arial,sans-serif}
-.sl-header{position:absolute;top:0;left:0;right:0;height:44px;display:flex;align-items:center;padding:0 16px;gap:10px}
-.sl-header-title{font-size:clamp(9px,1.8vw,14px);font-weight:800;color:#fff;letter-spacing:.04em}
-.sl-badge{margin-left:auto;font-size:clamp(7px,1.2vw,10px);font-weight:700;color:#fff;padding:2px 8px;border-radius:3px;background:rgba(255,255,255,.25)}
-.sl-body{position:absolute;top:44px;left:0;right:0;bottom:0;padding:10px 16px;display:flex;flex-direction:column}
-.sl-title-wrap{width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;padding:24px 32px;position:relative}
-.sl-title-main{font-size:clamp(16px,3.2vw,28px);font-weight:800;color:#fff;line-height:1.3}
-.sl-title-sub{font-size:clamp(9px,1.7vw,14px);color:rgba(255,255,255,.75);margin-top:10px}
-.sl-title-divider{width:50px;height:3px;border-radius:2px;background:rgba(255,255,255,.4);margin-bottom:12px}
+/* 共通スライドスタイル */
+.sl-wrap{width:1280px;height:720px;background:#fff;font-family:'Hiragino Kaku Gothic ProN','Noto Sans JP',Arial,sans-serif;position:relative;overflow:hidden}
+.sl-header{position:absolute;top:0;left:0;right:0;height:56px;display:flex;align-items:center;padding:0 40px;gap:14px}
+.sl-header-title{font-size:20px;font-weight:800;color:#fff;letter-spacing:.04em}
+.sl-badge{margin-left:auto;font-size:14px;font-weight:700;color:#fff;padding:4px 14px;border-radius:4px;background:rgba(255,255,255,.25)}
+.sl-body{position:absolute;top:56px;left:0;right:0;bottom:0;padding:24px 40px;display:flex;flex-direction:column}
+.sl-title-wrap{width:1280px;height:720px;display:flex;flex-direction:column;justify-content:center;padding:60px 80px;position:relative}
+.sl-title-main{font-size:48px;font-weight:800;color:#fff;line-height:1.3}
+.sl-title-sub{font-size:22px;color:rgba(255,255,255,.75);margin-top:20px}
+.sl-title-divider{width:70px;height:4px;border-radius:2px;background:rgba(255,255,255,.4);margin:20px 0}
 /* step */
-.layout-step .sl-steps{display:flex;gap:8px;flex:1;align-items:stretch}
-.layout-step .step-card{flex:1;border-radius:8px;padding:10px 8px;background:#f5f7ff;display:flex;flex-direction:column;align-items:center;gap:6px;position:relative}
-.layout-step .step-card::after{content:'›';position:absolute;right:-10px;top:50%;transform:translateY(-50%);font-size:clamp(12px,2vw,18px);color:#ccc;font-weight:700}
+.layout-step .sl-steps{display:flex;gap:16px;flex:1;align-items:stretch}
+.layout-step .step-card{flex:1;border-radius:12px;padding:28px 20px;background:#f5f7ff;display:flex;flex-direction:column;align-items:center;gap:14px;position:relative}
+.layout-step .step-card::after{content:'›';position:absolute;right:-14px;top:50%;transform:translateY(-50%);font-size:28px;color:#ccc;font-weight:700;z-index:1}
 .layout-step .step-card:last-child::after{display:none}
-.layout-step .step-num{width:clamp(22px,3.5vw,32px);height:clamp(22px,3.5vw,32px);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:clamp(9px,1.5vw,13px);font-weight:800;color:#fff}
-.layout-step .step-label{font-size:clamp(8px,1.4vw,11px);font-weight:800;text-align:center;line-height:1.2}
-.layout-step .step-desc{font-size:clamp(6px,1.1vw,9px);color:#555;text-align:center;line-height:1.4}
+.layout-step .step-num{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:#fff}
+.layout-step .step-label{font-size:18px;font-weight:800;text-align:center;line-height:1.3}
+.layout-step .step-desc{font-size:14px;color:#555;text-align:center;line-height:1.6}
 /* card */
-.layout-card .sl-cards{display:flex;gap:8px;flex:1;align-items:stretch}
-.layout-card .item-card{flex:1;border-radius:8px;padding:10px 8px;background:#f5f7ff;display:flex;flex-direction:column;align-items:center;gap:6px}
-.layout-card .card-icon{width:clamp(28px,4vw,40px);height:clamp(28px,4vw,40px);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:clamp(12px,2vw,18px)}
-.layout-card .card-title{font-size:clamp(8px,1.4vw,11px);font-weight:800;text-align:center}
-.layout-card .card-desc{font-size:clamp(6px,1.1vw,9px);color:#555;text-align:center;line-height:1.4}
+.layout-card .sl-cards{display:flex;gap:16px;flex:1;align-items:stretch}
+.layout-card .item-card{flex:1;border-radius:12px;padding:28px 20px;background:#f5f7ff;display:flex;flex-direction:column;align-items:center;gap:12px}
+.layout-card .item-card .card-icon{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px}
+.layout-card .item-card .card-title{font-size:18px;font-weight:800;text-align:center;line-height:1.3}
+.layout-card .item-card .card-desc{font-size:14px;color:#555;text-align:center;line-height:1.6}
 /* list */
-.layout-list .sl-items{display:flex;flex-direction:column;gap:6px;flex:1;justify-content:center}
-.layout-list .list-item{display:flex;align-items:flex-start;gap:8px}
-.layout-list .list-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:3px}
-.layout-list .list-icon{width:clamp(26px,3.5vw,34px);height:clamp(26px,3.5vw,34px);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:clamp(10px,1.6vw,14px);flex-shrink:0;border:1.5px solid currentColor}
-.layout-list .list-title{font-size:clamp(9px,1.7vw,13px);font-weight:700;color:#1a1a1a;margin-bottom:1px}
-.layout-list .list-desc{font-size:clamp(7px,1.3vw,10px);color:#555;line-height:1.4}
+.layout-list .sl-items{display:flex;flex-direction:column;gap:18px;flex:1;justify-content:center}
+.layout-list .list-item{display:flex;align-items:flex-start;gap:18px}
+.layout-list .list-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:6px}
+.layout-list .list-icon{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;border:2px solid currentColor}
+.layout-list .list-title{font-size:20px;font-weight:700;color:#1a1a1a;margin-bottom:4px}
+.layout-list .list-desc{font-size:15px;color:#555;line-height:1.6}
 /* hub */
 .layout-hub .sl-hub-wrap{flex:1;position:relative;display:flex;align-items:center;justify-content:center}
-.layout-hub .hub-center{position:absolute;width:clamp(60px,9vw,80px);height:clamp(60px,9vw,80px);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:clamp(7px,1.2vw,10px);font-weight:800;color:#fff;text-align:center;z-index:2}
-.layout-hub .hub-item{position:absolute;width:clamp(100px,16vw,140px);background:#f5f7ff;border-radius:8px;padding:8px}
-.layout-hub .hub-item-title{font-size:clamp(7px,1.3vw,10px);font-weight:800;margin-bottom:3px}
-.layout-hub .hub-item-desc{font-size:clamp(6px,1.1vw,9px);color:#555;line-height:1.4}
-.layout-hub .pos-top{top:4%;left:50%;transform:translateX(-50%)}
-.layout-hub .pos-left{left:2%;top:50%;transform:translateY(-50%)}
-.layout-hub .pos-right{right:2%;top:50%;transform:translateY(-50%)}
-.layout-hub .pos-bottom{bottom:4%;left:50%;transform:translateX(-50%)}
+.layout-hub .hub-center{position:absolute;width:120px;height:120px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;text-align:center;z-index:2;padding:8px}
+.layout-hub .hub-item{position:absolute;width:220px;background:#f5f7ff;border-radius:10px;padding:14px}
+.layout-hub .hub-item-title{font-size:16px;font-weight:800;margin-bottom:6px}
+.layout-hub .hub-item-desc{font-size:13px;color:#555;line-height:1.5}
+.layout-hub .hub-item.pos-top{top:4%;left:50%;transform:translateX(-50%)}
+.layout-hub .hub-item.pos-left{left:2%;top:50%;transform:translateY(-50%)}
+.layout-hub .hub-item.pos-right{right:2%;top:50%;transform:translateY(-50%)}
+.layout-hub .hub-item.pos-bottom{bottom:4%;left:50%;transform:translateX(-50%)}
 /* flow */
-.layout-flow .sl-flow{display:flex;flex-direction:column;gap:6px;flex:1;justify-content:center}
+.layout-flow .sl-flow{display:flex;flex-direction:column;gap:14px;flex:1;justify-content:center}
 .layout-flow .flow-row{display:flex;align-items:stretch;gap:0}
-.layout-flow .flow-label{min-width:clamp(60px,10vw,90px);padding:6px 10px;border-radius:6px 0 0 6px;font-size:clamp(8px,1.4vw,11px);font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center}
-.layout-flow .flow-steps{display:flex;flex:1;background:#f5f7ff;border-radius:0 6px 6px 0;overflow:hidden}
-.layout-flow .flow-step{flex:1;padding:5px 8px;font-size:clamp(6px,1.1vw,9px);font-weight:700;color:#1a1a1a;display:flex;align-items:center;justify-content:center;text-align:center;border-right:1px solid #e0e0e0}
+.layout-flow .flow-label{min-width:130px;padding:10px 16px;border-radius:8px 0 0 8px;font-size:16px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center}
+.layout-flow .flow-steps{display:flex;flex:1;background:#f5f7ff;border-radius:0 8px 8px 0;overflow:hidden}
+.layout-flow .flow-step{flex:1;padding:10px 14px;font-size:14px;font-weight:700;color:#1a1a1a;display:flex;align-items:center;justify-content:center;text-align:center;border-right:1px solid #e0e0e0;line-height:1.4}
 .layout-flow .flow-step:last-child{border-right:none}
 /* compare */
-.layout-compare .sl-cols{display:flex;gap:10px;flex:1;align-items:stretch}
-.layout-compare .col-box{flex:1;border-radius:8px;padding:10px;display:flex;flex-direction:column;gap:6px}
+.layout-compare .sl-cols{display:flex;gap:20px;flex:1;align-items:stretch}
+.layout-compare .col-box{flex:1;border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:12px}
 .layout-compare .col-box.col-before{background:#f0f0f0}
-.layout-compare .col-header{font-size:clamp(8px,1.4vw,11px);font-weight:800;color:#fff;padding:4px 10px;border-radius:4px;text-align:center}
-.layout-compare .col-item{background:rgba(255,255,255,.7);border-radius:6px;padding:6px 8px}
-.layout-compare .col-item-title{font-size:clamp(7px,1.3vw,10px);font-weight:700;color:#1a1a1a}
-.layout-compare .col-item-desc{font-size:clamp(6px,1.1vw,9px);color:#555;line-height:1.4}
+.layout-compare .col-header{font-size:16px;font-weight:800;color:#fff;padding:8px 16px;border-radius:6px;text-align:center}
+.layout-compare .col-item{background:rgba(255,255,255,.7);border-radius:8px;padding:12px 14px}
+.layout-compare .col-item-title{font-size:16px;font-weight:700;color:#1a1a1a;margin-bottom:4px}
+.layout-compare .col-item-desc{font-size:13px;color:#555;line-height:1.5}
 /* controls */
 .controls{display:flex;align-items:center;gap:10px;margin-top:14px}
 .nav-btn{padding:6px 18px;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:20px;cursor:pointer;font-size:13px;font-family:inherit}
 .nav-btn:disabled{opacity:.3;cursor:not-allowed}
 .dots{display:flex;gap:6px;flex:1;justify-content:center}
-.dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.3);cursor:pointer;transition:background .2s}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.3);cursor:pointer;transition:background .2s}
 .dot.on{background:#fff}
-.counter{font-size:12px;color:rgba(255,255,255,.5);min-width:40px;text-align:right}
-@keyframes fadeInUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-@keyframes slideLeft{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
-@keyframes slideRight{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+.counter{font-size:13px;color:rgba(255,255,255,.6);min-width:50px;text-align:right}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideLeft{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:translateX(0)}}
+@keyframes slideRight{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:translateX(0)}}
 @keyframes scaleIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 </style>
@@ -1223,10 +1275,19 @@ ${pagesHTML}
 <script>
 const total=${slideData.length+1};
 let cur=0;
+function scaleSlides(){
+  const vp=document.getElementById('vp');
+  if(!vp)return;
+  const w=vp.offsetWidth;
+  const s=w/1280;
+  vp.style.height=(720*s)+'px';
+  vp.querySelectorAll('.slide-page').forEach(p=>p.style.transform='scale('+s+')');
+}
+window.addEventListener('resize',scaleSlides);
 function buildDots(){const dc=document.getElementById('dots');for(let i=0;i<total;i++){const d=document.createElement('div');d.className='dot';d.onclick=(()=>{const x=i;return()=>show(x);})();dc.appendChild(d);}}
 function show(idx){document.querySelectorAll('.slide-page').forEach(p=>p.classList.remove('active'));const pg=document.getElementById('sp-'+idx);if(!pg)return;pg.classList.add('active');document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('on',i===idx));document.getElementById('cnt').textContent=(idx+1)+' / '+total;document.getElementById('prev').disabled=idx===0;document.getElementById('next').disabled=idx===total-1;cur=idx;}
 function nav(d){show(Math.max(0,Math.min(total-1,cur+d)));}
-buildDots();show(0);
+buildDots();scaleSlides();show(0);
 document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')nav(1);if(e.key==='ArrowLeft')nav(-1);});
 <\/script>
 </body>
