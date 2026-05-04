@@ -46,10 +46,6 @@ header {
 
 main { max-width: 1100px; margin: 40px auto; padding: 0 24px; }
 
-.hero { text-align: center; margin-bottom: 50px; }
-.hero h1 { font-size: 36px; font-weight: 900; color: var(--primary); margin-bottom: 12px; }
-.hero p { color: var(--text-sub); font-size: 18px; }
-
 .steps-bar { display: flex; align-items: center; margin-bottom: 40px; background: #fff; padding: 20px; border-radius: 100px; box-shadow: var(--shadow-premium); }
 .step { flex: 1; display: flex; align-items: center; justify-content: center; gap: 10px; color: #94A3B8; font-weight: 700; font-size: 14px; }
 .step-num { width: 28px; height: 28px; border-radius: 50%; background: #E2E8F0; display: flex; align-items: center; justify-content: center; font-size: 12px; transition: 0.3s; }
@@ -69,10 +65,10 @@ main { max-width: 1100px; margin: 40px auto; padding: 0 24px; }
   width: 100%; padding: 14px 18px; border: 2px solid #EDF2F7; border-radius: var(--radius-md);
   font-size: 15px; background: #F8FAFC; outline: none; transition: 0.2s;
 }
-.field textarea { height: 150px; resize: vertical; }
+.field textarea { height: 200px; resize: vertical; }
 
 .upload-area {
-  border: 2px dashed #CBD5E1; border-radius: var(--radius-lg); padding: 40px;
+  border: 2px dashed #CBD5E1; border-radius: var(--radius-lg); padding: 50px;
   text-align: center; cursor: pointer; background: #F8FAFC; position: relative; transition: 0.3s;
 }
 .upload-area:hover { border-color: var(--primary); background: #fff; }
@@ -134,58 +130,49 @@ footer { text-align: center; padding: 50px; color: #94A3B8; font-size: 15px; }
 
 <main>
   <div class="steps-bar">
-    <div class="step active" id="st1"><div class="step-num">1</div>デザイン</div>
+    <div class="step active" id="st1"><div class="step-num">1</div>既存資料解析</div>
     <div class="step-line"></div>
-    <div class="step" id="st2"><div class="step-num">2</div>原稿投入</div>
+    <div class="step" id="st2"><div class="step-num">2</div>原稿ファイル投入</div>
     <div class="step-line"></div>
-    <div class="step" id="st3"><div class="step-num">3</div>構成案</div>
+    <div class="step" id="st3"><div class="step-num">3</div>構成案確定</div>
     <div class="step-line"></div>
-    <div class="step" id="st4"><div class="step-num">4</div>完成</div>
+    <div class="step" id="st4"><div class="step-num">4</div>完成プレビュー</div>
   </div>
 
-  <!-- STEP 1 -->
   <div class="card panel active" id="panel1">
-    <div class="card-title">STEP 1　ベースデザイン解析</div>
+    <div class="card-title">STEP 1　既存資料（テンプレート元）のアップロード</div>
     <div class="upload-area" id="area1">
       <input type="file" onchange="handleUpload(this)">
-      <div style="font-size:50px;">🎨</div>
-      <p style="font-weight:800; margin-top:10px;" id="sub1">スライド画像をアップロード（任意）</p>
+      <div style="font-size:50px;">📄</div>
+      <p style="font-weight:800; margin-top:10px;" id="sub1">スライド画像をアップロードしてください</p>
     </div>
-    <button class="btn-primary" style="margin-top:40px;" onclick="setStep(2)">次へ →</button>
+    <p style="margin-top:15px; font-size:13px; color:var(--text-sub);">※ 既存資料からブランドカラーやレイアウト構造を自動解析し、テンプレートを構築します。</p>
+    <button class="btn-primary" style="margin-top:40px;" id="btnNext1" onclick="setStep(2)">解析して次へ →</button>
   </div>
 
-  <!-- STEP 2 (NEW: File Upload Support) -->
   <div class="card panel" id="panel2">
-    <div class="card-title">STEP 2　プレゼン原稿（テキストデータ）の投入</div>
+    <div class="card-title">STEP 2　プレゼン原稿ファイルの投入</div>
     <div class="upload-area" id="area2" style="margin-bottom:30px;">
       <input type="file" accept=".txt" onchange="handleTextUpload(this)">
-      <div style="font-size:50px;">📄</div>
-      <p style="font-weight:800; margin-top:10px;" id="sub2">原稿ファイル（.txt）をアップロード</p>
-      <p style="font-size:12px; color:#94A3B8;">※ または下のボックスに直接入力・ペーストも可能です</p>
+      <div style="font-size:50px;">📑</div>
+      <p style="font-weight:800; margin-top:10px;" id="sub2">原稿ファイル（.txt）を選択してください</p>
     </div>
     <div class="field">
-      <label>読み込まれた原稿内容</label>
-      <textarea id="sourceText" placeholder="ここに入力するか、ファイルをアップロードしてください。"></textarea>
+      <label>読み込まれた原稿（編集可能）</label>
+      <textarea id="sourceText" placeholder="ファイルをアップロードするか、直接入力してください。"></textarea>
     </div>
-    <div class="field">
-      <label>論理フレームワーク</label>
-      <select id="framework"><option value="pyramid">結論優先</option><option value="scqa">ストーリー重視</option></select>
-    </div>
-    <button class="btn-primary" onclick="generateOutline()">AIで構成を生成する →</button>
+    <button class="btn-primary" onclick="generateOutline()">AI構成案を生成する →</button>
   </div>
 
-  <!-- LOADERS -->
-  <div class="card panel" id="panelL1"><div style="text-align:center; padding:60px;"><div style="width:40px; height:40px; border:4px solid var(--primary); border-top-color:transparent; border-radius:50%; animation: spin 1s linear infinite; margin:0 auto 20px;"></div><p>構成を考えています...</p></div></div>
-  <div class="card panel" id="panelL2"><div style="text-align:center; padding:60px;"><div style="width:40px; height:40px; border:4px solid var(--primary); border-top-color:transparent; border-radius:50%; animation: spin 1s linear infinite; margin:0 auto 20px;"></div><p>スライドを作成中...</p></div></div>
+  <div class="card panel" id="panelL1"><div style="text-align:center; padding:60px;"><div style="width:40px; height:40px; border:4px solid var(--primary); border-top-color:transparent; border-radius:50%; animation: spin 1s linear infinite; margin:0 auto 20px;"></div><p>論理構造を構築中...</p></div></div>
+  <div class="card panel" id="panelL2"><div style="text-align:center; padding:60px;"><div style="width:40px; height:40px; border:4px solid var(--primary); border-top-color:transparent; border-radius:50%; animation: spin 1s linear infinite; margin:0 auto 20px;"></div><p>デザインを適用中...</p></div></div>
 
-  <!-- STEP 3 -->
   <div class="card panel" id="panel3">
-    <div class="card-title">STEP 3　AI構成案の確認</div>
-    <div id="outlineBox" style="background:#F8FAFC; padding:40px; border:2px solid #EDF2F7; border-radius:20px; white-space:pre-wrap; margin-bottom:30px; min-height:100px;"></div>
-    <button class="btn-primary" onclick="buildPresentation()">この構成で完成させる →</button>
+    <div class="card-title">STEP 3　AI構成案の最終確認</div>
+    <div id="outlineBox" style="background:#F8FAFC; padding:40px; border:2px solid #EDF2F7; border-radius:20px; white-space:pre-wrap; margin-bottom:30px; min-height:150px; font-size:15px; color:var(--text-main);"></div>
+    <button class="btn-primary" onclick="buildPresentation()">この構成でスライドを構築する →</button>
   </div>
 
-  <!-- STEP 4 -->
   <div class="card panel" id="panel4">
     <div class="card-title">STEP 4　完成プレビュー</div>
     <div class="slide-outer"><div class="slide-viewport" id="slideViewport"></div></div>
@@ -206,32 +193,39 @@ function setStep(n) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   const id = ['panel1','panel2','panel3','panel4'][n-1];
   const el = document.getElementById(id);
-  if (el) el.classList.add('active');
-  if (n === 4) setTimeout(scaleSlides, 50);
+  if (el) {
+    el.classList.add('active');
+    if (n === 4) setTimeout(scaleSlides, 100);
+  }
   document.querySelectorAll('.step').forEach((s, i) => { s.classList.toggle('active', i === n-1); s.classList.toggle('done', i < n-1); });
 }
 
 function handleUpload(input) {
   const file = input.files[0]; if(!file) return;
-  document.getElementById('sub1').textContent = file.name + ' 解析完了';
+  document.getElementById('sub1').textContent = file.name + ' 解析中...';
   document.getElementById('area1').classList.add('has-file');
   const reader = new FileReader();
   reader.onload = async (e) => {
     try {
       const res = await fetch('/api/analyze-template', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ imageBase64: e.target.result.split(',')[1], mediaType: file.type }) });
       const data = await res.json();
-      if(data.analysis && data.analysis.mainColor) {
-        themeColor = data.analysis.mainColor;
-        document.documentElement.style.setProperty('--primary', themeColor);
+      if(data.analysis) {
+        templateAnalysis = data.analysis;
+        if(data.analysis.mainColor) {
+          themeColor = data.analysis.mainColor;
+          document.documentElement.style.setProperty('--primary', themeColor);
+        }
+        document.getElementById('sub1').textContent = file.name + ' 解析完了 ✓';
       }
-    } catch(err) {}
+    } catch(err) {
+      document.getElementById('sub1').textContent = '解析に失敗しました。標準テンプレートを使用します。';
+    }
   };
   reader.readAsDataURL(file);
 }
 
 function handleTextUpload(input) {
   const file = input.files[0]; if(!file) return;
-  document.getElementById('sub2').textContent = file.name + ' 読み込み中...';
   const reader = new FileReader();
   reader.onload = (e) => {
     document.getElementById('sourceText').value = e.target.result;
@@ -244,18 +238,36 @@ function handleTextUpload(input) {
 async function generateOutline() {
   const source = document.getElementById('sourceText').value.trim();
   if(!source) return alert('原稿内容を入力またはアップロードしてください');
+  
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.getElementById('panelL1').classList.add('active');
+  
   try {
-    const res = await fetch('/api/generate', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ 
-      theme: 'プレゼン構成案', notes: source, framework: document.getElementById('framework').value 
-    }) });
+    const res = await fetch('/api/generate', { 
+      method:'POST', 
+      headers:{'Content-Type':'application/json'}, 
+      body:JSON.stringify({ 
+        theme: 'ビジネスプレゼンテーション', 
+        notes: source, 
+        templateAnalysis: templateAnalysis // テンプレート解析結果を確実に渡す
+      }) 
+    });
     const data = await res.json();
     outline = data.result || '';
+    
     const box = document.getElementById('outlineBox');
-    if (box) box.innerText = outline; // innerTextを使用して確実に反映
+    if (box) {
+      if (outline) {
+        box.innerText = outline;
+      } else {
+        box.innerText = "構成案の生成に失敗しました（AIからの返答が空です）。原稿内容を調整して再度お試しください。";
+      }
+    }
     setStep(3);
-  } catch(e) { setStep(2); alert('失敗しました'); }
+  } catch(e) { 
+    setStep(2); 
+    alert('AIとの通信に失敗しました。'); 
+  }
 }
 
 function parseOutline(text) {
