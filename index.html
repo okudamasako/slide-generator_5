@@ -604,12 +604,19 @@ function handleUpload(input) {
       const data = await res.json();
       if (data.analysis) {
         templateAnalysis = data.analysis;
+
+        // Claude Vision が返したメインカラーがあればそちらを優先して上書き
+        if (templateAnalysis.mainColor) {
+          themeColor = templateAnalysis.mainColor;
+          updateColorUI(templateAnalysis.mainColor);
+        }
+
         const badge = document.getElementById('templateBadge');
         badge.style.display = 'block';
         document.getElementById('templateBadgeTitle').textContent =
           `🎨 テンプレート解析完了：${templateAnalysis.layoutType || 'カスタム'}レイアウト`;
         document.getElementById('templateBadgeDetail').textContent =
-          `項目数：${templateAnalysis.itemsPerSlide}個／スライド　・　${templateAnalysis.designFeatures || ''}`;
+          `項目数：${templateAnalysis.itemsPerSlide}個／スライド　・　カラー：${templateAnalysis.mainColor || '自動抽出'}`;
         area.querySelector('.upload-sub').textContent = '解析完了 ✓';
       } else {
         area.querySelector('.upload-sub').textContent = 'アップロード完了 ✓';

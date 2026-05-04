@@ -14,7 +14,9 @@ export default async function handler(req, res) {
   "designFeatures": "デザインの主な特徴（配色、余白感、フォントスタイルなど）",
   "components": "使われているコンポーネント（アイコン、矢印、区切り線、バッジ、番号、カードなど）",
   "itemsPerSlide": "1スライドあたりの推奨項目数（数字のみ、例：3）",
-  "flowStyle": "スライドの流れ・構造の特徴（左から右、上から下、中心から放射状など）"
+  "flowStyle": "スライドの流れ・構造の特徴（左から右、上から下、中心から放射状など）",
+  "mainColor": "このスライドで最も印象的・主要なアクセントカラーの16進数カラーコード（例：#2A9D8F）。背景色や白・黒・グレーは除く。ヘッダー帯・ボタン・アイコンなど目立つ色を返す。",
+  "subColor": "メインカラーと組み合わせて使われているサブカラーの16進数カラーコード（例：#264653）。見当たらない場合はメインカラーをやや暗くした値を返す。"
 }`;
 
   try {
@@ -27,7 +29,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 500,
+        max_tokens: 600,
         messages: [{
           role: 'user',
           content: [
@@ -52,11 +54,16 @@ export default async function handler(req, res) {
     if (!r.ok) return res.status(500).json({ error: data.error?.message || '分析に失敗しました' });
 
     const text = data.content?.[0]?.text || '';
-    // JSON部分だけ抽出してパース
     const jsonMatch = text.match(/\{[\s\S]*\}/);
     if (!jsonMatch) return res.status(200).json({ analysis: null });
 
     const analysis = JSON.parse(jsonMatch[0]);
+
+    // mainColor / subColor が #RRGGBB 形式でなければ除外
+    const hexPattern = /^#[0-9A-Fa-f]{6}$/;
+    if (!hexPattern.test(analysis.mainColor)) delete analysis.mainColor;
+    if (!hexPattern.test(analysis.subColor))  delete analysis.subColor;
+
     return res.status(200).json({ analysis });
 
   } catch(e) {
