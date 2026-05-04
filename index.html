@@ -249,12 +249,20 @@ async function generateOutline() {
       body:JSON.stringify({ 
         theme: 'ビジネスプレゼンテーション', 
         notes: source, 
-        templateAnalysis: templateAnalysis // テンプレート解析結果を確実に渡す
+        templateAnalysis: templateAnalysis
       }) 
     });
     const data = await res.json();
-    outline = data.result || '';
     
+    if (data.error) {
+      outline = "";
+      const box = document.getElementById('outlineBox');
+      if (box) box.innerText = "エラー: " + data.error;
+      setStep(3);
+      return;
+    }
+
+    outline = data.result || '';
     const box = document.getElementById('outlineBox');
     if (box) {
       if (outline) {

@@ -1,8 +1,14 @@
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { theme, target, goal, badge, notes, slideCount, templateAnalysis } = req.body;
-  if (!theme || !target || !goal) return res.status(400).json({ error: '入力が不足しています' });
+  const { theme, target, goal, badge, notes, slideCount, templateAnalysis, framework } = req.body;
+  
+  // 必須チェックの緩和（デフォルト値を設定）
+  const finalTheme = theme || 'ビジネスプレゼンテーション';
+  const finalTarget = target || '経営層・ステークホルダー';
+  const finalGoal = goal || '意思決定の促進と合意形成';
+  const finalNotes = notes || '';
+  const finalSlideCount = slideCount || '5〜8枚';
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) return res.status(500).json({ error: 'APIキーが設定されていません' });
@@ -90,12 +96,13 @@ ${layoutInstructions[layoutType] || layoutInstructions.list}
 
   const prompt = `以下の条件でプレゼン資料のスライド構成案を作成してください。
 ${templateSection}
-テーマ：${theme}
-ターゲット：${target}
-目的・ゴール：${goal}
+テーマ：${finalTheme}
+ターゲット：${finalTarget}
+目的・ゴール：${finalGoal}
 バッジ表示テキスト：${badge || 'なし'}
-伝えたい要点：${notes || 'なし'}
-スライド枚数：${slideCount}
+伝えたい要点：${finalNotes}
+スライド枚数：${finalSlideCount}
+論理フレームワーク：${framework || 'pyramid'}
 
 出力ルール：
 ・必ず「スライド1：タイトル」の形式で番号を振ること
@@ -112,7 +119,7 @@ ${templateSection}
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-3-5-sonnet-20240620',
         max_tokens: 2000,
         messages: [{ role: 'user', content: prompt }]
       })
