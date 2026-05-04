@@ -46,12 +46,10 @@ header {
 
 main { max-width: 1100px; margin: 40px auto; padding: 0 24px; }
 
-/* ヒーローセクション */
 .hero { text-align: center; margin-bottom: 50px; }
 .hero h1 { font-size: 36px; font-weight: 900; color: var(--primary); margin-bottom: 12px; }
 .hero p { color: var(--text-sub); font-size: 18px; }
 
-/* ステップインジケーター */
 .steps-bar { display: flex; align-items: center; margin-bottom: 40px; background: #fff; padding: 20px; border-radius: 100px; box-shadow: var(--shadow-premium); }
 .step { flex: 1; display: flex; align-items: center; justify-content: center; gap: 10px; color: #94A3B8; font-weight: 700; font-size: 14px; }
 .step-num { width: 28px; height: 28px; border-radius: 50%; background: #E2E8F0; display: flex; align-items: center; justify-content: center; font-size: 12px; transition: 0.3s; }
@@ -60,13 +58,11 @@ main { max-width: 1100px; margin: 40px auto; padding: 0 24px; }
 .step.done .step-num { background: #10B981; color: #fff; }
 .step-line { width: 40px; height: 2px; background: #E2E8F0; }
 
-/* カード & パネル */
 .card { background: #fff; border-radius: var(--radius-lg); padding: 50px; margin-bottom: 30px; box-shadow: var(--shadow-premium); display: none; }
 .card.active { display: block; animation: fadeInUp 0.6s ease forwards; }
 .card-title { font-size: 20px; font-weight: 900; color: var(--primary); margin-bottom: 30px; display: flex; align-items: center; gap: 12px; }
 .card-title::before { content: ''; width: 6px; height: 24px; background: var(--accent); border-radius: 3px; }
 
-/* フォームグリッド */
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
 .field { margin-bottom: 24px; }
 .field.full { grid-column: 1 / -1; }
@@ -75,9 +71,7 @@ main { max-width: 1100px; margin: 40px auto; padding: 0 24px; }
   width: 100%; padding: 14px 18px; border: 2px solid #EDF2F7; border-radius: var(--radius-md);
   font-size: 15px; background: #F8FAFC; outline: none; transition: 0.2s;
 }
-.field textarea { height: 120px; resize: vertical; }
 .field textarea.large { height: 250px; border-color: var(--primary-light); background: #fff; }
-.field input:focus, .field textarea:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px var(--primary-soft); }
 
 .btn-primary {
   width: 100%; padding: 20px; background: var(--primary); color: #fff;
@@ -91,23 +85,32 @@ main { max-width: 1100px; margin: 40px auto; padding: 0 24px; }
   スライド表示・プレビュー用
   ============================================================
  */
-.slide-outer { border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.25); margin-bottom: 40px; background: #000; }
-.slide-viewport { width: 100%; position: relative; background: #fff; overflow: hidden; aspect-ratio: 16 / 9; }
-.slide-page { position: absolute; inset: 0; width: 1280px; height: 720px; transform-origin: top left; display: none; background: #fff; overflow: hidden; }
+.slide-outer { 
+  border-radius: var(--radius-lg); overflow: hidden; 
+  box-shadow: 0 50px 100px rgba(0,0,0,0.25); margin-bottom: 40px; 
+  background: #000; min-height: 300px; /* 最低高さを確保 */
+}
+.slide-viewport { 
+  width: 100%; position: relative; background: #fff; overflow: hidden; 
+  aspect-ratio: 16 / 9; /* アスペクト比を維持 */
+}
+.slide-page { 
+  position: absolute; inset: 0; width: 1280px; height: 720px; 
+  transform-origin: top left; display: none; background: #fff; overflow: hidden; 
+}
 .slide-page.active { display: flex; flex-direction: column; }
 
-.sl-wrap { width: 100%; height: 100%; display: flex; flex-direction: column; position: relative; }
+.sl-wrap { width: 100%; height: 100%; display: flex; flex-direction: column; position: relative; flex: 1; }
 .sl-bg-decor { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
 .sl-blob { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.15; }
 
 .sl-header { height: 110px; padding: 0 70px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(0,0,0,0.06); z-index: 10; background: rgba(255,255,255,0.85); backdrop-filter: blur(15px); }
 .sl-header-title { font-size: 38px; font-weight: 900; color: var(--primary); letter-spacing: -0.01em; }
-.sl-badge { padding: 8px 24px; border: 2px solid var(--primary-soft); border-radius: 100px; color: var(--primary); font-weight: 800; font-size: 16px; }
 
-.sl-body { flex: 1; padding: 60px 80px; position: relative; z-index: 5; display: flex; flex-direction: column; }
+.sl-body { flex: 1; padding: 60px 80px; position: relative; z-index: 5; display: flex; flex-direction: column; height: 610px; }
 
 /* レイアウト別スタイル */
-.layout-hero { flex-direction: row !important; }
+.layout-hero { flex-direction: row !important; height: 720px; }
 .hero-img { flex: 1.4; position: relative; overflow: hidden; }
 .hero-img img { width: 100%; height: 100%; object-fit: cover; }
 .hero-content { flex: 1; padding: 80px; display: flex; flex-direction: column; justify-content: center; background: var(--primary); color: #fff; }
@@ -119,12 +122,12 @@ main { max-width: 1100px; margin: 40px auto; padding: 0 24px; }
 .hub-item { background: #fff; padding: 40px; border-radius: 30px; box-shadow: 0 15px 45px rgba(0,0,0,0.08); border: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; text-align: center; gap: 15px; }
 
 .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; flex: 1; }
-.compare-box { padding: 50px; border-radius: 30px; display: flex; flex-direction: column; gap: 24px; position: relative; overflow: hidden; }
+.compare-box { padding: 50px; border-radius: 30px; display: flex; flex-direction: column; gap: 24px; position: relative; overflow: hidden; flex: 1; }
 .compare-box.before { background: #F7FAFC; border: 1px solid #E2E8F0; }
 .compare-box.after { background: var(--primary-soft); border: 3px solid var(--primary-light); }
 .compare-tag { display: inline-block; padding: 10px 30px; border-radius: 100px; font-weight: 900; font-size: 20px; color: #fff; align-self: flex-start; }
 
-.list-item { display: flex; align-items: flex-start; gap: 25px; padding: 30px; background: #fff; border-radius: 20px; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border-left: 8px solid var(--primary); transition: 0.3s; }
+.list-item { display: flex; align-items: flex-start; gap: 25px; padding: 30px; background: #fff; border-radius: 20px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border-left: 8px solid var(--primary); }
 .list-icon { font-size: 40px; }
 .list-title { font-size: 28px; font-weight: 900; color: var(--primary); margin-bottom: 8px; }
 .list-desc { font-size: 20px; color: var(--text-sub); }
@@ -158,7 +161,6 @@ footer { text-align: center; padding: 50px; color: #94A3B8; font-size: 15px; fon
     <div class="step" id="st4"><div class="step-num">4</div>完成</div>
   </div>
 
-  <!-- STEP 1 -->
   <div class="card panel active" id="panel1">
     <div class="card-title">STEP 1　ベースデザインの解析</div>
     <div style="border:3px dashed #CBD5E1; border-radius:var(--radius-lg); padding:60px; text-align:center; background:#F8FAFC; cursor:pointer; position:relative;">
@@ -177,80 +179,64 @@ footer { text-align: center; padding: 50px; color: #94A3B8; font-size: 15px; fon
     <button class="btn-primary" style="margin-top:40px;" onclick="setStep(2)">情報を入力して構成を作る →</button>
   </div>
 
-  <!-- STEP 2 (UPGRADED) -->
   <div class="card panel" id="panel2">
     <div class="card-title">STEP 2　論理構成と詳細テキストの投入</div>
     <div class="form-grid">
       <div class="field full">
         <label>伝えたいことのすべて（詳細原稿 / txtデータ） <span style="color:#E53E3E;">*必須</span></label>
-        <textarea id="sourceText" class="large" placeholder="ここに、プレゼンで伝えたい背景、課題、解決策、データなどの詳細テキストをすべてペーストしてください。AIがこれを分析してスライドに配分します。"></textarea>
+        <textarea id="sourceText" class="large" placeholder="ここに詳細をペーストしてください。"></textarea>
       </div>
       <div class="field">
         <label>プレゼン全体のテーマ</label>
-        <input type="text" id="theme" placeholder="例：2026年度 次世代AI戦略の導入計画">
+        <input type="text" id="theme">
       </div>
       <div class="field">
         <label>論理フレームワーク</label>
         <select id="framework">
-          <option value="pyramid" selected>結論優先（ピラミッド・プリンシプル）</option>
+          <option value="pyramid">結論優先（ピラミッド・プリンシプル）</option>
           <option value="scqa">ストーリー重視（SCQA法）</option>
-          <option value="problem_solution">課題解決型</option>
         </select>
-      </div>
-      <div class="field">
-        <label>ターゲット層（聞き手）</label>
-        <input type="text" id="target" placeholder="例：経営層、投資家、現場担当者">
-      </div>
-      <div class="field">
-        <label>ゴール（期待する行動）</label>
-        <input type="text" id="goal" placeholder="例：予算承認を得る、プロジェクトへの参加を促す">
       </div>
     </div>
     <button class="btn-primary" onclick="generateOutline()">AIが論理構成案を生成する →</button>
   </div>
 
-  <!-- LOADERS & STEP 3 -->
   <div class="card panel" id="panelL1">
     <div style="text-align:center; padding:60px;">
       <div style="width:50px; height:50px; border:5px solid var(--primary); border-top-color:transparent; border-radius:50%; animation: spin 1s linear infinite; margin:0 auto 30px;"></div>
-      <h2 style="font-weight:900; color:var(--primary); margin-bottom:10px;">Deep Analysis...</h2>
-      <p style="color:var(--text-sub);">テキストデータを解析し、論理構造を構築しています。</p>
+      <p>分析中...</p>
     </div>
   </div>
 
   <div class="card panel" id="panel3">
     <div class="card-title">STEP 3　AI構成案の最終確認</div>
-    <div id="outlineBox" style="background:#F8FAFC; padding:40px; border:2px solid #EDF2F7; border-radius:20px; white-space:pre-wrap; margin-bottom:30px; max-height:450px; overflow-y:auto; line-height:1.8; font-size:15px;"></div>
+    <div id="outlineBox" style="background:#F8FAFC; padding:40px; border-radius:20px; white-space:pre-wrap; margin-bottom:30px; max-height:450px; overflow-y:auto;"></div>
     <button class="btn-primary" onclick="buildPresentation()">この構成でスライドを完成させる →</button>
   </div>
 
   <div class="card panel" id="panelL2">
     <div style="text-align:center; padding:60px;">
       <div style="width:50px; height:50px; border:5px solid var(--primary); border-top-color:transparent; border-radius:50%; animation: spin 1s linear infinite; margin:0 auto 30px;"></div>
-      <h2 style="font-weight:900; color:var(--primary); margin-bottom:10px;">Rendering Slides...</h2>
-      <p style="color:var(--text-sub);">高品質なグラフィックを生成し、配置しています。</p>
+      <p>スライド作成中...</p>
     </div>
   </div>
 
-  <!-- STEP 4 -->
   <div class="card panel" id="panel4">
-    <div class="card-title">STEP 4　完成プレビュー（Enterprise Edition）</div>
+    <div class="card-title">STEP 4　完成プレビュー</div>
     <div class="slide-outer">
-      <div class="slide-viewport" id="slideViewport">
-        <!-- Slides will be rendered here -->
-      </div>
+      <div class="slide-viewport" id="slideViewport"></div>
     </div>
     <div style="display:flex; justify-content:center; align-items:center; gap:30px; margin-bottom:40px;">
-      <button class="btn-primary" style="width:140px; padding:12px; font-size:14px; background:#fff; color:var(--primary); border:2px solid var(--primary);" onclick="navSlide(-1)">← 前へ</button>
+      <button class="btn-primary" style="width:140px; padding:12px; background:#fff; color:var(--primary); border:2px solid var(--primary);" onclick="navSlide(-1)">← 前へ</button>
       <div id="slideDots" style="display:flex; gap:12px;"></div>
-      <button class="btn-primary" style="width:140px; padding:12px; font-size:14px; background:#fff; color:var(--primary); border:2px solid var(--primary);" onclick="navSlide(1)">次へ →</button>
+      <button class="btn-primary" style="width:140px; padding:12px; background:#fff; color:var(--primary); border:2px solid var(--primary);" onclick="navSlide(1)">次へ →</button>
     </div>
-    <button class="btn-primary" onclick="downloadHTML()">⬇ プレゼン用HTMLファイルをダウンロード</button>
-    <button class="btn-primary" style="margin-top:15px; background:#fff; color:#94A3B8; box-shadow:none; border:1px solid #E2E8F0;" onclick="location.reload()">新しいプレゼンを作成する</button>
+    <button class="btn-primary" onclick="downloadHTML()">⬇ ダウンロード</button>
+    <button class="btn-primary" style="margin-top:15px; background:#fff; color:#94A3B8; border:1px solid #E2E8F0;" onclick="location.reload()">最初から</button>
   </div>
 </main>
 
-<footer>© 2026 AIPres Generator | All Rights Reserved.</footer>
+<footer>© 2026 AIPres Generator</footer>
 
 <script>
 let themeColor = '#00796B', outline = '', slideData = [], currentSlide = 0, templateAnalysis = null;
@@ -264,7 +250,14 @@ function hexToRgb(hex) {
 function setStep(n) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   const id = ['panel1','panel2','panel3','panel4'][n-1];
-  if (id) document.getElementById(id).classList.add('active');
+  const el = document.getElementById(id);
+  if (el) {
+    el.classList.add('active');
+    // パネル4が表示された瞬間にサイズを計算し直す（ここが重要）
+    if (n === 4) {
+      setTimeout(scaleSlides, 50); 
+    }
+  }
   document.querySelectorAll('.step').forEach((s, i) => {
     s.classList.toggle('active', i === n-1);
     s.classList.toggle('done', i < n-1);
@@ -273,24 +266,19 @@ function setStep(n) {
 
 function handleUpload(input) {
   const file = input.files[0]; if(!file) return;
-  document.getElementById('uploadSub').textContent = file.name + ' を解析中...';
   const reader = new FileReader();
   reader.onload = async (e) => {
     try {
       const res = await fetch('/api/analyze-template', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ imageBase64: e.target.result.split(',')[1], mediaType: file.type }) });
       const data = await res.json();
-      if(data.analysis) {
-        templateAnalysis = data.analysis;
-        if(data.analysis.mainColor) {
-          themeColor = data.analysis.mainColor;
-          document.getElementById('swatchMain').style.background = themeColor;
-          document.getElementById('hexLabel').textContent = themeColor;
-          document.getElementById('colorPreview').style.display = 'flex';
-          document.documentElement.style.setProperty('--primary', themeColor);
-        }
-        document.getElementById('uploadSub').textContent = 'デザイン解析完了 ✓';
+      if(data.analysis && data.analysis.mainColor) {
+        themeColor = data.analysis.mainColor;
+        document.getElementById('swatchMain').style.background = themeColor;
+        document.getElementById('hexLabel').textContent = themeColor;
+        document.getElementById('colorPreview').style.display = 'flex';
+        document.documentElement.style.setProperty('--primary', themeColor);
       }
-    } catch(err) { document.getElementById('uploadSub').textContent = '解析エラー (標準デザインを適用します)'; }
+    } catch(err) {}
   };
   reader.readAsDataURL(file);
 }
@@ -298,27 +286,17 @@ function handleUpload(input) {
 async function generateOutline() {
   const source = document.getElementById('sourceText').value.trim();
   if(!source) return alert('詳細テキストを入力してください');
-  
-  const payload = { 
-    theme: document.getElementById('theme').value, 
-    target: document.getElementById('target').value, 
-    goal: document.getElementById('goal').value,
-    notes: source, // Use large text area as source
-    framework: document.getElementById('framework').value,
-    slideCount: '5〜8枚',
-    templateAnalysis 
-  };
-  
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.getElementById('panelL1').classList.add('active');
-  
   try {
-    const res = await fetch('/api/generate', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+    const res = await fetch('/api/generate', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ 
+      theme: document.getElementById('theme').value, notes: source, framework: document.getElementById('framework').value 
+    }) });
     const data = await res.json();
     outline = data.result;
     document.getElementById('outlineBox').textContent = outline;
     setStep(3);
-  } catch(e) { setStep(2); alert('生成に失敗しました。時間をおいてお試しください。'); }
+  } catch(e) { setStep(2); alert('失敗しました'); }
 }
 
 function parseOutline(text) {
@@ -330,7 +308,7 @@ function parseOutline(text) {
     const points = lines.slice(1).map(l => l.replace(/^[・\-\s\d.]+/, '').trim());
     let layout = 'list';
     if (i === 0) layout = 'hero';
-    else if (content.includes('比較') || content.includes('対比')) layout = 'compare';
+    else if (content.includes('比較')) layout = 'compare';
     else if (points.length >= 4) layout = 'hub';
     slides.push({ title, points, layout });
   });
@@ -339,53 +317,20 @@ function parseOutline(text) {
 
 function renderSlides() {
   const vp = document.getElementById('slideViewport'); vp.innerHTML = '';
-  const tc = themeColor;
-  const tcRgb = hexToRgb(tc);
-
   slideData.forEach((s, idx) => {
     const page = document.createElement('div'); page.className = 'slide-page'; page.id = `sp-${idx}`;
+    const tc = themeColor;
     let html = `<div class="sl-wrap">
-      <div class="sl-bg-decor">
-        <div class="sl-blob" style="width:800px; height:800px; background:${tc}; top:-300px; right:-100px;"></div>
-        <div class="sl-blob" style="width:600px; height:600px; background:${tc}; bottom:-200px; left:-100px; opacity:0.05;"></div>
-      </div>`;
-
+      <div class="sl-bg-decor"><div class="sl-blob" style="width:800px; height:800px; background:${tc}; top:-300px; right:-100px;"></div></div>`;
     if (s.layout === 'hero') {
-      html += `
-        <div class="sl-wrap layout-hero">
-          <div class="hero-img"><img src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=1280&q=80"></div>
-          <div class="hero-content">
-            <div class="hero-title" id="ht-${idx}">${s.title}</div>
-            <div class="hero-desc" id="hd-${idx}">${s.points.join(' | ')}</div>
-          </div>
-        </div>`;
+      html += `<div class="sl-wrap layout-hero"><div class="hero-img"><img src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=1280&q=80"></div><div class="hero-content"><div class="hero-title" id="ht-${idx}">${s.title}</div><div class="hero-desc" id="hd-${idx}">${s.points.join(' | ')}</div></div></div>`;
     } else if (s.layout === 'compare') {
       const mid = Math.ceil(s.points.length / 2);
-      html += `
-        <div class="sl-header"><div class="sl-header-title">${s.title}</div><div class="sl-badge">Enterprise Comparison</div></div>
-        <div class="sl-body">
-          <div class="compare-grid">
-            <div class="compare-box before" id="cb-${idx}-0"><span class="compare-tag" style="background:#718096">現状 / 課題</span>${s.points.slice(0,mid).map(p=>`<div style="font-size:22px; margin-bottom:12px;">・ ${p}</div>`).join('')}</div>
-            <div class="compare-box after" id="cb-${idx}-1"><span class="compare-tag" style="background:${tc}">解決策 / 理想</span>${s.points.slice(mid).map(p=>`<div style="font-size:22px; font-weight:700; color:${tc}; margin-bottom:12px;">・ ${p}</div>`).join('')}</div>
-          </div>
-        </div>`;
+      html += `<div class="sl-header"><div class="sl-header-title">${s.title}</div></div><div class="sl-body"><div class="compare-grid"><div class="compare-box before" id="cb-${idx}-0"><span class="compare-tag" style="background:#718096">現状</span>${s.points.slice(0,mid).map(p=>`<div>・ ${p}</div>`).join('')}</div><div class="compare-box after" id="cb-${idx}-1" style="border-color:${tc}"><span class="compare-tag" style="background:${tc}">改善後</span>${s.points.slice(mid).map(p=>`<div style="color:${tc}; font-weight:700;">・ ${p}</div>`).join('')}</div></div></div>`;
     } else if (s.layout === 'hub') {
-      html += `
-        <div class="sl-header"><div class="sl-header-title">${s.title}</div></div>
-        <div class="sl-body" style="justify-content:center; align-items:center;">
-          <div class="hub-center" id="hc-${idx}">${s.title.slice(0,8)}</div>
-          <div class="hub-items">${s.points.slice(0,4).map((p,pi)=>`<div class="hub-item" id="hi-${idx}-${pi}"><div style="font-size:50px;">${ICONS[pi%ICONS.length]}</div><div style="font-weight:900; color:${tc}; font-size:20px;">${p}</div></div>`).join('')}</div>
-        </div>`;
+      html += `<div class="sl-header"><div class="sl-header-title">${s.title}</div></div><div class="sl-body" style="justify-content:center; align-items:center;"><div class="hub-center" id="hc-${idx}" style="background:${tc}">${s.title.slice(0,8)}</div><div class="hub-items">${s.points.slice(0,4).map((p,pi)=>`<div class="hub-item" id="hi-${idx}-${pi}"><div style="font-size:50px;">${ICONS[pi%ICONS.length]}</div><div style="font-weight:900; color:${tc}">${p}</div></div>`).join('')}</div></div>`;
     } else {
-      html += `
-        <div class="sl-header"><div class="sl-header-title">${s.title}</div></div>
-        <div class="sl-body">
-          ${s.points.map((p,pi)=>`
-            <div class="list-item" id="li-${idx}-${pi}">
-              <div class="list-icon">${ICONS[pi%ICONS.length]}</div>
-              <div><div class="list-title">${p.split(/[：:]/)[0]}</div><div class="list-desc">${p.split(/[：:]/)[1] || ''}</div></div>
-            </div>`).join('')}
-        </div>`;
+      html += `<div class="sl-header"><div class="sl-header-title">${s.title}</div></div><div class="sl-body">${s.points.map((p,pi)=>`<div class="list-item" id="li-${idx}-${pi}" style="border-left-color:${tc}"><div class="list-icon">${ICONS[pi%ICONS.length]}</div><div><div class="list-title">${p}</div></div></div>`).join('')}</div>`;
     }
     html += `</div>`;
     page.innerHTML = html; vp.appendChild(page);
@@ -420,7 +365,7 @@ function buildPresentation() {
 }
 
 function scaleSlides() {
-  const vp = document.getElementById('slideViewport'); if(!vp) return;
+  const vp = document.getElementById('slideViewport'); if(!vp || vp.offsetWidth === 0) return;
   const s = vp.offsetWidth / 1280; vp.style.height = (720*s)+'px';
   vp.querySelectorAll('.slide-page').forEach(p => p.style.transform = `scale(${s})`);
 }
@@ -447,7 +392,7 @@ function downloadHTML() {
     return c.outerHTML;
   }).join('\n');
   const style = document.querySelector('style').innerHTML;
-  const html = `<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><title>${document.getElementById('theme').value || 'AI Presentation'}</title><style>${style}</style></head><body style="background:#000; display:flex; justify-content:center; align-items:center; min-height:100vh; margin:0;"><div style="width:100vw; height:56.25vw; position:relative; overflow:hidden; background:#fff; box-shadow:0 0 100px rgba(0,0,0,0.5);">${pages}</div></body></html>`;
+  const html = `<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><style>${style}</style></head><body style="margin:0;"><div style="width:100vw; height:56.25vw; position:relative; overflow:hidden;">${pages}</div></body></html>`;
   const blob = new Blob([html], {type:'text/html'}); const a = document.createElement('a');
   a.href = URL.createObjectURL(blob); a.download = 'presentation.html'; a.click();
 }
