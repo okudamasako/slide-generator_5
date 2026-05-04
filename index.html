@@ -422,6 +422,7 @@ let outline     = '';
 let formData    = {};
 let slideData   = [];
 let currentSlide = 0;
+let templateAnalysis = null; // テンプレート分析結果を保持
 
 const ICONS = ['📖','🤖','✍️','💡','📊','🎯','🔍','⚡','🌟','📝','🔑','💼'];
 
@@ -461,8 +462,9 @@ function handleUpload(input) {
   const area = document.getElementById('uploadArea');
   area.classList.add('has-file');
   area.querySelector('.upload-text').textContent = file.name;
-  area.querySelector('.upload-sub').textContent = 'アップロード完了 ✓';
+  area.querySelector('.upload-sub').textContent = '解析中...';
 
+  // ① 色抽出（既存処理）
   const img = new Image();
   const url = URL.createObjectURL(file);
   img.onload = () => {
@@ -472,6 +474,30 @@ function handleUpload(input) {
     URL.revokeObjectURL(url);
   };
   img.src = url;
+
+  // ② テンプレートをClaude Vision APIで分析
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    const base64 = e.target.result.split(',')[1];
+    const mediaType = file.type || 'image/png';
+    try {
+      const res = await fetch('/api/analyze-template', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imageBase64: base64, mediaType })
+      });
+      const data = await res.json();
+      if (data.analysis) {
+        templateAnalysis = data.analysis;
+        area.querySelector('.upload-sub').textContent = `テンプレート解析完了 ✓（${templateAnalysis.layoutType || 'カスタム'}）`;
+      } else {
+        area.querySelector('.upload-sub').textContent = 'アップロード完了 ✓';
+      }
+    } catch(err) {
+      area.querySelector('.upload-sub').textContent = 'アップロード完了 ✓';
+    }
+  };
+  reader.readAsDataURL(file);
 }
 
 function extractColor(img) {
@@ -552,7 +578,7 @@ async function generateOutline() {
     return;
   }
 
-  formData = { theme, target, goal, badge, notes, slideCount: count };
+  formData = { theme, target, goal, badge, notes, slideCount: count, templateAnalysis };
   showPanel('panelL1');
 
   try {

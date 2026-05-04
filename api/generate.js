@@ -1,14 +1,28 @@
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { theme, target, goal, badge, notes, slideCount } = req.body;
+  const { theme, target, goal, badge, notes, slideCount, templateAnalysis } = req.body;
   if (!theme || !target || !goal) return res.status(400).json({ error: '入力が不足しています' });
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) return res.status(500).json({ error: 'APIキーが設定されていません' });
 
-  const prompt = `以下の条件でプレゼン資料のスライド構成案を作成してください。
+  // テンプレート情報をプロンプトに組み込む
+  const templateSection = templateAnalysis ? `
+【テンプレートデザインの指示】
+登録されたテンプレートスライドの特徴を以下に示します。スライド構成はこのデザイン構造に厳密に従ってください。
 
+・レイアウトタイプ：${templateAnalysis.layoutType || '不明'}
+・デザインの特徴：${templateAnalysis.designFeatures || ''}
+・構成要素：${templateAnalysis.components || ''}
+・推奨する各スライドの項目数：${templateAnalysis.itemsPerSlide || '2〜4'}
+・スライドの流れの特徴：${templateAnalysis.flowStyle || ''}
+
+上記テンプレートのレイアウト・構造・項目数・流れを忠実に再現した構成にしてください。
+` : '';
+
+  const prompt = `以下の条件でプレゼン資料のスライド構成案を作成してください。
+${templateSection}
 テーマ：${theme}
 ターゲット：${target}
 目的・ゴール：${goal}
