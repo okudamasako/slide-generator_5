@@ -446,14 +446,9 @@ footer { text-align: center; padding: 28px; font-size: 11px; color: #94A3B8; }
       <span id="templateBadgeDetail"></span>
     </div>
 
-    <div style="margin-top:16px; display:flex; gap:10px; align-items:center; font-size:12px; color:#64748B;">
-      <span>カラーを手動指定：</span>
-      <input type="color" id="colorPicker" value="#1E2761" style="width:36px;height:28px;border:none;cursor:pointer;border-radius:4px;">
-      <input type="text" id="colorHex" value="#1E2761" style="width:80px;padding:4px 8px;font-size:12px;" oninput="manualColor(this.value)">
-    </div>
 
     <button class="btn-primary" style="margin-top:20px;" onclick="goToStep2()">次へ → 情報を入力する</button>
-    <p style="font-size:11px;color:#94A3B8;text-align:center;margin-top:10px;">※ 画像なしでもデフォルトカラーで続行できます</p>
+    <p style="font-size:11px;color:#94A3B8;text-align:center;margin-top:10px;">※ スライド画像をアップロードするとカラーとレイアウトが自動で解析されます</p>
   </div>
 
   <!-- パネル2：情報入力 -->
@@ -537,7 +532,7 @@ footer { text-align: center; padding: 28px; font-size: 11px; color: #94A3B8; }
 // ============================================================
 // State
 // ============================================================
-let themeColor       = '#1E2761';
+let themeColor       = null; // 画像アップロードまたは手動指定されるまでnull
 let outline          = '';
 let formData         = {};
 let slideData        = [];
@@ -657,25 +652,10 @@ function updateColorUI(hex) {
   document.getElementById('swatchMain').style.background = hex;
   document.getElementById('colorMainLabel').textContent  = `メインカラー：${hex.toUpperCase()}`;
   document.getElementById('colorPreview').style.display  = 'flex';
-  document.getElementById('colorPicker').value = hex;
-  document.getElementById('colorHex').value    = hex;
   themeColor = hex;
 }
 
-function manualColor(val) {
-  if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
-    themeColor = val;
-    document.getElementById('colorPicker').value = val;
-    document.getElementById('swatchMain').style.background = val;
-  }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('colorPicker').addEventListener('input', e => {
-    manualColor(e.target.value);
-    document.getElementById('colorHex').value = e.target.value;
-  });
-});
+document.addEventListener('DOMContentLoaded', () => {});
 
 function goToStep2() { setStep(2); }
 
@@ -788,7 +768,7 @@ function lighten(hex, amount) {
 function renderSlides() {
   const vp     = document.getElementById('slideViewport');
   vp.innerHTML = '';
-  const tc     = themeColor;
+  const tc     = themeColor || '#1E2761';
   const layout = getLayoutType();
 
   // タイトルスライド
@@ -1100,7 +1080,7 @@ function navSlide(dir) {
 // HTML ダウンロード
 // ============================================================
 function downloadHTML() {
-  const tc     = themeColor;
+  const tc     = themeColor || '#1E2761';
   const layout = getLayoutType();
 
   // スライドのHTMLを文字列化
