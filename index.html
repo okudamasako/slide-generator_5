@@ -447,6 +447,9 @@ footer { text-align: center; padding: 28px; font-size: 11px; color: #94A3B8; }
     </div>
 
 
+    <!-- ★デバッグ表示（確認後に削除） -->
+    <pre id="debugOutput" style="display:none;margin-top:12px;padding:12px;background:#1a1a1a;color:#00ff88;font-size:11px;border-radius:8px;overflow-x:auto;white-space:pre-wrap;max-height:200px;overflow-y:auto;"></pre>
+
     <button class="btn-primary" style="margin-top:20px;" onclick="goToStep2()">次へ → 情報を入力する</button>
     <p style="font-size:11px;color:#94A3B8;text-align:center;margin-top:10px;">※ スライド画像をアップロードするとカラーとレイアウトが自動で解析されます</p>
   </div>
@@ -602,6 +605,14 @@ function handleUpload(input) {
         body: JSON.stringify({ imageBase64: base64, mediaType })
       });
       const data = await res.json();
+
+      // ★デバッグ：APIの返答をそのまま画面に表示
+      const debugEl = document.getElementById('debugOutput');
+      if (debugEl) {
+        debugEl.style.display = 'block';
+        debugEl.textContent = 'APIレスポンス：\n' + JSON.stringify(data, null, 2);
+      }
+
       if (data.analysis) {
         templateAnalysis = data.analysis;
 
@@ -623,6 +634,11 @@ function handleUpload(input) {
       }
     } catch(err) {
       area.querySelector('.upload-sub').textContent = 'アップロード完了 ✓';
+      const debugEl = document.getElementById('debugOutput');
+      if (debugEl) {
+        debugEl.style.display = 'block';
+        debugEl.textContent = 'エラー：' + err.message;
+      }
     }
   };
   reader.readAsDataURL(file);
