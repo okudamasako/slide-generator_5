@@ -38,14 +38,31 @@ export default async function handler(req, res) {
     list: '【リスト型】項目と説明のセットで3つ記載。'
   };
 
-  // AIに送るプロンプトの組み立て
-  const prompt = `プレゼン資料の構成案を日本語で作成してください。
+  // AIに送るプロンプトの組み立て（論理構造と日本語の美しさを重視）
+  const prompt = `プロフェッショナルなプレゼン資料の構成案を、提供された原稿に基づいて作成してください。
+
+【制約事項】
+1. 日本語の文脈を深く理解し、単なる要約ではなく、聞き手に刺さる「メッセージ」として再構成してください。
+2. 出力は必ず「スライド1：タイトル」という形式のヘッダーから始めてください。
+3. Markdownの記号（#や*）はタイトルや本文に使わないでください。
+4. 各スライドは、タイトル1行と、3〜5つの具体的な箇条書きで構成してください。
+
+【入力情報】
 テーマ：${finalTheme}
-内容：${finalNotes}
-目的：${finalGoal}
+原稿内容：${finalNotes}
+ターゲット：${finalTarget}
+プレゼンの目的：${finalGoal}
 スライド枚数：${finalSlideCount}
-指示：${layoutInstructions[layoutType] || layoutInstructions.list}
-ルール：必ず「スライド1：タイトル」から始め、各スライドの内容を箇条書きで出力すること。`;
+レイアウト指示：${layoutInstructions[layoutType] || layoutInstructions.list}
+
+【出力イメージ】
+スライド1：タイトル
+・内容1
+・内容2
+
+スライド2：タイトル
+・内容1
+...`;
 
   try {
     // OpenAI APIを呼び出して構成案を生成

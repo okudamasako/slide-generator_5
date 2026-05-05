@@ -328,12 +328,32 @@ async function generateOutline() {
 function parseOutline(text) {
   if(!text) return [];
   const slides = [];
-  const sections = text.split(/スライド\s*\d+\s*[：:]/g).filter(s => s.trim());
-  sections.forEach((content, i) => {
+  // スライドの区切りをより柔軟に（### や **スライド1** などにも対応）
+  const rawSections = text.split(/(?:###|スライド|Slide)\s*\d+\s*[：:]?/gi).filter(s => s.trim());
+  
+  rawSections.forEach((content, i) => {
     const lines = content.split('\n').filter(l => l.trim());
-    const title = lines[0].trim();
-    const points = lines.slice(1).map(l => l.replace(/^[・\-\s\d.]+/, '').trim());
-    let layout = i === 0 ? 'hero' : (content.includes('比較') ? 'compare' : (points.length >= 4 ? 'hub' : 'list'));
+    if (lines.length === 0) return;
+
+    // タイトルから不要なMarkdown記号や空白を除去
+    let title = lines[0].replace(/^[#*\s：:]+/, '').replace(/[#*\s：:]+$/, '').trim();
+    // 箇条書きを抽出
+    const points = lines.slice(1)
+      .map(l => l.replace(/^[・\-\s\d.*]+/, '').trim())
+      .filter(p => p.length > 0);
+
+    // レイアウトの判定
+    let layout = 'list';
+    if (i === 0) {
+      layout = 'hero';
+    } else {
+      const lowerContent = content.toLowerCase();
+      if (lowerContent.includes('比較') || lowerContent.includes('対比') || lowerContent.includes('as-is')) {
+        layout = 'compare';
+      } else if (points.length >= 4 || lowerContent.includes('中心') || lowerContent.includes('構造')) {
+        layout = 'hub';
+      }
+    }
     slides.push({ title, points, layout });
   });
   return slides;
@@ -345,13 +365,16 @@ function renderSlides() {
     const page = document.createElement('div'); page.className = 'slide-page'; page.id = `sp-${idx}`;
     const tc = themeColor;
     let html = `<div class="sl-wrap"><div class="sl-bg-decor"><div class="sl-blob" style="width:800px; height:800px; background:${tc}; top:-300px; right:-100px;"></div></div>`;
+    
     if (s.layout === 'hero') {
-      html += `<div class="sl-wrap layout-hero"><div class="hero-img"><img src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=1280&q=80"></div><div class="hero-content"><div class="hero-title" id="ht-${idx}">${s.title}</div><div class="hero-desc" id="hd-${idx}">${s.points.join(' | ')}</div></div></div>`;
+      html += `<div class="sl-wrap layout-hero"><div class="hero-img"><img src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=1280&q=80"></div><div class="hero-content"><div class="hero-title" id="ht-${idx}" style="font-size: min(72px, ${1000/s.title.length}px)">${s.title}</div><div class="hero-desc" id="hd-${idx}">${s.points.join(' | ')}</div></div></div>`;
     } else if (s.layout === 'compare') {
       const mid = Math.ceil(s.points.length / 2);
       html += `<div class="sl-header"><div class="sl-header-title">${s.title}</div></div><div class="sl-body"><div class="compare-grid"><div class="compare-box before" id="cb-${idx}-0"><span class="compare-tag" style="background:#718096">現状</span>${s.points.slice(0,mid).map(p=>`<div>・ ${p}</div>`).join('')}</div><div class="compare-box after" id="cb-${idx}-1" style="border-color:${tc}"><span class="compare-tag" style="background:${tc}">改善後</span>${s.points.slice(mid).map(p=>`<div style="color:${tc}; font-weight:700;">・ ${p}</div>`).join('')}</div></div></div>`;
     } else if (s.layout === 'hub') {
-      html += `<div class="sl-header"><div class="sl-header-title">${s.title}</div></div><div class="sl-body" style="justify-content:center; align-items:center;"><div class="hub-center" id="hc-${idx}" style="background:${tc}">${s.title.slice(0,8)}</div><div class="hub-items">${s.points.slice(0,4).map((p,pi)=>`<div class="hub-item" id="hi-${idx}-${pi}"><div style="font-size:50px;">${ICONS[pi%ICONS.length]}</div><div style="font-weight:900; color:${tc}">${p}</div></div>`).join('')}</div></div>`;
+      // 中央のタイトルが長くても収まるように調整
+      const fontSize = s.title.length > 10 ? '24px' : '32px';
+      html += `<div class="sl-header"><div class="sl-header-title">${s.title}</div></div><div class="sl-body" style="justify-content:center; align-items:center;"><div class="hub-center" id="hc-${idx}" style="background:${tc}; font-size:${fontSize}; padding:20px; line-height:1.2; text-align:center; overflow:hidden; display:flex; align-items:center; justify-content:center; word-break:break-all;">${s.title}</div><div class="hub-items">${s.points.slice(0,4).map((p,pi)=>`<div class="hub-item" id="hi-${idx}-${pi}"><div style="font-size:50px;">${ICONS[pi%ICONS.length]}</div><div style="font-weight:900; color:${tc}; text-align:center;">${p}</div></div>`).join('')}</div></div>`;
     } else {
       html += `<div class="sl-header"><div class="sl-header-title">${s.title}</div></div><div class="sl-body">${s.points.map((p,pi)=>`<div class="list-item" id="li-${idx}-${pi}" style="border-left-color:${tc}"><div><div style="font-size:24px; font-weight:900; color:${tc}">${p}</div></div></div>`).join('')}</div>`;
     }
