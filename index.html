@@ -82,38 +82,46 @@ main { max-width: 1100px; margin: 40px auto; padding: 0 24px; }
 }
 .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(0, 121, 107, 0.35); }
 
-/* スライド表示用 (静的・ビジネス品質) */
-.slide-outer { border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 40px 80px rgba(0,0,0,0.15); margin-bottom: 30px; background: #000; }
+/* エグゼクティブ・ビジネスデザイン */
+.slide-outer { border-radius: 12px; overflow: hidden; box-shadow: 0 40px 100px rgba(0,0,0,0.2); margin-bottom: 30px; background: #000; border: 1px solid #ddd; }
 .slide-viewport { width: 100%; position: relative; background: #fff; overflow: hidden; aspect-ratio: 16 / 9; }
-.slide-page { position: absolute; inset: 0; width: 1280px; height: 720px; transform-origin: top left; display: none; background: #fff; }
+.slide-page { position: absolute; inset: 0; width: 1280px; height: 720px; transform-origin: top left; display: none; background: #fff; color: #1a202c; }
 .slide-page.active { display: flex; flex-direction: column; }
 
-.sl-wrap { width: 100%; height: 100%; display: flex; flex-direction: column; position: relative; }
-.sl-bg-decor { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
-.sl-blob { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.05; }
+.sl-wrap { width: 100%; height: 100%; position: relative; display: flex; flex-direction: column; }
 
-.sl-header { height: 110px; padding: 0 70px; display: flex; align-items: center; border-bottom: 1px solid rgba(0,0,0,0.06); z-index: 10; background: #fff; }
-.sl-header-title { font-size: 42px; font-weight: 900; color: var(--primary); }
+/* テンプレート由来の装飾 */
+.sl-accent-bar { position: absolute; top: 0; left: 0; width: 100%; height: 12px; background: var(--primary); z-index: 100; }
+.sl-footer-info { position: absolute; bottom: 30px; left: 60px; right: 60px; display: flex; justify-content: space-between; font-size: 14px; color: #94a3b8; font-weight: 700; border-top: 1px solid #f1f5f9; padding-top: 15px; }
 
-.sl-body { flex: 1; padding: 50px 70px; position: relative; z-index: 5; display: flex; flex-direction: row; gap: 40px; }
+.sl-header { padding: 60px 80px 20px 80px; z-index: 10; }
+.sl-header-title { font-size: 54px; font-weight: 900; color: #1a202c; line-height: 1.2; letter-spacing: -0.02em; border-bottom: 6px solid var(--primary); display: inline-block; padding-bottom: 10px; }
 
-/* レイアウト別 */
-.layout-hero { flex-direction: row !important; }
-.hero-img { flex: 1.2; position: relative; overflow: hidden; }
+.sl-body { flex: 1; padding: 20px 80px 80px 80px; display: flex; gap: 60px; align-items: center; }
+
+/* ヒーロー（表紙）- 圧倒的なインパクト */
+.layout-hero { flex-direction: row !important; background: #fff; }
+.hero-img { flex: 1.5; height: 100%; position: relative; clip-path: polygon(0 0, 100% 0, 85% 100%, 0 100%); }
 .hero-img img { width: 100%; height: 100%; object-fit: cover; }
-.hero-content { flex: 1; padding: 60px 70px; display: flex; flex-direction: column; justify-content: center; background: var(--primary); color: #fff; }
-.hero-title { font-size: 64px; font-weight: 900; line-height: 1.1; margin-bottom: 30px; }
-.hero-desc { font-size: 22px; border-left: 6px solid var(--accent); padding-left: 20px; opacity: 0.9; }
+.hero-content { flex: 1; padding: 100px 80px 100px 40px; display: flex; flex-direction: column; justify-content: center; }
+.hero-title { font-size: 82px; font-weight: 900; line-height: 1.1; color: #1a202c; margin-bottom: 40px; word-break: keep-all; }
+.hero-desc { font-size: 26px; color: var(--primary); font-weight: 700; line-height: 1.6; position: relative; padding-left: 30px; }
+.hero-desc::before { content: ''; position: absolute; left: 0; top: 0; width: 8px; height: 100%; background: #FF8C00; }
 
-.hub-center { width: 260px; height: 260px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 28px; font-weight: 900; z-index: 20; border: 8px solid #fff; box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
-.hub-items { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; flex: 1; }
-.hub-item { background: #fff; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; gap: 10px; border: 1px solid #f1f5f9; }
+/* リスト・標準 */
+.list-content { flex: 1.2; display: flex; flex-direction: column; gap: 24px; }
+.list-item { display: flex; align-items: center; gap: 20px; padding: 25px 35px; background: #fff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 15px rgba(0,0,0,0.03); transition: 0.3s; }
+.list-item-num { font-size: 24px; font-weight: 900; color: var(--primary); min-width: 40px; }
+.list-item-text { font-size: 26px; font-weight: 700; color: #2d3748; }
 
-.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; flex: 1; }
-.compare-box { padding: 40px; border-radius: 20px; background: #f8fafc; border: 1px solid #e2e8f0; position: relative; }
-.compare-tag { position: absolute; top: -15px; left: 20px; padding: 4px 20px; border-radius: 6px; font-weight: 900; font-size: 14px; color: #fff; }
+.list-visual { flex: 1; height: 100%; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.1); position: relative; }
+.list-visual img { width: 100%; height: 100%; object-fit: cover; }
+.list-visual::after { content: ''; position: absolute; inset: 0; border: 12px solid rgba(255,255,255,0.2); pointer-events: none; }
 
-.list-item { padding: 20px 30px; background: #f8fafc; border-radius: 0 15px 15px 0; border-left: 8px solid var(--primary); font-size: 24px; font-weight: 900; color: var(--text-main); }
+/* ハブ型 */
+.hub-grid { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+.hub-item { padding: 30px; background: #fff; border-radius: 20px; border-bottom: 6px solid var(--primary); box-shadow: 0 10px 30px rgba(0,0,0,0.05); text-align: center; }
+.hub-title { font-size: 22px; font-weight: 900; color: var(--primary); margin-top: 15px; }
 
 @keyframes spin { to { transform: rotate(360deg); } }
 
@@ -318,24 +326,40 @@ function renderSlides() {
   slideData.forEach((s, idx) => {
     const page = document.createElement('div'); page.className = 'slide-page'; page.id = `sp-${idx}`;
     const tc = themeColor;
-    const imgUrl = `https://source.unsplash.com/featured/1280x720/?${encodeURIComponent(s.keyword)}`;
+    const sig = s.sig || 0;
+    // images.unsplash.com を使用し、より安定かつ高画質な画像を取得
+    const imgUrl = `https://images.unsplash.com/photo-${getFixedImageId(s.keyword)}?auto=format&fit=crop&w=1280&q=80&sig=${idx}_${sig}`;
     
-    let html = `<div class="sl-wrap"><div class="sl-bg-decor"><div class="sl-blob" style="width:800px; height:800px; background:${tc}; opacity:0.05; top:-300px; right:-100px;"></div></div>`;
+    let html = `<div class="sl-wrap"><div class="sl-accent-bar"></div><div class="sl-bg-decor"><div class="sl-blob" style="width:1000px; height:1000px; background:${tc}; top:-200px; left:-200px;"></div></div>`;
     
     if (s.layout === 'hero') {
       html += `<div class="sl-wrap layout-hero"><div class="hero-img"><img src="${imgUrl}"></div><div class="hero-content"><div class="hero-title">${s.title}</div><div class="hero-desc">${s.points.join(' | ')}</div></div></div>`;
     } else if (s.layout === 'compare') {
       const mid = Math.ceil(s.points.length / 2);
-      html += `<div class="sl-header"><div class="sl-header-title">${s.title}</div></div><div class="sl-body"><div class="compare-grid"><div class="compare-box before"><span class="compare-tag" style="background:#718096">現状</span>${s.points.slice(0,mid).map(p=>`<div>・ ${p}</div>`).join('')}</div><div class="compare-box after" style="border-color:${tc}"><span class="compare-tag" style="background:${tc}">改善後</span>${s.points.slice(mid).map(p=>`<div style="color:${tc}; font-weight:700;">・ ${p}</div>`).join('')}</div></div></div>`;
+      html += `<div class="sl-header"><div class="sl-header-title">${s.title}</div></div><div class="sl-body"><div class="compare-grid"><div class="compare-box before"><span class="compare-tag" style="background:#718096">現状</span>${s.points.slice(0,mid).map(p=>`<div style="margin-bottom:15px; font-weight:700;">・ ${p}</div>`).join('')}</div><div class="compare-box after" style="border-color:${tc}; background:rgba(0,0,0,0.02);"><span class="compare-tag" style="background:${tc}">改善後</span>${s.points.slice(mid).map(p=>`<div style="color:${tc}; font-weight:900; margin-bottom:15px;">・ ${p}</div>`).join('')}</div></div></div>`;
     } else if (s.layout === 'hub') {
-      const fontSize = s.title.length > 10 ? '24px' : '32px';
-      html += `<div class="sl-header"><div class="sl-header-title">${s.title}</div></div><div class="sl-body" style="flex-direction:row; gap:40px; align-items:center;"><div style="width:60%; position:relative; height:100%; display:flex; align-items:center; justify-content:center;"><div class="hub-center" style="background:${tc}; font-size:${fontSize}; position:static;">${s.title}</div><div class="hub-items">${s.points.slice(0,4).map((p,pi)=>`<div class="hub-item" style="opacity:1;"><div style="font-size:40px;">${ICONS[pi%ICONS.length]}</div><div style="font-weight:900; color:${tc}; font-size:14px; text-align:center;">${p}</div></div>`).join('')}</div></div><div style="width:40%; height:80%; border-radius:20px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.1);"><img src="${imgUrl}" style="width:100%; height:100%; object-fit:cover;"></div></div>`;
+      html += `<div class="sl-header"><div class="sl-header-title">${s.title}</div></div><div class="sl-body"><div class="hub-grid">${s.points.slice(0,4).map((p,pi)=>`<div class="hub-item"><div style="font-size:50px; margin-bottom:10px;">${ICONS[pi%ICONS.length]}</div><div class="hub-title">${p}</div></div>`).join('')}</div><div class="list-visual"><img src="${imgUrl}"></div></div>`;
     } else {
-      html += `<div class="sl-header"><div class="sl-header-title">${s.title}</div></div><div class="sl-body" style="flex-direction:row; gap:60px;"><div style="flex:1; display:flex; flex-direction:column; gap:20px;">${s.points.map((p)=>`<div class="list-item" style="border-left-color:${tc}; opacity:1; padding:15px 25px; background:#f8fafc; border-radius:0 15px 15px 0;"><div><div style="font-size:22px; font-weight:900; color:${tc}">${p}</div></div></div>`).join('')}</div><div style="width:400px; height:100%; border-radius:25px; overflow:hidden; box-shadow:0 15px 40px rgba(0,0,0,0.1);"><img src="${imgUrl}" style="width:100%; height:100%; object-fit:cover;"></div></div>`;
+      html += `<div class="sl-header"><div class="sl-header-title">${s.title}</div></div><div class="sl-body"><div class="list-content">${s.points.map((p,pi)=>`<div class="list-item"><div class="list-item-num">0${pi+1}</div><div class="list-item-text">${p}</div></div>`).join('')}</div><div class="list-visual"><img src="${imgUrl}"></div></div>`;
     }
-    html += `</div>`; page.innerHTML = html; vp.appendChild(page);
+    html += `<div class="sl-footer-info"><div>CONFIDENTIAL | AI Presentation System</div><div>Page ${idx+1}</div></div></div>`;
+    page.innerHTML = html; vp.appendChild(page);
   });
   scaleSlides();
+}
+
+// キーワードに応じた固定画像IDを返す（source.unsplash.comの不安定さを回避）
+function getFixedImageId(keyword) {
+  const map = {
+    'business': '1497215728101-856f4ea42174',
+    'team': '1522071823991-b5ae72c515d2',
+    'growth': '1460925895917-afdab827c52f',
+    'technology': '1518770660439-4636190af475',
+    'success': '1552664730-d307ca884978',
+    'trust': '1521791136364-7034717a0050',
+    'future': '1451187580459-43490279c0fa'
+  };
+  return map[keyword.toLowerCase()] || '1497215728101-856f4ea42174';
 }
 
 function showSlide(idx) {
