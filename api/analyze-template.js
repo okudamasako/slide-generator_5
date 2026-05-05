@@ -5,9 +5,9 @@ export default async function handler(req, res) {
   const { imageBase64, mediaType } = req.body;
   if (!imageBase64) return res.status(400).json({ error: '画像データがありません' });
 
-  // OpenAIのAPIキーを取得
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) return res.status(500).json({ error: 'OpenAIのAPIキーが設定されていません' });
+  // OpenAIのAPIキーを取得（環境変数から）し、前後の空白を削除
+  const apiKey = (process.env.OPENAI_API_KEY || '').trim();
+  if (!apiKey) return res.status(500).json({ error: 'OpenAIのAPIキー(OPENAI_API_KEY)がサーバーに設定されていません。VercelのEnvironment Variablesを確認してください。' });
 
   // AIへの指示（プロンプト）
   const prompt = `このスライド画像を分析して、以下の情報をJSON形式のみで返してください。前置きや説明は不要です。JSONだけ返してください。
