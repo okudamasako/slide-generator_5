@@ -103,10 +103,9 @@ main { max-width: 1100px; margin: 40px auto; padding: 0 24px; }
 .layout-hero { flex-direction: row !important; background: #fff; }
 .hero-img { flex: 1.5; height: 100%; position: relative; clip-path: polygon(0 0, 100% 0, 85% 100%, 0 100%); }
 .hero-img img { width: 100%; height: 100%; object-fit: cover; }
-.hero-content { flex: 1; padding: 100px 80px 100px 40px; display: flex; flex-direction: column; justify-content: center; }
-.hero-title { font-size: 82px; font-weight: 900; line-height: 1.1; color: #1a202c; margin-bottom: 40px; word-break: keep-all; }
-.hero-desc { font-size: 26px; color: var(--primary); font-weight: 700; line-height: 1.6; position: relative; padding-left: 30px; }
-.hero-desc::before { content: ''; position: absolute; left: 0; top: 0; width: 8px; height: 100%; background: #FF8C00; }
+.hero-content { flex: 1; padding: 100px 80px 100px 40px; display: flex; flex-direction: column; justify-content: center; background: var(--primary); color: #fff; z-index: 20; }
+.hero-title { font-size: 82px; font-weight: 900; line-height: 1.1; color: #ffffff; margin-bottom: 40px; word-break: keep-all; }
+.hero-desc { font-size: 26px; color: #ffffff; font-weight: 700; line-height: 1.6; position: relative; padding-left: 30px; border-left: 8px solid #FF8C00; }
 
 /* リスト・標準 */
 .list-content { flex: 1.2; display: flex; flex-direction: column; gap: 24px; }
@@ -288,34 +287,32 @@ async function generateOutline() {
 function parseOutline(text) {
   if(!text) return [];
   const slides = [];
-  // 区切り記号をより確実に
-  const rawSections = text.split(/---|\nスライド\s*\d+\s*[：:]?/gi).filter(s => s.trim());
+  // スライドの区切りをより柔軟に（先頭のスライドにも対応）
+  const rawSections = text.split(/(?=スライド\s*\d+|---)/gi).filter(s => s.trim() && s.length > 10);
   
   rawSections.forEach((content, i) => {
-    const lines = content.split('\n').filter(l => l.trim());
+    const lines = content.split('\n').map(l => l.trim()).filter(l => l);
     if (lines.length === 0) return;
 
     let title = '', keyword = 'business', points = [];
     lines.forEach(l => {
-      const cleanLine = l.replace(/^[#*\s：:]+/, '').trim();
       if (l.includes('キーワード')) {
         keyword = l.split(/[：:]/)[1]?.trim() || 'business';
-      } else if (!title && !l.startsWith('・')) {
-        title = cleanLine;
+      } else if (!title && !l.startsWith('・') && !l.includes('スライド')) {
+        title = l.replace(/^[#*\s：:]+/, '').trim();
       } else if (l.startsWith('・')) {
-        points.push(cleanLine.replace(/^・/, '').trim());
+        points.push(l.replace(/^・/, '').trim());
       }
     });
 
-    if (!title) title = "スライド " + (i + 1);
+    if (!title && lines[0]) title = lines[0].replace(/スライド\s*\d+\s*[：:]?/, '').trim();
+    if (!title) title = "Slide " + (i + 1);
 
-    let layout = 'list';
-    if (i === 0) layout = 'hero';
-    else {
-      const low = content.toLowerCase();
-      if (low.includes('比較') || low.includes('対比')) layout = 'compare';
-      else if (points.length >= 4) layout = 'hub';
-    }
+    let layout = (i === 0) ? 'hero' : 'list';
+    const low = content.toLowerCase();
+    if (low.includes('比較')) layout = 'compare';
+    else if (points.length >= 4) layout = 'hub';
+    
     slides.push({ title, points, layout, keyword });
   });
   return slides;
