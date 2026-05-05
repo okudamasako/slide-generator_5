@@ -181,15 +181,17 @@ footer { text-align: center; padding: 50px; color: #94A3B8; font-size: 15px; }
       <div id="slideDots" style="display:flex; align-items:center; gap:10px;"></div>
       <button class="btn-primary" style="width:120px; padding:10px; background:#fff; color:var(--primary); border:2px solid var(--primary);" onclick="navSlide(1)">次へ</button>
     </div>
-    <button class="btn-primary" onclick="downloadHTML()">プレゼン用HTMLをダウンロード</button>
+    <button class="btn-primary" style="margin-bottom:10px;" onclick="downloadPPTX()">PowerPoint (.pptx) をダウンロード</button>
+    <button class="btn-primary" style="background:#fff; color:var(--primary); border:2px solid var(--primary);" onclick="downloadHTML()">プレゼン用HTMLをダウンロード</button>
   </div>
 </main>
 
-<!-- PDF解析用のライブラリを導入 -->
+<!-- 外部ライブラリの読み込み -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
 
 <script>
-// PDF.jsの初期設定
+// PDF.jsの設定
 const pdfjsLib = window['pdfjs-dist/build/pdf'];
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
@@ -207,66 +209,41 @@ function setStep(n) {
   document.querySelectorAll('.step').forEach((s, i) => { s.classList.toggle('active', i === n-1); s.classList.toggle('done', i < n-1); });
 }
 
-// PDFを画像（Base64）に変換する関数
+// PDFから画像への変換
 async function convertPdfToImage(file) {
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
-  const page = await pdf.getPage(1); // 1枚目のスライドを取得
-  const viewport = page.getViewport({ scale: 2.0 }); // 高解像度でレンダリング
-  
+  const page = await pdf.getPage(1);
+  const viewport = page.getViewport({ scale: 2.0 });
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('2d');
-  canvas.height = viewport.height;
-  canvas.width = viewport.width;
-  
+  canvas.height = viewport.height; canvas.width = viewport.width;
   await page.render({ canvasContext: context, viewport: viewport }).promise;
   return canvas.toDataURL('image/png').split(',')[1];
 }
 
 async function handleUpload(input) {
   const file = input.files[0]; if(!file) return;
-  
   document.getElementById('sub1').textContent = file.name + ' 解析中...';
   document.getElementById('area1').classList.add('has-file');
-
   try {
-    let base64Data = '';
-    let mediaType = file.type;
-
-    // PDFの場合は画像に変換
+    let base64Data = '', mediaType = file.type;
     if (file.type === 'application/pdf') {
       base64Data = await convertPdfToImage(file);
-      mediaType = 'image/png'; // AIには画像として送る
+      mediaType = 'image/png';
     } else {
-      // 画像の場合はそのまま読み込む
       const reader = new FileReader();
-      base64Data = await new Promise((resolve) => {
-        reader.onload = (e) => resolve(e.target.result.split(',')[1]);
-        reader.readAsDataURL(file);
-      });
+      base64Data = await new Promise(r => { reader.onload = e => r(e.target.result.split(',')[1]); reader.readAsDataURL(file); });
     }
-
-    // AI解析APIを呼び出し
-    const res = await fetch('/api/analyze-template', { 
-      method:'POST', 
-      headers:{'Content-Type':'application/json'}, 
-      body:JSON.stringify({ imageBase64: base64Data, mediaType: mediaType }) 
-    });
+    const res = await fetch('/api/analyze-template', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ imageBase64: base64Data, mediaType: mediaType }) });
     const data = await res.json();
-    
     if(res.ok && data.analysis) {
       templateAnalysis = data.analysis;
-      if(data.analysis.mainColor) {
-        themeColor = data.analysis.mainColor;
-        document.documentElement.style.setProperty('--primary', themeColor);
-      }
+      if(data.analysis.mainColor) { themeColor = data.analysis.mainColor; document.documentElement.style.setProperty('--primary', themeColor); }
       document.getElementById('sub1').textContent = file.name + ' 解析完了 ✓';
-    } else {
-      throw new Error(data.error || '解析に失敗しました');
-    }
+    } else { throw new Error(data.error || '解析失敗'); }
   } catch(err) {
-    console.error(err);
-    document.getElementById('sub1').textContent = '解析に失敗しました。標準テンプレートを使用します。';
+    document.getElementById('sub1').textContent = '解析失敗。標準設定を使います。';
     alert('解析エラー: ' + err.message);
   }
 }
@@ -284,75 +261,34 @@ function handleTextUpload(input) {
 
 async function generateOutline() {
   const source = document.getElementById('sourceText').value.trim();
-  if(!source) return alert('原稿内容を入力またはアップロードしてください');
-  
+  if(!source) return alert('原稿内容を入力してください');
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.getElementById('panelL1').classList.add('active');
-  
   try {
-    const res = await fetch('/api/generate', { 
-      method:'POST', 
-      headers:{'Content-Type':'application/json'}, 
-      body:JSON.stringify({ 
-        theme: 'ビジネスプレゼンテーション', 
-        notes: source, 
-        templateAnalysis: templateAnalysis
-      }) 
-    });
+    const res = await fetch('/api/generate', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ theme: 'ビジネスプレゼンテーション', notes: source, templateAnalysis: templateAnalysis }) });
     const data = await res.json();
-    
-    if (data.error) {
-      outline = "";
-      const box = document.getElementById('outlineBox');
-      if (box) box.innerText = "エラー: " + data.error;
-      setStep(3);
-      return;
-    }
-
+    if (data.error) throw new Error(data.error);
     outline = data.result || '';
-    const box = document.getElementById('outlineBox');
-    if (box) {
-      if (outline) {
-        box.innerText = outline;
-      } else {
-        box.innerText = "構成案の生成に失敗しました（AIからの返答が空です）。原稿内容を調整して再度お試しください。";
-      }
-    }
+    document.getElementById('outlineBox').innerText = outline || "構成案の生成に失敗しました。";
     setStep(3);
-  } catch(e) { 
-    setStep(2); 
-    alert('AIとの通信に失敗しました。'); 
-  }
+  } catch(e) { setStep(2); alert('AI通信エラー: ' + e.message); }
 }
 
 function parseOutline(text) {
   if(!text) return [];
   const slides = [];
-  // スライドの区切りをより柔軟に（### や **スライド1** などにも対応）
   const rawSections = text.split(/(?:###|スライド|Slide)\s*\d+\s*[：:]?/gi).filter(s => s.trim());
-  
   rawSections.forEach((content, i) => {
     const lines = content.split('\n').filter(l => l.trim());
     if (lines.length === 0) return;
-
-    // タイトルから不要なMarkdown記号や空白を除去
     let title = lines[0].replace(/^[#*\s：:]+/, '').replace(/[#*\s：:]+$/, '').trim();
-    // 箇条書きを抽出
-    const points = lines.slice(1)
-      .map(l => l.replace(/^[・\-\s\d.*]+/, '').trim())
-      .filter(p => p.length > 0);
-
-    // レイアウトの判定
+    const points = lines.slice(1).map(l => l.replace(/^[・\-\s\d.*]+/, '').trim()).filter(p => p.length > 0);
     let layout = 'list';
-    if (i === 0) {
-      layout = 'hero';
-    } else {
-      const lowerContent = content.toLowerCase();
-      if (lowerContent.includes('比較') || lowerContent.includes('対比') || lowerContent.includes('as-is')) {
-        layout = 'compare';
-      } else if (points.length >= 4 || lowerContent.includes('中心') || lowerContent.includes('構造')) {
-        layout = 'hub';
-      }
+    if (i === 0) layout = 'hero';
+    else {
+      const low = content.toLowerCase();
+      if (low.includes('比較') || low.includes('対比')) layout = 'compare';
+      else if (points.length >= 4) layout = 'hub';
     }
     slides.push({ title, points, layout });
   });
@@ -365,14 +301,12 @@ function renderSlides() {
     const page = document.createElement('div'); page.className = 'slide-page'; page.id = `sp-${idx}`;
     const tc = themeColor;
     let html = `<div class="sl-wrap"><div class="sl-bg-decor"><div class="sl-blob" style="width:800px; height:800px; background:${tc}; top:-300px; right:-100px;"></div></div>`;
-    
     if (s.layout === 'hero') {
       html += `<div class="sl-wrap layout-hero"><div class="hero-img"><img src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=1280&q=80"></div><div class="hero-content"><div class="hero-title" id="ht-${idx}" style="font-size: min(72px, ${1000/s.title.length}px)">${s.title}</div><div class="hero-desc" id="hd-${idx}">${s.points.join(' | ')}</div></div></div>`;
     } else if (s.layout === 'compare') {
       const mid = Math.ceil(s.points.length / 2);
       html += `<div class="sl-header"><div class="sl-header-title">${s.title}</div></div><div class="sl-body"><div class="compare-grid"><div class="compare-box before" id="cb-${idx}-0"><span class="compare-tag" style="background:#718096">現状</span>${s.points.slice(0,mid).map(p=>`<div>・ ${p}</div>`).join('')}</div><div class="compare-box after" id="cb-${idx}-1" style="border-color:${tc}"><span class="compare-tag" style="background:${tc}">改善後</span>${s.points.slice(mid).map(p=>`<div style="color:${tc}; font-weight:700;">・ ${p}</div>`).join('')}</div></div></div>`;
     } else if (s.layout === 'hub') {
-      // 中央のタイトルが長くても収まるように調整
       const fontSize = s.title.length > 10 ? '24px' : '32px';
       html += `<div class="sl-header"><div class="sl-header-title">${s.title}</div></div><div class="sl-body" style="justify-content:center; align-items:center;"><div class="hub-center" id="hc-${idx}" style="background:${tc}; font-size:${fontSize}; padding:20px; line-height:1.2; text-align:center; overflow:hidden; display:flex; align-items:center; justify-content:center; word-break:break-all;">${s.title}</div><div class="hub-items">${s.points.slice(0,4).map((p,pi)=>`<div class="hub-item" id="hi-${idx}-${pi}"><div style="font-size:50px;">${ICONS[pi%ICONS.length]}</div><div style="font-weight:900; color:${tc}; text-align:center;">${p}</div></div>`).join('')}</div></div>`;
     } else {
@@ -395,18 +329,12 @@ function showSlide(idx) {
   document.querySelectorAll('.sdot').forEach((d,i)=>d.style.background = i===idx?themeColor:'#E2E8F0');
 }
 
-function animEl(id, anim) {
-  const el = document.getElementById(id); if(!el) return;
-  el.style.animation = 'none'; el.style.opacity = '0'; void el.offsetWidth; el.style.animation = anim;
-}
+function animEl(id, anim) { const el = document.getElementById(id); if(!el) return; el.style.animation = 'none'; el.style.opacity = '0'; void el.offsetWidth; el.style.animation = anim; }
 
 function buildPresentation() {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.getElementById('panelL2').classList.add('active');
-  setTimeout(() => {
-    slideData = parseOutline(outline); renderSlides();
-    setStep(4); buildDots(); showSlide(0);
-  }, 1000);
+  setTimeout(() => { slideData = parseOutline(outline); renderSlides(); setStep(4); buildDots(); showSlide(0); }, 1000);
 }
 
 function scaleSlides() {
@@ -424,8 +352,22 @@ function buildDots() {
   });
 }
 
-function navSlide(dir) { 
-  const next = currentSlide + dir; if(next >= 0 && next < slideData.length) showSlide(next);
+function navSlide(dir) { const next = currentSlide + dir; if(next >= 0 && next < slideData.length) showSlide(next); }
+
+// PowerPointダウンロード機能
+function downloadPPTX() {
+  const pptx = new PptxGenJS();
+  pptx.layout = 'LAYOUT_16x9';
+  slideData.forEach((s, idx) => {
+    const slide = pptx.addSlide();
+    slide.background = { color: 'FFFFFF' };
+    // 簡易的なデザインの再現
+    slide.addText(s.title, { x: 0.5, y: 0.5, w: '90%', fontSize: 32, bold: true, color: themeColor.replace('#','') });
+    s.points.forEach((p, i) => {
+      slide.addText(p, { x: 0.8, y: 1.5 + (i * 0.6), w: '80%', fontSize: 20, bullet: true });
+    });
+  });
+  pptx.writeFile({ fileName: `presentation_${new Date().getTime()}.pptx` });
 }
 
 function downloadHTML() {
@@ -436,7 +378,12 @@ function downloadHTML() {
     return c.outerHTML;
   }).join('\n');
   const style = document.querySelector('style').innerHTML;
-  const html = `<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><style>${style}</style></head><body style="margin:0;"><div style="width:100vw; height:56.25vw; position:relative; overflow:hidden;">${pages}</div></body></html>`;
+  const html = `<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><style>${style}</style></head><body style="margin:0; background:#000;"><div style="width:100vw; height:56.25vw; position:relative; overflow:hidden; background:#fff; margin:auto; top:50%; transform:translateY(-50%);">${pages}</div>
+  <script>
+    let cur = 0; const p = document.querySelectorAll('.slide-page');
+    function show(n) { if(n<0||n>=p.length)return; p[cur].classList.remove('active'); cur=n; p[cur].classList.add('active'); }
+    window.addEventListener('keydown', e => { if(e.key==='ArrowRight'||e.key===' ') show(cur+1); if(e.key==='ArrowLeft') show(cur-1); });
+  <\/script></body></html>`;
   const blob = new Blob([html], {type:'text/html'}); const a = document.createElement('a');
   a.href = URL.createObjectURL(blob); a.download = 'presentation.html'; a.click();
 }
