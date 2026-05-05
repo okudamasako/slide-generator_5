@@ -82,41 +82,39 @@ main { max-width: 1100px; margin: 40px auto; padding: 0 24px; }
 }
 .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(0, 121, 107, 0.35); }
 
-/* スライド表示用 */
-.slide-outer { border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.25); margin-bottom: 40px; background: #000; min-height: 200px; }
+/* スライド表示用 (静的・ビジネス品質) */
+.slide-outer { border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 40px 80px rgba(0,0,0,0.15); margin-bottom: 30px; background: #000; }
 .slide-viewport { width: 100%; position: relative; background: #fff; overflow: hidden; aspect-ratio: 16 / 9; }
 .slide-page { position: absolute; inset: 0; width: 1280px; height: 720px; transform-origin: top left; display: none; background: #fff; }
 .slide-page.active { display: flex; flex-direction: column; }
 
 .sl-wrap { width: 100%; height: 100%; display: flex; flex-direction: column; position: relative; }
 .sl-bg-decor { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
-.sl-blob { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.15; }
+.sl-blob { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.05; }
 
 .sl-header { height: 110px; padding: 0 70px; display: flex; align-items: center; border-bottom: 1px solid rgba(0,0,0,0.06); z-index: 10; background: #fff; }
-.sl-header-title { font-size: 38px; font-weight: 900; color: var(--primary); }
+.sl-header-title { font-size: 42px; font-weight: 900; color: var(--primary); }
 
-.sl-body { flex: 1; padding: 60px 80px; position: relative; z-index: 5; display: flex; flex-direction: column; }
+.sl-body { flex: 1; padding: 50px 70px; position: relative; z-index: 5; display: flex; flex-direction: row; gap: 40px; }
 
 /* レイアウト別 */
 .layout-hero { flex-direction: row !important; }
-.hero-img { flex: 1.4; position: relative; overflow: hidden; }
+.hero-img { flex: 1.2; position: relative; overflow: hidden; }
 .hero-img img { width: 100%; height: 100%; object-fit: cover; }
-.hero-content { flex: 1; padding: 80px; display: flex; flex-direction: column; justify-content: center; background: var(--primary); color: #fff; }
-.hero-title { font-size: 72px; font-weight: 900; line-height: 1.1; margin-bottom: 30px; }
-.hero-desc { font-size: 26px; border-left: 4px solid var(--accent); padding-left: 20px; }
+.hero-content { flex: 1; padding: 60px 70px; display: flex; flex-direction: column; justify-content: center; background: var(--primary); color: #fff; }
+.hero-title { font-size: 64px; font-weight: 900; line-height: 1.1; margin-bottom: 30px; }
+.hero-desc { font-size: 22px; border-left: 6px solid var(--accent); padding-left: 20px; opacity: 0.9; }
 
-.hub-center { width: 280px; height: 280px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 36px; font-weight: 900; position: relative; z-index: 20; border: 10px solid #fff; }
-.hub-items { display: grid; grid-template-columns: 1fr 1fr; gap: 100px; position: absolute; inset: 80px; z-index: 10; }
-.hub-item { background: #fff; padding: 40px; border-radius: 30px; box-shadow: 0 15px 45px rgba(0,0,0,0.08); display: flex; flex-direction: column; align-items: center; gap: 15px; }
+.hub-center { width: 260px; height: 260px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 28px; font-weight: 900; z-index: 20; border: 8px solid #fff; box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+.hub-items { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; flex: 1; }
+.hub-item { background: #fff; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; gap: 10px; border: 1px solid #f1f5f9; }
 
-.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; flex: 1; }
-.compare-box { padding: 50px; border-radius: 30px; display: flex; flex-direction: column; gap: 24px; border: 1px solid var(--border); }
-.compare-box.after { background: var(--primary-soft); border-color: var(--primary-light); }
-.compare-tag { display: inline-block; padding: 10px 30px; border-radius: 100px; font-weight: 900; font-size: 20px; color: #fff; align-self: flex-start; }
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; flex: 1; }
+.compare-box { padding: 40px; border-radius: 20px; background: #f8fafc; border: 1px solid #e2e8f0; position: relative; }
+.compare-tag { position: absolute; top: -15px; left: 20px; padding: 4px 20px; border-radius: 6px; font-weight: 900; font-size: 14px; color: #fff; }
 
-.list-item { display: flex; align-items: flex-start; gap: 25px; padding: 30px; background: #fff; border-radius: 20px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border-left: 8px solid var(--primary); }
+.list-item { padding: 20px 30px; background: #f8fafc; border-radius: 0 15px 15px 0; border-left: 8px solid var(--primary); font-size: 24px; font-weight: 900; color: var(--text-main); }
 
-@keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 footer { text-align: center; padding: 50px; color: #94A3B8; font-size: 15px; }
@@ -176,10 +174,13 @@ footer { text-align: center; padding: 50px; color: #94A3B8; font-size: 15px; }
   <div class="card panel" id="panel4">
     <div class="card-title">STEP 4　完成プレビュー</div>
     <div class="slide-outer"><div class="slide-viewport" id="slideViewport"></div></div>
-    <div style="display:flex; justify-content:center; gap:20px; margin-bottom:30px;">
-      <button class="btn-primary" style="width:120px; padding:10px; background:#fff; color:var(--primary); border:2px solid var(--primary);" onclick="navSlide(-1)">前へ</button>
-      <div id="slideDots" style="display:flex; align-items:center; gap:10px;"></div>
-      <button class="btn-primary" style="width:120px; padding:10px; background:#fff; color:var(--primary); border:2px solid var(--primary);" onclick="navSlide(1)">次へ</button>
+    <div style="display:flex; justify-content:center; align-items:center; gap:20px; margin-bottom:30px;">
+      <button class="btn-primary" style="width:100px; padding:8px; background:#fff; color:var(--primary); border:1px solid var(--primary); font-size:12px;" onclick="navSlide(-1)">前へ</button>
+      <div id="slideDots" style="display:flex; align-items:center; gap:8px;"></div>
+      <button class="btn-primary" style="width:100px; padding:8px; background:#fff; color:var(--primary); border:1px solid var(--primary); font-size:12px;" onclick="navSlide(1)">次へ</button>
+      <div style="width:1px; height:20px; background:#ddd; margin:0 10px;"></div>
+      <button class="btn-primary" style="width:120px; padding:8px; background:#f0f9ff; color:#0369a1; border:1px solid #0369a1; font-size:12px;" onclick="toggleBg()">背景切替</button>
+      <button class="btn-primary" style="width:120px; padding:8px; background:#f0fdf4; color:#15803d; border:1px solid #15803d; font-size:12px;" onclick="changeImg()">画像変更</button>
     </div>
     <button class="btn-primary" style="margin-bottom:10px;" onclick="downloadPPTX()">PowerPoint (.pptx) をダウンロード</button>
     <button class="btn-primary" style="margin-bottom:10px; background:#fff; color:var(--primary); border:2px solid var(--primary);" onclick="downloadHTML()">プレゼン用HTMLをダウンロード</button>
@@ -279,12 +280,27 @@ async function generateOutline() {
 function parseOutline(text) {
   if(!text) return [];
   const slides = [];
-  const rawSections = text.split(/(?:###|スライド|Slide)\s*\d+\s*[：:]?/gi).filter(s => s.trim());
+  // 区切り記号をより確実に
+  const rawSections = text.split(/---|\nスライド\s*\d+\s*[：:]?/gi).filter(s => s.trim());
+  
   rawSections.forEach((content, i) => {
     const lines = content.split('\n').filter(l => l.trim());
     if (lines.length === 0) return;
-    let title = lines[0].replace(/^[#*\s：:]+/, '').replace(/[#*\s：:]+$/, '').trim();
-    const points = lines.slice(1).map(l => l.replace(/^[・\-\s\d.*]+/, '').trim()).filter(p => p.length > 0);
+
+    let title = '', keyword = 'business', points = [];
+    lines.forEach(l => {
+      const cleanLine = l.replace(/^[#*\s：:]+/, '').trim();
+      if (l.includes('キーワード')) {
+        keyword = l.split(/[：:]/)[1]?.trim() || 'business';
+      } else if (!title && !l.startsWith('・')) {
+        title = cleanLine;
+      } else if (l.startsWith('・')) {
+        points.push(cleanLine.replace(/^・/, '').trim());
+      }
+    });
+
+    if (!title) title = "スライド " + (i + 1);
+
     let layout = 'list';
     if (i === 0) layout = 'hero';
     else {
@@ -292,7 +308,7 @@ function parseOutline(text) {
       if (low.includes('比較') || low.includes('対比')) layout = 'compare';
       else if (points.length >= 4) layout = 'hub';
     }
-    slides.push({ title, points, layout });
+    slides.push({ title, points, layout, keyword });
   });
   return slides;
 }
@@ -302,17 +318,20 @@ function renderSlides() {
   slideData.forEach((s, idx) => {
     const page = document.createElement('div'); page.className = 'slide-page'; page.id = `sp-${idx}`;
     const tc = themeColor;
-    let html = `<div class="sl-wrap"><div class="sl-bg-decor"><div class="sl-blob" style="width:800px; height:800px; background:${tc}; top:-300px; right:-100px;"></div></div>`;
+    const imgUrl = `https://source.unsplash.com/featured/1280x720/?${encodeURIComponent(s.keyword)}`;
+    
+    let html = `<div class="sl-wrap"><div class="sl-bg-decor"><div class="sl-blob" style="width:800px; height:800px; background:${tc}; opacity:0.05; top:-300px; right:-100px;"></div></div>`;
+    
     if (s.layout === 'hero') {
-      html += `<div class="sl-wrap layout-hero"><div class="hero-img"><img src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=1280&q=80"></div><div class="hero-content"><div class="hero-title" id="ht-${idx}" style="font-size: min(72px, ${1000/s.title.length}px)">${s.title}</div><div class="hero-desc" id="hd-${idx}">${s.points.join(' | ')}</div></div></div>`;
+      html += `<div class="sl-wrap layout-hero"><div class="hero-img"><img src="${imgUrl}"></div><div class="hero-content"><div class="hero-title">${s.title}</div><div class="hero-desc">${s.points.join(' | ')}</div></div></div>`;
     } else if (s.layout === 'compare') {
       const mid = Math.ceil(s.points.length / 2);
-      html += `<div class="sl-header"><div class="sl-header-title">${s.title}</div></div><div class="sl-body"><div class="compare-grid"><div class="compare-box before" id="cb-${idx}-0"><span class="compare-tag" style="background:#718096">現状</span>${s.points.slice(0,mid).map(p=>`<div>・ ${p}</div>`).join('')}</div><div class="compare-box after" id="cb-${idx}-1" style="border-color:${tc}"><span class="compare-tag" style="background:${tc}">改善後</span>${s.points.slice(mid).map(p=>`<div style="color:${tc}; font-weight:700;">・ ${p}</div>`).join('')}</div></div></div>`;
+      html += `<div class="sl-header"><div class="sl-header-title">${s.title}</div></div><div class="sl-body"><div class="compare-grid"><div class="compare-box before"><span class="compare-tag" style="background:#718096">現状</span>${s.points.slice(0,mid).map(p=>`<div>・ ${p}</div>`).join('')}</div><div class="compare-box after" style="border-color:${tc}"><span class="compare-tag" style="background:${tc}">改善後</span>${s.points.slice(mid).map(p=>`<div style="color:${tc}; font-weight:700;">・ ${p}</div>`).join('')}</div></div></div>`;
     } else if (s.layout === 'hub') {
       const fontSize = s.title.length > 10 ? '24px' : '32px';
-      html += `<div class="sl-header"><div class="sl-header-title">${s.title}</div></div><div class="sl-body" style="justify-content:center; align-items:center;"><div class="hub-center" id="hc-${idx}" style="background:${tc}; font-size:${fontSize}; padding:20px; line-height:1.2; text-align:center; overflow:hidden; display:flex; align-items:center; justify-content:center; word-break:break-all;">${s.title}</div><div class="hub-items">${s.points.slice(0,4).map((p,pi)=>`<div class="hub-item" id="hi-${idx}-${pi}"><div style="font-size:50px;">${ICONS[pi%ICONS.length]}</div><div style="font-weight:900; color:${tc}; text-align:center;">${p}</div></div>`).join('')}</div></div>`;
+      html += `<div class="sl-header"><div class="sl-header-title">${s.title}</div></div><div class="sl-body" style="flex-direction:row; gap:40px; align-items:center;"><div style="width:60%; position:relative; height:100%; display:flex; align-items:center; justify-content:center;"><div class="hub-center" style="background:${tc}; font-size:${fontSize}; position:static;">${s.title}</div><div class="hub-items">${s.points.slice(0,4).map((p,pi)=>`<div class="hub-item" style="opacity:1;"><div style="font-size:40px;">${ICONS[pi%ICONS.length]}</div><div style="font-weight:900; color:${tc}; font-size:14px; text-align:center;">${p}</div></div>`).join('')}</div></div><div style="width:40%; height:80%; border-radius:20px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.1);"><img src="${imgUrl}" style="width:100%; height:100%; object-fit:cover;"></div></div>`;
     } else {
-      html += `<div class="sl-header"><div class="sl-header-title">${s.title}</div></div><div class="sl-body">${s.points.map((p,pi)=>`<div class="list-item" id="li-${idx}-${pi}" style="border-left-color:${tc}"><div><div style="font-size:24px; font-weight:900; color:${tc}">${p}</div></div></div>`).join('')}</div>`;
+      html += `<div class="sl-header"><div class="sl-header-title">${s.title}</div></div><div class="sl-body" style="flex-direction:row; gap:60px;"><div style="flex:1; display:flex; flex-direction:column; gap:20px;">${s.points.map((p)=>`<div class="list-item" style="border-left-color:${tc}; opacity:1; padding:15px 25px; background:#f8fafc; border-radius:0 15px 15px 0;"><div><div style="font-size:22px; font-weight:900; color:${tc}">${p}</div></div></div>`).join('')}</div><div style="width:400px; height:100%; border-radius:25px; overflow:hidden; box-shadow:0 15px 40px rgba(0,0,0,0.1);"><img src="${imgUrl}" style="width:100%; height:100%; object-fit:cover;"></div></div>`;
     }
     html += `</div>`; page.innerHTML = html; vp.appendChild(page);
   });
@@ -322,11 +341,6 @@ function renderSlides() {
 function showSlide(idx) {
   document.querySelectorAll('.slide-page').forEach(p => p.classList.remove('active'));
   const page = document.getElementById(`sp-${idx}`); if(!page) return; page.classList.add('active');
-  const s = slideData[idx]; if(!s) return;
-  if(s.layout==='hero'){ animEl(`ht-${idx}`,'fadeInUp 0.8s forwards'); animEl(`hd-${idx}`,'fadeInUp 0.8s 0.3s forwards'); }
-  else if(s.layout==='compare'){ animEl(`cb-${idx}-0`,'fadeInUp 0.7s forwards'); animEl(`cb-${idx}-1`,'fadeInUp 0.7s 0.3s forwards'); }
-  else if(s.layout==='hub'){ animEl(`hc-${idx}`,'fadeInUp 0.6s forwards'); s.points.forEach((_,pi)=>animEl(`hi-${idx}-${pi}`,`fadeInUp 0.5s ${0.4+pi*0.1}s forwards`)); }
-  else { s.points.forEach((_,pi)=>animEl(`li-${idx}-${pi}`,`fadeInUp 0.6s ${0.1+pi*0.1}s forwards`)); }
   currentSlide = idx;
   document.querySelectorAll('.sdot').forEach((d,i)=>d.style.background = i===idx?themeColor:'#E2E8F0');
 }
@@ -356,40 +370,67 @@ function buildDots() {
 
 function navSlide(dir) { const next = currentSlide + dir; if(next >= 0 && next < slideData.length) showSlide(next); }
 
-// PowerPointダウンロード機能（高精度キャプチャ方式）
-async function downloadPPTX() {
+// PowerPointダウンロード機能（高精度ネイティブ配置版）
+function downloadPPTX() {
   const pptx = new PptxGenJS();
   pptx.layout = 'LAYOUT_16x9';
-  const vp = document.getElementById('slideViewport');
-  const originalTransform = vp.style.transform;
-  const originalWidth = vp.style.width;
-  
-  // キャプチャ用に一時的に1280x720の実寸大にする
-  vp.style.transform = 'none';
-  vp.style.width = '1280px';
-  vp.style.height = '720px';
+  const tc = themeColor.replace('#', '');
 
-  for (let i = 0; i < slideData.length; i++) {
-    showSlide(i);
-    // アニメーション完了を待つ（キャプチャ用）
-    await new Promise(r => setTimeout(r, 800));
-    const canvas = await html2canvas(document.getElementById(`sp-${i}`), { 
-      width: 1280, height: 720, scale: 2, useCORS: true, logging: false 
-    });
-    const imgData = canvas.toDataURL('image/png');
+  slideData.forEach((s, idx) => {
     const slide = pptx.addSlide();
-    // 背景画像としてキャプチャを配置（これで見た目は100%再現）
-    slide.addImage({ data: imgData, x: 0, y: 0, w: '100%', h: '100%' });
-    
-    // その上に編集可能なテキストを透明で配置（検索・編集用）
-    const s = slideData[i];
-    slide.addText(s.title, { x: 0.5, y: 0.5, w: '90%', fontSize: 28, color: '000000', transparency: 100 });
-  }
+    const isDark = s.isDark || false;
+    slide.background = { color: isDark ? tc : 'FFFFFF' };
+    const txtColor = isDark ? 'FFFFFF' : '333333';
+    const subColor = isDark ? 'E0E0E0' : '666666';
 
-  // 元の表示に戻す
-  vp.style.transform = originalTransform;
-  scaleSlides();
+    const imgUrl = `https://source.unsplash.com/featured/1280x720/?${encodeURIComponent(s.keyword || 'business')}&sig=${idx}`;
+
+    if (s.layout === 'hero') {
+      slide.addImage({ path: imgUrl, x: 0, y: 0, w: '50%', h: '100%', sizing: { type: 'cover' } });
+      slide.addShape(pptx.ShapeType.rect, { fill: { color: tc }, x: '50%', y: 0, w: '50%', h: '100%' });
+      slide.addShape(pptx.ShapeType.rect, { fill: { color: 'FF8C00' }, x: '55%', y: '50%', w: 0.05, h: '20%' });
+      slide.addText(s.title, { x: '55%', y: '25%', w: '40%', fontSize: 42, bold: true, color: 'FFFFFF', fontFace: 'Meiryo' });
+      slide.addText(s.points.join(' | '), { x: '57%', y: '52%', w: '38%', fontSize: 18, color: 'FFFFFF', fontFace: 'Meiryo' });
+    } else if (s.layout === 'hub') {
+      slide.addShape(pptx.ShapeType.rect, { fill: { color: tc }, x: 0.5, y: 0.4, w: 0.1, h: 0.5 });
+      slide.addText(s.title, { x: 0.7, y: 0.45, fontSize: 32, bold: true, color: txtColor, fontFace: 'Meiryo' });
+      
+      const circleSize = 2.4;
+      slide.addShape(pptx.ShapeType.ellipse, { fill: { color: tc }, x: 1.5, y: 1.8, w: circleSize, h: circleSize });
+      slide.addText(s.title, { x: 1.5, y: 1.8, w: circleSize, h: circleSize, fontSize: 18, bold: true, color: 'FFFFFF', align: 'center', valign: 'middle', fontFace: 'Meiryo' });
+      
+      const positions = [{x:4.5,y:1.5}, {x:7.2,y:1.5}, {x:4.5,y:3.5}, {x:7.2,y:3.5}];
+      s.points.slice(0,4).forEach((p, i) => {
+        const pos = positions[i];
+        slide.addShape(pptx.ShapeType.roundRect, { fill: { color: isDark?'FFFFFF10':'F8FAFC' }, line: { color: tc, width: 1 }, x: pos.x, y: pos.y, w: 2.2, h: 1.4, rectRadius: 0.1 });
+        slide.addText(p, { x: pos.x, y: pos.y, w: 2.2, h: 1.4, fontSize: 14, color: txtColor, align: 'center', valign: 'middle', fontFace: 'Meiryo' });
+      });
+    } else {
+      // 標準・リスト型
+      slide.addShape(pptx.ShapeType.rect, { fill: { color: tc }, x: 0.5, y: 0.4, w: 0.1, h: 0.5 });
+      slide.addText(s.title, { x: 0.7, y: 0.45, fontSize: 32, bold: true, color: txtColor, fontFace: 'Meiryo' });
+      
+      const listW = 5.5;
+      s.points.slice(0,5).forEach((p, i) => {
+        slide.addShape(pptx.ShapeType.rect, { fill: { color: tc }, x: 0.8, y: 1.5 + (i * 0.9), w: 0.05, h: 0.7 });
+        slide.addText(p, { x: 1.0, y: 1.5 + (i * 0.9), w: listW, fontSize: 20, bold: true, color: txtColor, fontFace: 'Meiryo' });
+      });
+      slide.addImage({ path: imgUrl, x: 6.8, y: 1.2, w: 2.8, h: 4.0, sizing: { type: 'cover' }, rounding: true });
+    }
+  });
   pptx.writeFile({ fileName: `presentation_${new Date().getTime()}.pptx` });
+}
+
+function toggleBg() {
+  const s = slideData[currentSlide]; if(!s) return;
+  s.isDark = !s.isDark;
+  renderSlides(); showSlide(currentSlide);
+}
+
+function changeImg() {
+  const s = slideData[currentSlide]; if(!s) return;
+  s.sig = (s.sig || 0) + 1;
+  renderSlides(); showSlide(currentSlide);
 }
 
 function downloadHTML() {
