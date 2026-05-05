@@ -182,13 +182,15 @@ footer { text-align: center; padding: 50px; color: #94A3B8; font-size: 15px; }
       <button class="btn-primary" style="width:120px; padding:10px; background:#fff; color:var(--primary); border:2px solid var(--primary);" onclick="navSlide(1)">次へ</button>
     </div>
     <button class="btn-primary" style="margin-bottom:10px;" onclick="downloadPPTX()">PowerPoint (.pptx) をダウンロード</button>
-    <button class="btn-primary" style="background:#fff; color:var(--primary); border:2px solid var(--primary);" onclick="downloadHTML()">プレゼン用HTMLをダウンロード</button>
+    <button class="btn-primary" style="margin-bottom:10px; background:#fff; color:var(--primary); border:2px solid var(--primary);" onclick="downloadHTML()">プレゼン用HTMLをダウンロード</button>
+    <button class="btn-primary" style="background:#fff; color:var(--primary); border:2px solid var(--primary);" onclick="window.print()">PDFとして保存 (印刷)</button>
   </div>
 </main>
 
 <!-- 外部ライブラリの読み込み -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/gitbrent/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <script>
 // PDF.jsの設定
@@ -354,117 +356,68 @@ function buildDots() {
 
 function navSlide(dir) { const next = currentSlide + dir; if(next >= 0 && next < slideData.length) showSlide(next); }
 
-// PowerPointダウンロード機能（デザイン忠実再現版）
-function downloadPPTX() {
+// PowerPointダウンロード機能（高精度キャプチャ方式）
+async function downloadPPTX() {
   const pptx = new PptxGenJS();
   pptx.layout = 'LAYOUT_16x9';
-  const tc = themeColor.replace('#', '');
+  const vp = document.getElementById('slideViewport');
+  const originalTransform = vp.style.transform;
+  const originalWidth = vp.style.width;
+  
+  // キャプチャ用に一時的に1280x720の実寸大にする
+  vp.style.transform = 'none';
+  vp.style.width = '1280px';
+  vp.style.height = '720px';
 
-  slideData.forEach((s, idx) => {
+  for (let i = 0; i < slideData.length; i++) {
+    showSlide(i);
+    // アニメーション完了を待つ（キャプチャ用）
+    await new Promise(r => setTimeout(r, 800));
+    const canvas = await html2canvas(document.getElementById(`sp-${i}`), { 
+      width: 1280, height: 720, scale: 2, useCORS: true, logging: false 
+    });
+    const imgData = canvas.toDataURL('image/png');
     const slide = pptx.addSlide();
-    slide.background = { color: 'FFFFFF' };
+    // 背景画像としてキャプチャを配置（これで見た目は100%再現）
+    slide.addImage({ data: imgData, x: 0, y: 0, w: '100%', h: '100%' });
+    
+    // その上に編集可能なテキストを透明で配置（検索・編集用）
+    const s = slideData[i];
+    slide.addText(s.title, { x: 0.5, y: 0.5, w: '90%', fontSize: 28, color: '000000', transparency: 100 });
+  }
 
-    // 背景の装飾（Blobs）を再現
-    slide.addShape(pptx.ShapeType.ellipse, { fill: { color: tc, transparency: 92 }, x: 8.5, y: -1, w: 6, h: 6 });
-    slide.addShape(pptx.ShapeType.ellipse, { fill: { color: tc, transparency: 95 }, x: -2, y: 4, w: 5, h: 5 });
-
-    if (s.layout === 'hero') {
-      // 左側：画像
-      slide.addImage({ 
-        path: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=1280&q=80", 
-        x: 0, y: 0, w: '50%', h: '100%', sizing: { type: 'cover' } 
-      });
-      // 右側：カラーブロック
-      slide.addShape(pptx.ShapeType.rect, { fill: { color: tc }, x: '50%', y: 0, w: '50%', h: '100%' });
-      // 装飾ライン（オレンジ系を想定）
-      slide.addShape(pptx.ShapeType.rect, { fill: { color: 'FF8C00' }, x: '55%', y: '48%', w: 0.05, h: '25%' });
-      // タイトル
-      slide.addText(s.title, { 
-        x: '55%', y: '25%', w: '40%', fontSize: 36, bold: true, color: 'FFFFFF', fontFace: 'Meiryo' 
-      });
-      // 詳細（箇条書きを1行に）
-      slide.addText(s.points.join(' | '), { 
-        x: '57%', y: '50%', w: '38%', fontSize: 18, color: 'FFFFFF', fontFace: 'Meiryo', lineSpacing: 28 
-      });
-
-    } else if (s.layout === 'hub') {
-      // ヘッダー
-      slide.addShape(pptx.ShapeType.rect, { fill: { color: tc }, x: 0.5, y: 0.4, w: 0.1, h: 0.5 });
-      slide.addText(s.title, { x: 0.7, y: 0.45, fontSize: 28, bold: true, color: '333333', fontFace: 'Meiryo' });
-      
-      // 中央の円
-      const circleSize = 2.2;
-      slide.addShape(pptx.ShapeType.ellipse, { 
-        fill: { color: tc }, x: (10-circleSize)/2, y: (5.6-circleSize)/2 + 0.5, w: circleSize, h: circleSize 
-      });
-      slide.addText(s.title, { 
-        x: (10-circleSize)/2, y: (5.6-circleSize)/2 + 0.5, w: circleSize, h: circleSize, 
-        fontSize: 16, bold: true, color: 'FFFFFF', align: 'center', valign: 'middle', fontFace: 'Meiryo' 
-      });
-
-      // 周囲のアイテム
-      const positions = [
-        { x: 1.5, y: 1.8 }, { x: 6.3, y: 1.8 },
-        { x: 1.5, y: 3.5 }, { x: 6.3, y: 3.5 }
-      ];
-      s.points.slice(0, 4).forEach((p, i) => {
-        const pos = positions[i];
-        slide.addShape(pptx.ShapeType.roundRect, { 
-          fill: { color: 'FFFFFF' }, line: { color: 'E2E8F0', width: 1 }, 
-          x: pos.x, y: pos.y, w: 2.2, h: 1.2, rectRadius: 0.1,
-          shadow: { type: 'outer', color: '000000', opacity: 0.1, blur: 3, offset: 2 }
-        });
-        slide.addText(p, { 
-          x: pos.x, y: pos.y, w: 2.2, h: 1.2, fontSize: 14, color: '333333', 
-          align: 'center', valign: 'middle', fontFace: 'Meiryo' 
-        });
-      });
-
-    } else if (s.layout === 'compare') {
-      slide.addShape(pptx.ShapeType.rect, { fill: { color: tc }, x: 0.5, y: 0.4, w: 0.1, h: 0.5 });
-      slide.addText(s.title, { x: 0.7, y: 0.45, fontSize: 28, bold: true, color: '333333', fontFace: 'Meiryo' });
-      
-      const mid = Math.ceil(s.points.length / 2);
-      // 現状
-      slide.addShape(pptx.ShapeType.roundRect, { fill: { color: 'F8FAFC' }, x: 0.8, y: 1.5, w: 4, h: 3.5, rectRadius: 0.1 });
-      slide.addText("現状", { x: 1.0, y: 1.7, w: 1, h: 0.4, fontSize: 14, color: 'FFFFFF', fill: { color: '718096' }, align: 'center', fontFace: 'Meiryo' });
-      slide.addText(s.points.slice(0, mid).map(p=>`・ ${p}`).join('\n'), { x: 1.0, y: 2.2, w: 3.6, fontSize: 16, color: '4A5568', fontFace: 'Meiryo' });
-      
-      // 改善後
-      slide.addShape(pptx.ShapeType.roundRect, { fill: { color: 'FFFFFF' }, line: { color: tc, width: 2 }, x: 5.2, y: 1.5, w: 4, h: 3.5, rectRadius: 0.1 });
-      slide.addText("改善後", { x: 5.4, y: 1.7, w: 1, h: 0.4, fontSize: 14, color: 'FFFFFF', fill: { color: tc }, align: 'center', fontFace: 'Meiryo' });
-      slide.addText(s.points.slice(mid).map(p=>`・ ${p}`).join('\n'), { x: 5.4, y: 2.2, w: 3.6, fontSize: 16, color: tc, bold: true, fontFace: 'Meiryo' });
-
-    } else {
-      // 標準のリスト型
-      slide.addShape(pptx.ShapeType.rect, { fill: { color: tc }, x: 0.5, y: 0.4, w: 0.1, h: 0.5 });
-      slide.addText(s.title, { x: 0.7, y: 0.45, fontSize: 28, bold: true, color: '333333', fontFace: 'Meiryo' });
-
-      s.points.forEach((p, i) => {
-        slide.addShape(pptx.ShapeType.rect, { fill: { color: tc }, x: 0.8, y: 1.6 + (i * 0.9), w: 0.05, h: 0.7 });
-        slide.addText(p, { 
-          x: 1.0, y: 1.6 + (i * 0.9), w: '85%', fontSize: 20, color: '333333', bold: true, fontFace: 'Meiryo' 
-        });
-      });
-    }
-  });
+  // 元の表示に戻す
+  vp.style.transform = originalTransform;
+  scaleSlides();
   pptx.writeFile({ fileName: `presentation_${new Date().getTime()}.pptx` });
 }
 
 function downloadHTML() {
-  const tc = themeColor, vp = document.getElementById('slideViewport');
+  const style = document.querySelector('style').innerHTML;
+  const vp = document.getElementById('slideViewport');
   const pages = Array.from(vp.querySelectorAll('.slide-page')).map((p,i) => {
     const c = p.cloneNode(true); c.classList.toggle('active', i===0);
-    c.querySelectorAll('[style*="opacity"]').forEach(el => { el.style.opacity='1'; el.style.animation='none'; el.style.transform=''; });
+    // アニメーション設定を保持したままクローン
     return c.outerHTML;
   }).join('\n');
-  const style = document.querySelector('style').innerHTML;
-  const html = `<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><style>${style}</style></head><body style="margin:0; background:#000;"><div style="width:100vw; height:56.25vw; position:relative; overflow:hidden; background:#fff; margin:auto; top:50%; transform:translateY(-50%);">${pages}</div>
+  
+  const html = `<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8">
+  <title>Presentation</title>
+  <style>${style}
+  body { margin:0; background:#000; overflow:hidden; font-family:sans-serif; }
+  .viewer { width:100vw; height:56.25vw; position:relative; background:#fff; margin:auto; top:50%; transform:translateY(-50%); overflow:hidden; }
+  .slide-page { display:none; width:1280px; height:720px; position:absolute; top:0; left:0; transform-origin:top left; }
+  .slide-page.active { display:block; }
+  </style></head><body><div class="viewer" id="v">${pages}</div>
   <script>
-    let cur = 0; const p = document.querySelectorAll('.slide-page');
+    const v = document.getElementById('v'); const p = document.querySelectorAll('.slide-page');
+    let cur = 0;
+    function scale() { const s = window.innerWidth / 1280; v.style.height = (720*s)+'px'; p.forEach(x=>x.style.transform=\`scale(\${s})\`); }
     function show(n) { if(n<0||n>=p.length)return; p[cur].classList.remove('active'); cur=n; p[cur].classList.add('active'); }
+    window.addEventListener('resize', scale); scale();
     window.addEventListener('keydown', e => { if(e.key==='ArrowRight'||e.key===' ') show(cur+1); if(e.key==='ArrowLeft') show(cur-1); });
   <\/script></body></html>`;
+  
   const blob = new Blob([html], {type:'text/html'}); const a = document.createElement('a');
   a.href = URL.createObjectURL(blob); a.download = 'presentation.html'; a.click();
 }
