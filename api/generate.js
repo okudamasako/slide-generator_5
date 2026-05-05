@@ -10,8 +10,11 @@ export default async function handler(req, res) {
   const finalNotes = notes || '';
   const finalSlideCount = slideCount || '5〜8枚';
 
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) return res.status(500).json({ error: 'APIキーが設定されていません' });
+  const apiKey = (process.env.ANTHROPIC_API_KEY || '').trim();
+  if (!apiKey) return res.status(500).json({ error: 'VercelにAPIキーが設定されていません' });
+  if (!apiKey.startsWith('sk-ant-')) {
+    return res.status(500).json({ error: '設定されているAPIキーがAnthropic用ではないようです（sk-ant-から始まっていません）。VercelのEnvironment Variablesを確認してください。' });
+  }
 
   // レイアウトタイプ判定
   const lt = (templateAnalysis?.layoutType || '').toLowerCase();
@@ -126,9 +129,8 @@ ${templateSection}
     });
     const data = await r.json();
     if (!r.ok) {
-      if (r.status === 401) return res.status(401).json({ error: 'APIキーが無効です' });
-      if (r.status === 429) return res.status(429).json({ error: 'APIの利用上限に達しました' });
-      return res.status(500).json({ error: data.error?.message || '生成に失敗しました' });
+      const errorDetail = data.error ? `[${data.error.type}] ${data.error.message}` : '不明な生成エラー';
+      return res.status(500).json({ error: errorDetail });
     }
     return res.status(200).json({ result: data.content?.[0]?.text || '' });
   } catch(e) {
