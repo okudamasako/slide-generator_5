@@ -185,7 +185,14 @@ footer { text-align: center; padding: 50px; color: #94A3B8; font-size: 15px; }
   </div>
 </main>
 
+<!-- PDF解析用のライブラリを導入 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
 <script>
+// PDF.jsの初期設定
+const pdfjsLib = window['pdfjs-dist/build/pdf'];
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
 let themeColor = '#00796B', outline = '', slideData = [], currentSlide = 0, templateAnalysis = null;
 const ICONS = ['🎯','⚡','💡','🌟','📊','🔍','🛠','📈','🚀','💎','🎨','🧩','📢'];
 
@@ -200,45 +207,68 @@ function setStep(n) {
   document.querySelectorAll('.step').forEach((s, i) => { s.classList.toggle('active', i === n-1); s.classList.toggle('done', i < n-1); });
 }
 
-function handleUpload(input) {
+// PDFを画像（Base64）に変換する関数
+async function convertPdfToImage(file) {
+  const arrayBuffer = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+  const page = await pdf.getPage(1); // 1枚目のスライドを取得
+  const viewport = page.getViewport({ scale: 2.0 }); // 高解像度でレンダリング
+  
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d');
+  canvas.height = viewport.height;
+  canvas.width = viewport.width;
+  
+  await page.render({ canvasContext: context, viewport: viewport }).promise;
+  return canvas.toDataURL('image/png').split(',')[1];
+}
+
+async function handleUpload(input) {
   const file = input.files[0]; if(!file) return;
   
-  // PDFの場合はOpenAIが対応していないため警告を出す
-  if (file.type === 'application/pdf') {
-    alert('OpenAIは現在PDFの直接解析に対応していません。スライドの画像（PNG/JPG）をアップロードするか、このまま「次へ」進んでください。');
-    document.getElementById('sub1').textContent = '画像を選択してください';
-    return;
-  }
-
   document.getElementById('sub1').textContent = file.name + ' 解析中...';
   document.getElementById('area1').classList.add('has-file');
-  const reader = new FileReader();
-  reader.onload = async (e) => {
-    try {
-      const res = await fetch('/api/analyze-template', { 
-        method:'POST', 
-        headers:{'Content-Type':'application/json'}, 
-        body:JSON.stringify({ imageBase64: e.target.result.split(',')[1], mediaType: file.type }) 
+
+  try {
+    let base64Data = '';
+    let mediaType = file.type;
+
+    // PDFの場合は画像に変換
+    if (file.type === 'application/pdf') {
+      base64Data = await convertPdfToImage(file);
+      mediaType = 'image/png'; // AIには画像として送る
+    } else {
+      // 画像の場合はそのまま読み込む
+      const reader = new FileReader();
+      base64Data = await new Promise((resolve) => {
+        reader.onload = (e) => resolve(e.target.result.split(',')[1]);
+        reader.readAsDataURL(file);
       });
-      const data = await res.json();
-      
-      if(res.ok && data.analysis) {
-        templateAnalysis = data.analysis;
-        if(data.analysis.mainColor) {
-          themeColor = data.analysis.mainColor;
-          document.documentElement.style.setProperty('--primary', themeColor);
-        }
-        document.getElementById('sub1').textContent = file.name + ' 解析完了 ✓';
-      } else {
-        throw new Error(data.error || '解析に失敗しました');
-      }
-    } catch(err) {
-      console.error(err);
-      document.getElementById('sub1').textContent = '解析に失敗しました。このまま進むことも可能です。';
-      alert('解析エラー: ' + err.message + '\n画像形式（PNG/JPG）を使用してください。');
     }
-  };
-  reader.readAsDataURL(file);
+
+    // AI解析APIを呼び出し
+    const res = await fetch('/api/analyze-template', { 
+      method:'POST', 
+      headers:{'Content-Type':'application/json'}, 
+      body:JSON.stringify({ imageBase64: base64Data, mediaType: mediaType }) 
+    });
+    const data = await res.json();
+    
+    if(res.ok && data.analysis) {
+      templateAnalysis = data.analysis;
+      if(data.analysis.mainColor) {
+        themeColor = data.analysis.mainColor;
+        document.documentElement.style.setProperty('--primary', themeColor);
+      }
+      document.getElementById('sub1').textContent = file.name + ' 解析完了 ✓';
+    } else {
+      throw new Error(data.error || '解析に失敗しました');
+    }
+  } catch(err) {
+    console.error(err);
+    document.getElementById('sub1').textContent = '解析に失敗しました。標準テンプレートを使用します。';
+    alert('解析エラー: ' + err.message);
+  }
 }
 
 function handleTextUpload(input) {
