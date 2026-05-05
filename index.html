@@ -103,9 +103,9 @@ main { max-width: 1100px; margin: 40px auto; padding: 0 24px; }
 .layout-hero { flex-direction: row !important; background: #fff; }
 .hero-img { flex: 1.5; height: 100%; position: relative; clip-path: polygon(0 0, 100% 0, 85% 100%, 0 100%); }
 .hero-img img { width: 100%; height: 100%; object-fit: cover; }
-.hero-content { flex: 1; padding: 100px 80px 100px 40px; display: flex; flex-direction: column; justify-content: center; background: var(--primary); color: #fff; z-index: 20; }
-.hero-title { font-size: 82px; font-weight: 900; line-height: 1.1; color: #ffffff; margin-bottom: 40px; word-break: keep-all; }
-.hero-desc { font-size: 26px; color: #ffffff; font-weight: 700; line-height: 1.6; position: relative; padding-left: 30px; border-left: 8px solid #FF8C00; }
+.hero-content { flex: 1; padding: 80px 60px; display: flex; flex-direction: column; justify-content: center; background: var(--primary); color: #ffffff !important; z-index: 100; position: relative; }
+.hero-title { font-size: 72px; font-weight: 900; line-height: 1.1; color: #ffffff !important; margin-bottom: 30px; word-break: keep-all; z-index: 110; }
+.hero-desc { font-size: 24px; color: #ffffff !important; font-weight: 700; line-height: 1.6; position: relative; padding-left: 25px; border-left: 6px solid #FF8C00; z-index: 110; }
 
 /* リスト・標準 */
 .list-content { flex: 1.2; display: flex; flex-direction: column; gap: 24px; }
@@ -324,22 +324,22 @@ function renderSlides() {
     const page = document.createElement('div'); page.className = 'slide-page'; page.id = `sp-${idx}`;
     const tc = themeColor;
     const sig = s.sig || 0;
-    // images.unsplash.com を使用し、より安定かつ高画質な画像を取得
     const imgUrl = `https://images.unsplash.com/photo-${getFixedImageId(s.keyword)}?auto=format&fit=crop&w=1280&q=80&sig=${idx}_${sig}`;
     
-    let html = `<div class="sl-wrap"><div class="sl-accent-bar"></div><div class="sl-bg-decor"><div class="sl-blob" style="width:1000px; height:1000px; background:${tc}; top:-200px; left:-200px;"></div></div>`;
+    // 背景装飾を一旦削除し、不具合の元を断つ
+    let html = `<div class="sl-wrap"><div class="sl-accent-bar" style="background:${tc}"></div>`;
     
     if (s.layout === 'hero') {
-      html += `<div class="sl-wrap layout-hero"><div class="hero-img"><img src="${imgUrl}"></div><div class="hero-content"><div class="hero-title">${s.title}</div><div class="hero-desc">${s.points.join(' | ')}</div></div></div>`;
+      html += `<div class="sl-wrap layout-hero" style="flex:1; display:flex;"><div class="hero-img" style="z-index:50;"><img src="${imgUrl}"></div><div class="hero-content"><div class="hero-title">${s.title}</div><div class="hero-desc">${s.points.join(' | ')}</div></div></div>`;
     } else if (s.layout === 'compare') {
       const mid = Math.ceil(s.points.length / 2);
-      html += `<div class="sl-header"><div class="sl-header-title">${s.title}</div></div><div class="sl-body"><div class="compare-grid"><div class="compare-box before"><span class="compare-tag" style="background:#718096">現状</span>${s.points.slice(0,mid).map(p=>`<div style="margin-bottom:15px; font-weight:700;">・ ${p}</div>`).join('')}</div><div class="compare-box after" style="border-color:${tc}; background:rgba(0,0,0,0.02);"><span class="compare-tag" style="background:${tc}">改善後</span>${s.points.slice(mid).map(p=>`<div style="color:${tc}; font-weight:900; margin-bottom:15px;">・ ${p}</div>`).join('')}</div></div></div>`;
+      html += `<div class="sl-header" style="z-index:100;"><div class="sl-header-title" style="color:${tc}">${s.title}</div></div><div class="sl-body" style="z-index:100;"><div class="compare-grid"><div class="compare-box before"><span class="compare-tag" style="background:#718096">現状</span>${s.points.slice(0,mid).map(p=>`<div style="margin-bottom:12px; font-weight:700;">・ ${p}</div>`).join('')}</div><div class="compare-box after" style="border-color:${tc}; background:rgba(0,0,0,0.02);"><span class="compare-tag" style="background:${tc}">改善後</span>${s.points.slice(mid).map(p=>`<div style="color:${tc}; font-weight:900; margin-bottom:12px;">・ ${p}</div>`).join('')}</div></div></div>`;
     } else if (s.layout === 'hub') {
-      html += `<div class="sl-header"><div class="sl-header-title">${s.title}</div></div><div class="sl-body"><div class="hub-grid">${s.points.slice(0,4).map((p,pi)=>`<div class="hub-item"><div style="font-size:50px; margin-bottom:10px;">${ICONS[pi%ICONS.length]}</div><div class="hub-title">${p}</div></div>`).join('')}</div><div class="list-visual"><img src="${imgUrl}"></div></div>`;
+      html += `<div class="sl-header" style="z-index:100;"><div class="sl-header-title" style="color:${tc}">${s.title}</div></div><div class="sl-body" style="z-index:100;"><div class="hub-grid">${s.points.slice(0,4).map((p,pi)=>`<div class="hub-item"><div style="font-size:40px; margin-bottom:10px;">${ICONS[pi%ICONS.length]}</div><div class="hub-title" style="color:${tc}">${p}</div></div>`).join('')}</div><div class="list-visual" style="z-index:50;"><img src="${imgUrl}"></div></div>`;
     } else {
-      html += `<div class="sl-header"><div class="sl-header-title">${s.title}</div></div><div class="sl-body"><div class="list-content">${s.points.map((p,pi)=>`<div class="list-item"><div class="list-item-num">0${pi+1}</div><div class="list-item-text">${p}</div></div>`).join('')}</div><div class="list-visual"><img src="${imgUrl}"></div></div>`;
+      html += `<div class="sl-header" style="z-index:100;"><div class="sl-header-title" style="color:${tc}">${s.title}</div></div><div class="sl-body" style="z-index:100;"><div class="list-content">${s.points.map((p,pi)=>`<div class="list-item"><div class="list-item-num">0${pi+1}</div><div class="list-item-text">${p}</div></div>`).join('')}</div><div class="list-visual" style="z-index:50;"><img src="${imgUrl}"></div></div>`;
     }
-    html += `<div class="sl-footer-info"><div>CONFIDENTIAL | AI Presentation System</div><div>Page ${idx+1}</div></div></div>`;
+    html += `<div class="sl-footer-info" style="z-index:100;"><div>CONFIDENTIAL | AI Presentation System</div><div>Page ${idx+1}</div></div></div>`;
     page.innerHTML = html; vp.appendChild(page);
   });
   scaleSlides();
