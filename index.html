@@ -202,23 +202,40 @@ function setStep(n) {
 
 function handleUpload(input) {
   const file = input.files[0]; if(!file) return;
+  
+  // PDFの場合はOpenAIが対応していないため警告を出す
+  if (file.type === 'application/pdf') {
+    alert('OpenAIは現在PDFの直接解析に対応していません。スライドの画像（PNG/JPG）をアップロードするか、このまま「次へ」進んでください。');
+    document.getElementById('sub1').textContent = '画像を選択してください';
+    return;
+  }
+
   document.getElementById('sub1').textContent = file.name + ' 解析中...';
   document.getElementById('area1').classList.add('has-file');
   const reader = new FileReader();
   reader.onload = async (e) => {
     try {
-      const res = await fetch('/api/analyze-template', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ imageBase64: e.target.result.split(',')[1], mediaType: file.type }) });
+      const res = await fetch('/api/analyze-template', { 
+        method:'POST', 
+        headers:{'Content-Type':'application/json'}, 
+        body:JSON.stringify({ imageBase64: e.target.result.split(',')[1], mediaType: file.type }) 
+      });
       const data = await res.json();
-      if(data.analysis) {
+      
+      if(res.ok && data.analysis) {
         templateAnalysis = data.analysis;
         if(data.analysis.mainColor) {
           themeColor = data.analysis.mainColor;
           document.documentElement.style.setProperty('--primary', themeColor);
         }
         document.getElementById('sub1').textContent = file.name + ' 解析完了 ✓';
+      } else {
+        throw new Error(data.error || '解析に失敗しました');
       }
     } catch(err) {
-      document.getElementById('sub1').textContent = '解析に失敗しました。標準テンプレートを使用します。';
+      console.error(err);
+      document.getElementById('sub1').textContent = '解析に失敗しました。このまま進むことも可能です。';
+      alert('解析エラー: ' + err.message + '\n画像形式（PNG/JPG）を使用してください。');
     }
   };
   reader.readAsDataURL(file);
