@@ -2,7 +2,7 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   const { theme, target, goal, badge, notes, slideCount, templateAnalysis, framework } = req.body;
-  
+
   const finalTheme = theme || 'ビジネスプレゼンテーション';
   const finalTarget = target || '経営層・ステークホルダー';
   const finalGoal = goal || '意思決定の促進と合意形成';
@@ -58,8 +58,8 @@ export default async function handler(req, res) {
       const data = await response.json();
       if (!response.ok) throw new Error(`OpenAI Error: ${data.error?.message || 'Unknown'}`);
       return res.status(200).json({ result: data.choices[0].message.content });
-    } 
-    
+    }
+
     // Anthropicを使用する場合
     else {
       const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -82,7 +82,7 @@ export default async function handler(req, res) {
       }
       return res.status(200).json({ result: data.content[0].text });
     }
-  } catch(e) {
+  } catch (e) {
     return res.status(500).json({ error: e.message });
   }
 }
